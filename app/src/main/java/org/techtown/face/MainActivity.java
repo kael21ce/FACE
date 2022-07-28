@@ -15,6 +15,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    FrameFragment frameFragment;
+    ScaleFragment scaleFragment;
+    MomentFragment momentFragment;
+
     ActionBar abar = getActionBar();
 
     //액션바를 위한 메서드
@@ -51,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        frameFragment = new FrameFragment();
+        scaleFragment = new ScaleFragment();
+        momentFragment = new MomentFragment();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,14 +69,20 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.frameTab:
                                 abar.setTitle("FACE: 가족");
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                                        frameFragment).commit();
 
                                 return true;
                             case R.id.scaleTab:
                                 abar.setTitle("FACE: 연락저울");
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                                        scaleFragment).commit();
 
                                 return true;
                             case R.id.momentTab:
                                 abar.setTitle("FACE: 순간");
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                                        momentFragment).commit();
 
                                 return true;
                         }
