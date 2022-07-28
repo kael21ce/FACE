@@ -7,6 +7,7 @@
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="가족"
+        android:icon="@drawable/smile"
         />
 
     <item
@@ -14,6 +15,7 @@
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="연락저울"
+        android:icon="@drawable/scale"
         />
 
     <item
@@ -21,6 +23,7 @@
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="순간"
+        android:icon="@drawable/gallery"
         />
 
 </menu>
