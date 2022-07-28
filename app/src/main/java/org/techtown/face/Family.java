@@ -19,15 +19,15 @@ public class Family {
         this.mobile = mobile;
     }
 
-    public Drawable getFace() {
+    public Integer getFace() {
         return face;
     }
 
-    public void setFace(Drawable face) {
+    public void setFace(Integer face) {
         this.face = face;
     }
 
-    public Family(String name, String mobile, Drawable face) {
+    public Family(String name, String mobile, Integer face) {
         this.name = name;
         this.mobile = mobile;
         this.face = face;
@@ -35,5 +35,5 @@ public class Family {
 
     String name;
     String mobile;
-    Drawable face;
+    Integer face;
 }
