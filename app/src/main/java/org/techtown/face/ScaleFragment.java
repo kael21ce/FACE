@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class FrameFragment extends Fragment {
+public class ScaleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_frame, container, false);
+        View v = inflater.inflate(R.layout.fragment_scale, container, false);
 
         return v;
     }
