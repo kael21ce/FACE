@@ -3,6 +3,7 @@ package org.techtown.face;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
+    ActionBar abar = getActionBar();
 
     //액션바를 위한 메서드
     @Override
@@ -52,12 +55,15 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.frameTab:
+                                abar.setTitle("FACE: 가족");
 
                                 return true;
                             case R.id.scaleTab:
+                                abar.setTitle("FACE: 연락저울");
 
                                 return true;
                             case R.id.momentTab:
+                                abar.setTitle("FACE: 순간");
 
                                 return true;
                         }
