@@ -24,13 +24,15 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        Family.FamilyScale item = items.get(position);
+        viewHolder.setItem(item);
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return items.size();
     }
 
     public void addItem(Family.FamilyScale item) {
