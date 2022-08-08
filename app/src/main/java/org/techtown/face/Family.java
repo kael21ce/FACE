@@ -36,4 +36,32 @@ public class Family {
     String name;
     String mobile;
     Integer face;
+
+    public class FamilyScale {
+        String name;
+        String mobile;
+
+        public String getScaleName() {
+            return name;
+        }
+
+        public void setScaleName(String name) {
+            this.name = name;
+        }
+
+        public String getScaleMobile() {
+            return mobile;
+        }
+
+        public void setScaleMobile(String mobile) {
+            this.mobile = mobile;
+        }
+
+        public FamilyScale(String name, String mobile, Integer face) {
+            this.name = name;
+            this.mobile = mobile;
+        }
+    }
 }
+
+

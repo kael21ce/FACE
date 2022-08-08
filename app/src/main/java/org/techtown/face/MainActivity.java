@@ -1,9 +1,9 @@
 package org.techtown.face;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
 
-    ActionBar abar = getActionBar();
+    ActionBar abar;
 
     //액션바를 위한 메서드
     @Override
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         frameFragment = new FrameFragment();
         scaleFragment = new ScaleFragment();
         momentFragment = new MomentFragment();
+
+        abar = getSupportActionBar();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
 
