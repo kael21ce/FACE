@@ -27,6 +27,8 @@ public class FrameFragment extends Fragment {
         adapter.addItem(new Family("엄마", "010-1234-5678", R.drawable.user_icon));
         //
 
+        recyclerView.setAdapter(adapter);
+
         return v;
     }
 }
