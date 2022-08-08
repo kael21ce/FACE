@@ -23,8 +23,8 @@ public class FrameFragment extends Fragment {
         FamilyAdapter adapter = new FamilyAdapter();
         
         //어탭터로 가족 추가
-        adapter.addItem(new Family("나", "010-0000-0000", R.drawable.user_icon));
-        adapter.addItem(new Family("엄마", "010-1234-5678", R.drawable.user_icon));
+        adapter.addItem(new Family("홍길동", "01000000000", R.drawable.user_icon));
+        adapter.addItem(new Family("임꺽정", "01012345678", R.drawable.user_icon));
         //
 
         recyclerView.setAdapter(adapter);
