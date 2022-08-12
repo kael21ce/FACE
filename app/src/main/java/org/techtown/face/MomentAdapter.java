@@ -44,7 +44,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         }
 
         public void setItem(FamilyScale item) {
-            nameTxt.setText(item.getName());
+            nameTxt.setText(item.getScaleName());
         }
     }
 
