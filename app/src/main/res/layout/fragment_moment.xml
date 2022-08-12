@@ -9,6 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:id="@+id/myImgIndicator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/momentRecyclerView"
         android:layout_width="match_parent"
