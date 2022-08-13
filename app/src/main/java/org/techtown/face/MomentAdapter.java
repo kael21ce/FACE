@@ -40,7 +40,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTxt = itemView.findViewById(R.id.momentName);
+            //nameTxt = itemView.findViewById(R.id.momentName);
         }
 
         public void setItem(FamilyScale item) {
