@@ -17,7 +17,7 @@ public class MomentFragment extends Fragment {
     public LinearLayout layoutIndicator;
     public LinearLayout myMomentLayout;
 
-    private int[] images = new int[] {
+    public int[] images = new int[] {
             R.drawable.pasta,
             R.drawable.cat,
             R.drawable.gallery
@@ -28,29 +28,22 @@ public class MomentFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_moment, container, false);
 
         //나의 순간 ViewPager2 다루기
-        myImageViewPager = v.findViewById(R.id.imgSlider);
+        myImageViewPager = v.findViewById(R.id.myViewPager);
         layoutIndicator = v.findViewById(R.id.myImgIndicator);
         myMomentLayout = v.findViewById(R.id.mMomentContainer);
 
-        try {
-            myImageViewPager.setOffscreenPageLimit(1);
-            myImageViewPager.setAdapter(new ImageSliderAdapter(v.getContext(), images));
+        myImageViewPager.setOffscreenPageLimit(1);
+        myImageViewPager.setAdapter(new ImageSliderAdapter(v.getContext(), images));
 
-            myImageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                @Override
-                public void onPageSelected(int position) {
-                    super.onPageSelected(position);
-                    setCurrentIndicator(position);
-                }
-            });
+        myImageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setCurrentIndicator(position);
+            }
+        });
 
-            setupIndicator(images.length);
-            //
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            //추후에 순간을 추가해보세요라고 창 나오도록 수정해야 함!!
-        }
+        setupIndicator(images.length);
 
 
         return v;
