@@ -11,16 +11,18 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import me.relex.circleindicator.CircleIndicator;
+import me.relex.circleindicator.CircleIndicator3;
+
 public class MomentFragment extends Fragment {
 
-    public ViewPager2 myImageViewPager;
-    public LinearLayout layoutIndicator;
-    public LinearLayout myMomentLayout;
+    private ViewPager2 myImageViewPager;
+    private CircleIndicator3 myImgIndicator;
 
     public int[] images = new int[] {
             R.drawable.pasta,
             R.drawable.cat,
-            R.drawable.gallery
+            R.drawable.pork
             };
 
     @Override
@@ -29,61 +31,15 @@ public class MomentFragment extends Fragment {
 
         //나의 순간 ViewPager2 다루기
         myImageViewPager = v.findViewById(R.id.myViewPager);
-        layoutIndicator = v.findViewById(R.id.myImgIndicator);
-        myMomentLayout = v.findViewById(R.id.mMomentContainer);
+        myImgIndicator = (CircleIndicator3) v.findViewById(R.id.myImgIndicator);
 
         myImageViewPager.setOffscreenPageLimit(1);
         myImageViewPager.setAdapter(new ImageSliderAdapter(v.getContext(), images));
 
-        myImageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                setCurrentIndicator(position);
-            }
-        });
+        myImgIndicator.setViewPager(myImageViewPager);
 
-        setupIndicator(images.length);
 
 
         return v;
-    }
-
-    //Indicator 설정
-    public void setupIndicator(int count) {
-        ImageView[] indicators = new ImageView[count];
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-
-        params.setMargins(16, 8, 16, 8);
-
-        for (int i = 0; i<indicators.length; i++) {
-            indicators[i] =new ImageView(getContext());
-            indicators[i].setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.bg_indicator_inactive));
-            indicators[i].setLayoutParams(params);
-            layoutIndicator.addView(indicators[i]);
-        }
-        setCurrentIndicator(0);
-    }
-
-    //현재 Indicator의 상태 설정
-    public void setCurrentIndicator(int position) {
-        int childCount = layoutIndicator.getChildCount();
-        for (int i = 0; i<childCount; i++) {
-            ImageView imageView = (ImageView) layoutIndicator.getChildAt(i);
-            if (i==position) {
-                imageView.setImageDrawable(ContextCompat.getDrawable(
-                        getContext(),
-                        R.drawable.bg_indicator_active
-                ));
-            } else {
-                imageView.setImageDrawable(ContextCompat.getDrawable(
-                        getContext(),
-                        R.drawable.bg_indicator_inactive
-                ));
-            }
-        }
     }
 }
