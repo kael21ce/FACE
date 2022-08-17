@@ -15,6 +15,7 @@ public class MomentFragment extends Fragment {
 
     public ViewPager2 myImageViewPager;
     public LinearLayout layoutIndicator;
+    public LinearLayout myMomentLayout;
 
     private int[] images = new int[] {
             R.drawable.pasta,
@@ -29,20 +30,28 @@ public class MomentFragment extends Fragment {
         //나의 순간 ViewPager2 다루기
         myImageViewPager = v.findViewById(R.id.imgSlider);
         layoutIndicator = v.findViewById(R.id.myImgIndicator);
+        myMomentLayout = v.findViewById(R.id.mMomentContainer);
 
-        myImageViewPager.setOffscreenPageLimit(1);
-        myImageViewPager.setAdapter(new ImageSliderAdapter(v.getContext(), images));
+        try {
+            myImageViewPager.setOffscreenPageLimit(1);
+            myImageViewPager.setAdapter(new ImageSliderAdapter(v.getContext(), images));
 
-        myImageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                setCurrentIndicator(position);
-            }
-        });
+            myImageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageSelected(int position) {
+                    super.onPageSelected(position);
+                    setCurrentIndicator(position);
+                }
+            });
 
-        setupIndicator(images.length);
-        //
+            setupIndicator(images.length);
+            //
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            //추후에 순간을 추가해보세요라고 창 나오도록 수정해야 함!!
+        }
+
 
         return v;
     }
