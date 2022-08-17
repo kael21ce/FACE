@@ -9,13 +9,11 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.MyViewHolder> {
     private Context context;
-    private String[] sliderImage;
+    private int[] sliderImage;
 
-    public ImageSliderAdapter(Context context, String[] sliderImage) {
+    public ImageSliderAdapter(Context context, int[] sliderImage) {
         this.context = context;
         this.sliderImage = sliderImage;
     }
@@ -45,10 +43,8 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
             imageView = itemView.findViewById(R.id.imgSlider);
         }
 
-        public void bindSliderImage(String imageURL) {
-            Glide.with(context)
-                    .load(imageURL)
-                    .into(imageView);
+        public void bindSliderImage(int image) {
+            imageView.setImageResource(image);
         }
     }
 }
