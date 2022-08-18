@@ -13,7 +13,7 @@
     </androidx.viewpager2.widget.ViewPager2>
 
     <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/myImgIndicator"
+        android:id="@+id/imgIndicator"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:ci_drawable = "@drawable/bg_indicator_active"
