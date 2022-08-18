@@ -15,12 +15,42 @@ import java.util.ArrayList;
 public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder> {
     ArrayList<Family> items = new ArrayList<Family>();
 
+    public interface OnItemClickListener {
+        void onItemClicked(int position, String name, String mobile);
+    }
+
+    private OnItemClickListener itemClickListener;
+
+    public void setOnItemClickListener (OnItemClickListener listener) {
+        itemClickListener=listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.frame_item, viewGroup, false);
-        return new ViewHolder(itemView);
+
+
+
+        FamilyAdapter.ViewHolder viewHolder = new FamilyAdapter.ViewHolder(itemView);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name="";
+                String mobile="";
+                int position = viewHolder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    name=items.get(position).getName();
+                    mobile=items.get(position).getMobile();
+                }
+                itemClickListener.onItemClicked(position, name, mobile);
+            }
+        });
+
+
+        return viewHolder;
     }
 
     @Override
@@ -51,7 +81,6 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
             familyImg.setImageResource(item.getFace());
         }
     }
-
     public void addItem(Family item) {
         items.add(item);
     }
@@ -67,5 +96,6 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     public void setItem(int position, Family item) {
         items.set(position, item);
     }
+
 
 }
