@@ -44,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingIntent);
                 break;
             case R.id.add_moment:
+                //데이터베이스 구현 후 추가
+                break;
+            case R.id.delete_moment:
+                //데이터베이스 구현 후 추가
                 break;
         }
         return super.onOptionsItemSelected(item);

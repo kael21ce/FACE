@@ -20,7 +20,14 @@
         android:id="@+id/add_moment"
         android:title="순간 추가"
         android:icon="@drawable/plusbox"
-        app:showAsAction="never"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/delete_moment"
+        android:title="순간 삭제"
+        android:icon="@drawable/trash"
+        app:showAsAction="always"
         />
 
 </menu>
