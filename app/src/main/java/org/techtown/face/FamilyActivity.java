@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewbinding.ViewBinding;
-import androidx.viewbinding.ViewBindings;
 
 public class FamilyActivity extends AppCompatActivity {
 
@@ -28,7 +26,6 @@ public class FamilyActivity extends AppCompatActivity {
 
         fName=findViewById(R.id.familyName);
         minContact=findViewById(R.id.minContact);
-        maxContact = findViewById(R.id.maxContact);
         idealContact = findViewById(R.id.idealContact);
         themeLike = findViewById(R.id.themeLike);
         themeDislike = findViewById(R.id.themeDislike);
@@ -56,5 +53,4 @@ public class FamilyActivity extends AppCompatActivity {
             }
         });
     }
-}
 }
