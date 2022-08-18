@@ -4,14 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import me.relex.circleindicator.CircleIndicator;
 import me.relex.circleindicator.CircleIndicator3;
 
 public class MomentFragment extends Fragment {
@@ -31,7 +27,7 @@ public class MomentFragment extends Fragment {
 
         //나의 순간 ViewPager2 다루기
         myImageViewPager = v.findViewById(R.id.myViewPager);
-        myImgIndicator = (CircleIndicator3) v.findViewById(R.id.myImgIndicator);
+        myImgIndicator = (CircleIndicator3) v.findViewById(R.id.imgIndicator);
 
         myImageViewPager.setOffscreenPageLimit(1);
         myImageViewPager.setAdapter(new ImageSliderAdapter(v.getContext(), images));

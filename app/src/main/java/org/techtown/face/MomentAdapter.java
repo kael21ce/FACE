@@ -53,7 +53,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         }
 
         public void setItem(Moment item) {
-            nameTxt.setText(item.getName());
+            nameTxt.setText(item.getName()+"의 순간");
             String[] dates = item.getDates();
 
             imageViewPager.setOffscreenPageLimit(1);
@@ -64,7 +64,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
-                    momentDate.setText(dates[position]);
+                    momentDate.setText("| " + dates[position] + " |");
                 }
             });
         }
