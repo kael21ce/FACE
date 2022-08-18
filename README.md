@@ -1,2 +1,2 @@
 # FACE
-#강지원 왔다감
+#Family Assistant for Communication and Expression
