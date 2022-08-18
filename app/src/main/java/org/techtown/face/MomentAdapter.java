@@ -7,13 +7,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import org.techtown.face.Family.FamilyScale;
 
 import java.util.ArrayList;
 
+import me.relex.circleindicator.CircleIndicator3;
+
 public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder> {
-    ArrayList<FamilyScale> items = new ArrayList<FamilyScale>();
+    ArrayList<Moment> items = new ArrayList<Moment>();
 
     @NonNull
     @Override
@@ -25,7 +28,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        FamilyScale item = items.get(position);
+        Moment item = items.get(position);
         viewHolder.setItem(item);
     }
 
@@ -36,31 +39,50 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
+        ViewPager2 imageViewPager;
+        TextView momentDate;
+        CircleIndicator3 imgIndicator;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            //nameTxt = itemView.findViewById(R.id.momentName);
+            nameTxt = itemView.findViewById(R.id.momentName);
+            imageViewPager = itemView.findViewById(R.id.imageViewPager);
+            momentDate = itemView.findViewById(R.id.momentDate);
+            imgIndicator = (CircleIndicator3) itemView.findViewById(R.id.imgIndicator);
         }
 
-        public void setItem(FamilyScale item) {
-            nameTxt.setText(item.getScaleName());
+        public void setItem(Moment item) {
+            nameTxt.setText(item.getName());
+            String[] dates = item.getDates();
+
+            imageViewPager.setOffscreenPageLimit(1);
+            imageViewPager.setAdapter(new ImageSliderAdapter(itemView.getContext(), item.getImages()));
+            imgIndicator.setViewPager(imageViewPager);
+
+            imageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageSelected(int position) {
+                    super.onPageSelected(position);
+                    momentDate.setText(dates[position]);
+                }
+            });
         }
     }
 
-    public void addItem(FamilyScale item) {
+    public void addItem(Moment item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<FamilyScale> items) {
+    public void setItems(ArrayList<Moment> items) {
         this.items = items;
     }
 
-    public FamilyScale getItem(int position) {
+    public Moment getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, FamilyScale item) {
+    public void setItem(int position, Moment item) {
         items.set(position, item);
     }
 }
