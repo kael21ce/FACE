@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "728254760916",
+    "project_id": "facedatabase-eff47",
+    "storage_bucket": "facedatabase-eff47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728254760916:android:d3f57e4bb59321e112b841",
+        "android_client_info": {
+          "package_name": "org.techtown.face"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728254760916-aqm8vlsh4rd50vbqou4vk0f2341p5o53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM0ms_B8tXg4Sboe9eAc1p_FbfuWTO3dU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728254760916-aqm8vlsh4rd50vbqou4vk0f2341p5o53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
