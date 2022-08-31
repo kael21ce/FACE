@@ -1,9 +1,11 @@
 package org.techtown.face;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,15 +55,19 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
+        ImageView scaleHead;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             nameTxt = itemView.findViewById(R.id.scaleName);
+            scaleHead = itemView.findViewById(R.id.scale_head);
+
         }
 
         public void setItem(Family.FamilyScale item) {
             nameTxt.setText(item.getScaleName());
+            scaleHead.setRotation(item.getScaleAngle());
         }
     }
 }
