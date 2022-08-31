@@ -18,7 +18,7 @@
         <activity
             android:name=".FamilyActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
+            />
 
         <activity
             android:name=".SettingActivity"
