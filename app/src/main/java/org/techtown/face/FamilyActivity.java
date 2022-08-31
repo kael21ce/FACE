@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class FamilyActivity extends AppCompatActivity {
 
     TextView fName;
@@ -44,7 +46,7 @@ public class FamilyActivity extends AppCompatActivity {
         String mobile = "tel:" + intent.getStringExtra("mobile");
         //
 
-        Button callButton = findViewById(R.id.callButton);
+        FloatingActionButton callButton = findViewById(R.id.callButton);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

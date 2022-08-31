@@ -89,7 +89,7 @@
                 android:layout_marginEnd="50dp"
                 android:clickable="true"
                 app:backgroundTint="#9C27B0"
-                app:srcCompat="@drawable/users_group"
+                app:srcCompat="@drawable/group"
                 tools:ignore="SpeakableTextPresentCheck" />
         </LinearLayout>
 
