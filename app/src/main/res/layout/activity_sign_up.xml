@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".SignUpActivity"
+    tools:ignore="ExtraText">
+
+    <TextView
+        android:id="@+id/textView_signUpTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:text="@string/회원가입"
+        android:textColor="@android:color/black"
+        android:textSize="25sp" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="250dp"
+        android:layout_height="1.2dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/black" />
+
+
+    <EditText
+        android:id="@+id/editText_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:textColor="@android:color/black"
+        android:autofillHints=" " />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="50dp"
+        android:ems="10"
+        android:textColor="#0054FF"
+        android:text="@string/n"
+        />
+
+    <EditText
+        android:id="@+id/editText_passWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="#757575" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pwd"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/btn_join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:text="@string/join"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>

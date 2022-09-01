@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">FACE</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="회원가입">회원가입</string>
+    <string name="join">Join</string>
+    <string name="email">Email</string>
+    <string name="n">이메일 인증이 가능한 이메일을 넣어주세요. \n로그인할 때 이메일 인증을 해야 사용가능합니다.</string>
+    <string name="password">Password</string>
+    <string name="실패">실패!</string>
+    <string name="실패1">실패!</string>
+    <string name="logout">Logout !</string>
+    <string name="탈퇴">탈퇴 !</string>
 </resources>
