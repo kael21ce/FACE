@@ -27,15 +27,35 @@ public class Family {
         this.face = face;
     }
 
-    public Family(String name, String mobile, Integer face) {
+    public Integer getMinContact() {
+        return minContact;
+    }
+
+    public void setMinContact(Integer minContact) {
+        this.minContact = minContact;
+    }
+
+    public Integer getIdealContact() {
+        return idealContact;
+    }
+
+    public void setIdealContact(Integer idealContact) {
+        this.idealContact = idealContact;
+    }
+
+    public Family(String name, String mobile, Integer face, Integer minContact, Integer idealContact) {
         this.name = name;
         this.mobile = mobile;
         this.face = face;
+        this.minContact = minContact;
+        this.idealContact = idealContact;
     }
 
     String name;
     String mobile;
     Integer face;
+    Integer minContact;
+    Integer idealContact;
 
     public static class FamilyScale {
         String name;

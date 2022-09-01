@@ -16,7 +16,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     ArrayList<Family> items = new ArrayList<Family>();
 
     public interface OnItemClickListener {
-        void onItemClicked(int position, String name, String mobile);
+        void onItemClicked(int position, String name, String mobile, Integer minContact, Integer idealContact);
     }
 
     private OnItemClickListener itemClickListener;
@@ -40,12 +40,16 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
             public void onClick(View view) {
                 String name="";
                 String mobile="";
+                Integer minContact=0;
+                Integer idealContact=0;
                 int position = viewHolder.getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     name=items.get(position).getName();
                     mobile=items.get(position).getMobile();
+                    minContact=items.get(position).getMinContact();
+                    idealContact=items.get(position).getIdealContact();
                 }
-                itemClickListener.onItemClicked(position, name, mobile);
+                itemClickListener.onItemClicked(position, name, mobile, minContact, idealContact);
             }
         });
 

@@ -15,7 +15,6 @@ public class FamilyActivity extends AppCompatActivity {
 
     TextView fName;
     //바라는 연락 횟수; 데이터베이스 구현 후 적용
-    TextView maxContact;
     TextView minContact;
     TextView idealContact;
     TextView themeLike;
@@ -40,10 +39,14 @@ public class FamilyActivity extends AppCompatActivity {
             }
         });
 
-        //이름, 전화번호 인텐트에서 가져오기
+        //이름, 전화번호, 최소, 이상적인 연락 횟수 인텐트에서 가져오기
         Intent intent = getIntent();
         fName.setText(intent.getStringExtra("name"));
         String mobile = "tel:" + intent.getStringExtra("mobile");
+        Integer mContact = intent.getIntExtra("minContact", 0);
+        Integer iContact = intent.getIntExtra("idealContact", 0);
+        minContact.setText("적어도 " + mContact.toString() + "일에 1번");
+        idealContact.setText(iContact.toString() + "일에 1번");
         //
 
         FloatingActionButton callButton = findViewById(R.id.callButton);
