@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:elevation="2dp"
     android:orientation="vertical"
-    tools:context=".SettingActivity">
+    tools:context=".activities.SettingActivity">
 
     <LinearLayout
         android:id="@+id/setRuler"

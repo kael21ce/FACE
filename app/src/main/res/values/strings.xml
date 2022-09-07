@@ -18,4 +18,21 @@
     <string name="실패1">실패!</string>
     <string name="logout">Logout !</string>
     <string name="탈퇴">탈퇴 !</string>
+    <string name="login_to_continue">Login to continue!!</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="sign_in">Sign In</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="add_image">Add Image</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="select_user">Select User</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="online">Online</string>
+    <string name="birthday">생년월일</string>
+    <string name="phone_number">휴대폰 번호</string>
+    <string name="ideal_contact">이상적인 연락 간격(예: 3일이면 3입력)</string>
+    <string name="theme_like">좋아하는 주제</string>
+    <string name="theme_dislike">싫어하는 주제</string>
+    <string name="app_start">시작하기</string>
 </resources>
