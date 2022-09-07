@@ -63,19 +63,24 @@ public class FrameFragment extends Fragment {
                                 int minContact = Integer.parseInt(document.get("minContact").toString());
                                 int idealContact = Integer.parseInt(document.get("idealContact").toString());
                                 int expression = Integer.parseInt(document.get("expression").toString());
-                                //표정 변화 단계에 따라 이미지 달리하여 추가하기
-                                if (expression==5) {
+                                boolean meet = (Boolean) document.get("meet");
+                                //대면 만남 여부, 표정 변화 단계에 따라 이미지 달리하여 추가하기
+                                if (meet==true) {
                                     adapter.addItem(new Family(name, mobile, R.drawable.five, minContact, idealContact));
-                                } else if (expression==4) {
-                                    adapter.addItem(new Family(name, mobile, R.drawable.four, minContact, idealContact));
-                                } else if (expression==3) {
-                                    adapter.addItem(new Family(name, mobile, R.drawable.three, minContact, idealContact));
-                                } else if (expression==2) {
-                                    adapter.addItem(new Family(name, mobile, R.drawable.two, minContact, idealContact));
-                                } else if (expression==1) {
-                                    adapter.addItem(new Family(name, mobile, R.drawable.one, minContact, idealContact));
                                 } else {
-                                    adapter.addItem(new Family(name, mobile, R.drawable.user_icon, minContact, idealContact));
+                                    if (expression==5) {
+                                        adapter.addItem(new Family(name, mobile, R.drawable.five, minContact, idealContact));
+                                    } else if (expression==4) {
+                                        adapter.addItem(new Family(name, mobile, R.drawable.four, minContact, idealContact));
+                                    } else if (expression==3) {
+                                        adapter.addItem(new Family(name, mobile, R.drawable.three, minContact, idealContact));
+                                    } else if (expression==2) {
+                                        adapter.addItem(new Family(name, mobile, R.drawable.two, minContact, idealContact));
+                                    } else if (expression==1) {
+                                        adapter.addItem(new Family(name, mobile, R.drawable.one, minContact, idealContact));
+                                    } else {
+                                        adapter.addItem(new Family(name, mobile, R.drawable.user_icon, minContact, idealContact));
+                                    }
                                 }
                                 Log.w(TAG, "Successfully loaded");
                             }
