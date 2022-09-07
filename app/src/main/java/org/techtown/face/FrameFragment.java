@@ -62,7 +62,21 @@ public class FrameFragment extends Fragment {
                                 String mobile = document.get("mobile").toString();
                                 int minContact = Integer.parseInt(document.get("minContact").toString());
                                 int idealContact = Integer.parseInt(document.get("idealContact").toString());
-                                adapter.addItem(new Family(name, mobile, R.drawable.user_icon, minContact, idealContact));
+                                int expression = Integer.parseInt(document.get("expression").toString());
+                                //표정 변화 단계에 따라 이미지 달리하여 추가하기
+                                if (expression==5) {
+                                    adapter.addItem(new Family(name, mobile, R.drawable.five, minContact, idealContact));
+                                } else if (expression==4) {
+                                    adapter.addItem(new Family(name, mobile, R.drawable.four, minContact, idealContact));
+                                } else if (expression==3) {
+                                    adapter.addItem(new Family(name, mobile, R.drawable.three, minContact, idealContact));
+                                } else if (expression==2) {
+                                    adapter.addItem(new Family(name, mobile, R.drawable.two, minContact, idealContact));
+                                } else if (expression==1) {
+                                    adapter.addItem(new Family(name, mobile, R.drawable.one, minContact, idealContact));
+                                } else {
+                                    adapter.addItem(new Family(name, mobile, R.drawable.user_icon, minContact, idealContact));
+                                }
                                 Log.w(TAG, "Successfully loaded");
                             }
                             recyclerView.setAdapter(adapter);
