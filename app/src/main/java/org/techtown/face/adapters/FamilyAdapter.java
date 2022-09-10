@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.techtown.face.models.User;
 import org.techtown.face.utilites.Family;
 import org.techtown.face.R;
 
@@ -18,7 +19,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     ArrayList<Family> items = new ArrayList<>();
 
     public interface OnItemClickListener {
-        void onItemClicked(int position, String name, String mobile, Integer minContact, Integer idealContact);
+        void onItemClicked(int position, String name, String mobile, Integer minContact, Integer idealContact, User user);
     }
 
     private OnItemClickListener itemClickListener;
@@ -33,8 +34,6 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.frame_item, viewGroup, false);
 
-
-
         FamilyAdapter.ViewHolder viewHolder = new FamilyAdapter.ViewHolder(itemView);
 
         itemView.setOnClickListener(view -> {
@@ -42,14 +41,17 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
             String mobile="";
             Integer minContact=0;
             Integer idealContact=0;
+            User user = new User();
             int position = viewHolder.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 name=items.get(position).getName();
                 mobile=items.get(position).getPhoneNumber();
                 minContact=items.get(position).getMinContact();
                 idealContact=items.get(position).getIdealContact();
+                user = items.get(position).getUserContact();
             }
-            itemClickListener.onItemClicked(position, name, mobile, minContact, idealContact);
+
+            itemClickListener.onItemClicked(position, name, mobile, minContact, idealContact, user);
         });
 
 

@@ -51,9 +51,9 @@ public class ScaleFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String name = document.get("name").toString();
-                                String mobile = document.get("mobile").toString();
+                                String phone_number = document.get("phone_number").toString();
                                 float angle = Float.parseFloat(document.get("angle").toString());
-                                adapter.addItem(new FamilyScale(name, mobile, angle));
+                                adapter.addItem(new FamilyScale(name, phone_number, angle));
                                 Log.w(TAG, "Successfully loaded");
                             }
                             recyclerView.setAdapter(adapter);

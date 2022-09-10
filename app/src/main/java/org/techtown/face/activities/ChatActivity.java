@@ -135,8 +135,8 @@ public class ChatActivity extends BaseActivity {
                             JSONObject responseJson = new JSONObject(response.body());
                             JSONArray results = responseJson.getJSONArray("results");
                             if (responseJson.getInt("failure") == 1){
-                                JSONObject error = (JSONObject) results.get(0);
-                                showToast(error.getString("error"));
+                                //JSONObject error = (JSONObject) results.get(0);
+                                //showToast(error.getString("error"));
                                 return;
                             }
                         }
@@ -158,9 +158,8 @@ public class ChatActivity extends BaseActivity {
 
 
     private  void listenAvailabilityOfReceiver(){
-        database.collection(Constants.KEY_COLLECTION_USERS).document(
-                receiverUser.id
-        ).addSnapshotListener(ChatActivity.this,(value, error) -> {
+        database.collection(Constants.KEY_COLLECTION_USERS).document(receiverUser.id).
+                addSnapshotListener(ChatActivity.this,(value, error) -> {
             if (error != null){
                 return;
             }
