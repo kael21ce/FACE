@@ -20,6 +20,9 @@
             android:name=".activities.AccountActivity"
             android:exported="true" />
         <activity
+            android:name=".activities.ChatActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.FamilyActivity"
             android:exported="true" />
         <activity

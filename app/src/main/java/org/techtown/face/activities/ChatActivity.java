@@ -158,9 +158,8 @@ public class ChatActivity extends BaseActivity {
 
 
     private  void listenAvailabilityOfReceiver(){
-        database.collection(Constants.KEY_COLLECTION_USERS).document(
-                receiverUser.id
-        ).addSnapshotListener(ChatActivity.this,(value, error) -> {
+        database.collection(Constants.KEY_COLLECTION_USERS).document(receiverUser.id).
+                addSnapshotListener(ChatActivity.this,(value, error) -> {
             if (error != null){
                 return;
             }
