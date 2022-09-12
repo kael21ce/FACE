@@ -62,12 +62,16 @@ public class FrameFragment extends Fragment {
                                 user.image= document.get(Constants.KEY_IMAGE).toString();
                                 user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
                                 user.id = document.getId();
+<<<<<<< HEAD
                                 user.phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
                                 user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                                 user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                                 user.like = document.get(Constants.KEY_THEME_LIKE).toString();
                                 user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
                                 adapter.addItem(new Family(user));
+=======
+                                adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+>>>>>>> main
                                 recyclerView.setAdapter(adapter);
                             }
                             Log.w(TAG, "Successfully loaded");
@@ -103,6 +107,7 @@ public class FrameFragment extends Fragment {
 
                             //대면 만남 여부, 표정 변화 단계에 따라 이미지 달리하여 추가하기
                             if (meet) {
+<<<<<<< HEAD
                                 adapter.addItem(new Family(user));
                             } else {
                                 if (expression==5) {
@@ -117,6 +122,22 @@ public class FrameFragment extends Fragment {
                                     adapter.addItem(new Family(user));
                                 } else {
                                     adapter.addItem(new Family(user));
+=======
+                                adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+                            } else {
+                                if (expression==5) {
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+                                } else if (expression==4) {
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+                                } else if (expression==3) {
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+                                } else if (expression==2) {
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+                                } else if (expression==1) {
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+                                } else {
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
+>>>>>>> main
                                 }
                             }
                         }
