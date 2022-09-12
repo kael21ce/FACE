@@ -70,7 +70,7 @@ public class FrameFragment extends Fragment {
                                 user.image= document.get(Constants.KEY_IMAGE).toString();
                                 user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
                                 user.id = document.getId();
-                                adapter.addItem(new Family(name, phone_number, R.drawable.five, min_contact, ideal_contact, user));
+                                adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 recyclerView.setAdapter(adapter);
                             }
                             Log.w(TAG, "Successfully loaded");
@@ -106,20 +106,20 @@ public class FrameFragment extends Fragment {
 
                             //대면 만남 여부, 표정 변화 단계에 따라 이미지 달리하여 추가하기
                             if (meet) {
-                                adapter.addItem(new Family(name, phone_number, R.drawable.five, min_contact, ideal_contact, user));
+                                adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                             } else {
                                 if (expression==5) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.five, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 } else if (expression==4) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.four, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 } else if (expression==3) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.three, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 } else if (expression==2) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.two, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 } else if (expression==1) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.one, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 } else {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.user_icon, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(name, phone_number, user.image, min_contact, ideal_contact, user));
                                 }
                             }
                         }

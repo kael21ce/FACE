@@ -1,5 +1,8 @@
 package org.techtown.face.adapters;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +77,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
         TextView nameTxt;
         ImageView familyImg;
 
+
         public ViewHolder(View itemVIew) {
             super(itemVIew);
 
@@ -83,7 +87,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
 
         public void setItem(Family item) {
             nameTxt.setText(item.getName());
-            familyImg.setImageResource(item.getFace());
+            familyImg.setImageBitmap(getUserImage(item.getImage()));
         }
     }
     public void addItem(Family item) {
@@ -101,6 +105,10 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     public void setItem(int position, Family item) {
         items.set(position, item);
     }
-
+    private static Bitmap getUserImage(String encodedImage){
+        byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+    }
 
 }
+

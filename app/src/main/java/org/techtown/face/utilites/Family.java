@@ -1,7 +1,5 @@
 package org.techtown.face.utilites;
 
-import android.graphics.drawable.Drawable;
-
 import org.techtown.face.models.User;
 
 public class Family {
@@ -21,12 +19,12 @@ public class Family {
         this.phone_number = phone_number;
     }
 
-    public Integer getFace() {
-        return face;
+    public String getImage() {
+        return image;
     }
 
-    public void setFace(Integer face) {
-        this.face = face;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getMinContact() {
@@ -53,10 +51,10 @@ public class Family {
         this.user = user;
     }
 
-    public Family(String name, String phone_number, Integer face, Integer min_contact, Integer ideal_contact, User user) {
+    public Family(String name, String phone_number, String image, Integer min_contact, Integer ideal_contact, User user) {
         this.name = name;
         this.phone_number = phone_number;
-        this.face = face;
+        this.image = image;
         this.min_contact = min_contact;
         this.ideal_contact = ideal_contact;
         this.user = user;
@@ -64,7 +62,7 @@ public class Family {
 
     String name;
     String phone_number;
-    Integer face;
+    String image;
     Integer min_contact;
     Integer ideal_contact;
     User user;
