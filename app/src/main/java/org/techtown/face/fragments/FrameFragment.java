@@ -41,12 +41,8 @@ public class FrameFragment extends Fragment {
         //어탭터로 가족 추가
 
         //터치 이벤트 추가
-        adapter.setOnItemClickListener((position, name, phone_number, min_contact, ideal_contact, user) -> {
+        adapter.setOnItemClickListener((position, user) -> {
             Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
-            contactIntent.putExtra(Constants.KEY_NAME, name);
-            contactIntent.putExtra(Constants.KEY_PHONE_NUMBER, phone_number);
-            contactIntent.putExtra(Constants.KEY_MIN_CONTACT, min_contact);
-            contactIntent.putExtra(Constants.KEY_IDEAL_CONTACT, ideal_contact);
             contactIntent.putExtra(Constants.KEY_USER,user);
             startActivity(contactIntent);
         });
@@ -60,17 +56,18 @@ public class FrameFragment extends Fragment {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             if (currentUserId.equals(document.getId())){
-                                String name = "나";
-                                String phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
-                                int min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
-                                int ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                                 User user = new User();
-                                user.name = document.get(Constants.KEY_NAME).toString();
+                                user.name = "나";
                                 user.email = document.get(Constants.KEY_EMAIL).toString();
                                 user.image= document.get(Constants.KEY_IMAGE).toString();
                                 user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
                                 user.id = document.getId();
-                                adapter.addItem(new Family(name, phone_number, R.drawable.five, min_contact, ideal_contact, user));
+                                user.phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
+                                user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
+                                user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
+                                user.like = document.get(Constants.KEY_THEME_LIKE).toString();
+                                user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                                adapter.addItem(new Family(user));
                                 recyclerView.setAdapter(adapter);
                             }
                             Log.w(TAG, "Successfully loaded");
@@ -92,34 +89,34 @@ public class FrameFragment extends Fragment {
 
                             }
                             User user = new User();
-                            String name = document.get(Constants.KEY_NAME).toString();
-                            String phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
-                            int min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
-                            int ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
-                            int expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
-                            boolean meet = (Boolean) document.get(Constants.KEY_MEET);
                             user.name = document.get(Constants.KEY_NAME).toString();
                             user.email = document.get(Constants.KEY_EMAIL).toString();
                             user.image= document.get(Constants.KEY_IMAGE).toString();
                             user.id = document.getId();
-
+                            user.phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
+                            user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
+                            user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
+                            user.like = document.get(Constants.KEY_THEME_LIKE).toString();
+                            user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                            int expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
+                            boolean meet = (Boolean) document.get(Constants.KEY_MEET);
 
                             //대면 만남 여부, 표정 변화 단계에 따라 이미지 달리하여 추가하기
                             if (meet) {
-                                adapter.addItem(new Family(name, phone_number, R.drawable.five, min_contact, ideal_contact, user));
+                                adapter.addItem(new Family(user));
                             } else {
                                 if (expression==5) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.five, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(user));
                                 } else if (expression==4) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.four, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(user));
                                 } else if (expression==3) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.three, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(user));
                                 } else if (expression==2) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.two, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(user));
                                 } else if (expression==1) {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.one, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(user));
                                 } else {
-                                    adapter.addItem(new Family(name, phone_number, R.drawable.user_icon, min_contact, ideal_contact, user));
+                                    adapter.addItem(new Family(user));
                                 }
                             }
                         }

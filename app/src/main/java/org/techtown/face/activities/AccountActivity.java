@@ -1,7 +1,10 @@
 package org.techtown.face.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentReference;
@@ -26,6 +29,10 @@ public class AccountActivity extends BaseActivity {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
         binding.SignOut.setOnClickListener(view -> signOut());
+        binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_PHONE_NUMBER));
+        binding.imageView.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
+        binding.like.setText(preferenceManager.getString(Constants.KEY_THEME_LIKE));
+        binding.dislike.setText(preferenceManager.getString(Constants.KEY_THEME_DISLIKE));
 
     }
 
@@ -47,6 +54,11 @@ public class AccountActivity extends BaseActivity {
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private static Bitmap getUserImage(String encodedImage){
+        byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
     }
 
 

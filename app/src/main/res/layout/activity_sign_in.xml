@@ -20,19 +20,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="@string/welcome_back"
+            android:text="돌아오신 것을 환영합니다"
             android:textColor="@color/primary_text"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/login_to_continue"
+            android:text="계속하려면 로그인 하세요"
             android:textColor="@color/secondary_text"
             android:textSize="12sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/inputEmail"
@@ -40,14 +40,14 @@
             android:layout_height="45dp"
             android:layout_marginTop="45dp"
             android:background="@drawable/background_input"
-            android:inputType="textEmailAddress"
-            android:hint="@string/email"
+            android:hint="이메일"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="@color/primary_text"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/inputPassword"
@@ -55,14 +55,14 @@
             android:layout_height="45dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
-            android:inputType="textPassword"
-            android:hint="@string/password"
+            android:hint="비밀번호"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
+            android:inputType="textPassword"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="@color/primary_text"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <FrameLayout
             android:id="@+id/layoutSignIn"
@@ -70,13 +70,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:animateLayoutChanges="true">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="@string/sign_in"
-                android:textSize="13sp"
+                android:text="로그인"
                 android:textColor="@color/white"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 app:cornerRadius="8dp" />
 
@@ -87,15 +88,16 @@
                 android:layout_gravity="center"
                 android:visibility="gone"/>
         </FrameLayout>
+
         <Button
             android:id="@+id/textCreateNewAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:textStyle="bold"
-            android:textSize="13sp"
+            android:text="회원 가입"
             android:textColor="@color/white"
-            android:text="@string/create_new_account"/>
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
 
