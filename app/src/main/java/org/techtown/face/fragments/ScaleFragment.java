@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,11 +54,15 @@ public class ScaleFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (!currentUserId.equals(document.getId())) {
                                     String mobile = document.get("mobile").toString();
-                                    float angle = scaleInfo.differenceContact(v.getContext(), mobile);
-                                    DocumentReference documentReference
-                                            = document.getDocumentReference("angle");
-                                    documentReference.
-                                            update("angle", angle);
+                                    float angle = 0;
+                                    float differenceContact = scaleInfo.differenceContact(v.getContext(), mobile);
+                                    if (differenceContact<10 || differenceContact>-10) {
+                                        angle = 4*differenceContact;
+                                    } else {
+                                        angle = 45;
+                                    }
+                                    db.collection("users")
+                                            .document(document.getId()).update("angle", angle);
                                     Log.w(TAG, "Successfully uploaded");
                                 }
                             }
@@ -86,7 +92,6 @@ public class ScaleFragment extends Fragment {
                                 if (!currentUserId.equals(document.getId())) {
                                     String name = document.get("name").toString();
                                     String mobile = document.get("mobile").toString();
-
                                     float angle = Float.parseFloat(document.get("angle").toString());
                                     adapter.addItem(new FamilyScale(name, mobile, angle));
                                     Log.w(TAG, "Successfully loaded");

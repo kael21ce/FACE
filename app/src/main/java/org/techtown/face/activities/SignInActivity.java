@@ -13,6 +13,11 @@ import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.List;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -21,6 +26,26 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.READ_CALL_LOG, Permission.READ_CONTACTS)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .start();
+
         preferenceManager = new PreferenceManager(getApplicationContext());
         if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)){
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);

@@ -91,26 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
         abar = getSupportActionBar();
 
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.READ_CALL_LOG, Permission.READ_CONTACTS)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> permissions) {
-                        Toast.makeText(MainActivity.this, "허용된 권한 개수"+permissions.size(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> permissions) {
-                        Toast.makeText(MainActivity.this, "거부된 권한 개수"+permissions.size(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .start();
-
-
         getToken();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
 
