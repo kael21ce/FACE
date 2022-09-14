@@ -69,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put(Constants.KEY_PASSWORD,binding.inputPassword.getText().toString());
         user.put(Constants.KEY_IMAGE,encodedImage);
         user.put(Constants.KEY_BIRTHDAY,binding.inputBirth.getText().toString());
-        user.put(Constants.KEY_PHONE_NUMBER,binding.inputPhoneNumber.getText().toString());
+        user.put(Constants.KEY_MOBILE,binding.inputPhoneNumber.getText().toString());
         user.put(Constants.KEY_IDEAL_CONTACT,binding.inputIdealContact.getText().toString());
         user.put(Constants.KEY_MIN_CONTACT,binding.inputMinContact.getText().toString());
         user.put(Constants.KEY_THEME_LIKE,binding.inputThemeLike.getText().toString());

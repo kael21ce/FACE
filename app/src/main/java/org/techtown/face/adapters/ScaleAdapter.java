@@ -1,6 +1,7 @@
 package org.techtown.face.adapters;
 
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.techtown.face.utilites.Family;
 import org.techtown.face.R;
+import org.techtown.face.utilites.ScaleInfo;
 
 import java.util.ArrayList;
 
@@ -57,19 +59,33 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
+        TextView incomingNum;
+        TextView outgoingNum;
         ImageView scaleHead;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             nameTxt = itemView.findViewById(R.id.scaleName);
+            incomingNum = itemView.findViewById(R.id.incomingNum);
+            outgoingNum = itemView.findViewById(R.id.outgoingNum);
             scaleHead = itemView.findViewById(R.id.scale_head);
 
         }
 
+        @SuppressLint("SetTextI18n")
         public void setItem(Family.FamilyScale item) {
+            ScaleInfo scaleInfo = new ScaleInfo();
+
             nameTxt.setText(item.getScaleName());
             scaleHead.setRotation(item.getScaleAngle());
+            String mobile = item.getScaleMoible();
+            incomingNum.setText("수신: " + Integer.toString(scaleInfo.getIncomingNum(itemView.getContext(),
+                    mobile)));
+            outgoingNum.setText("발신: " + Integer.toString(scaleInfo.getOutgoingNum(itemView.getContext(),
+                    mobile)));
+
+
         }
     }
 }

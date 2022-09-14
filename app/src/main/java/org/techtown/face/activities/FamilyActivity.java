@@ -64,7 +64,7 @@ public class FamilyActivity extends BaseActivity {
 >>>>>>> main
 
         binding.callButton.setOnClickListener(v -> {
-            Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + user.phone_number));
+            Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + user.mobile));
             startActivity(callIntent);
         });
 <<<<<<< HEAD
