@@ -44,7 +44,7 @@ public class FamilyActivity extends BaseActivity {
         binding.idealContact.setText(user.ideal_contact + "일에 1번");
 
         binding.callButton.setOnClickListener(v -> {
-            Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + user.phone_number));
+            Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + user.mobile));
             startActivity(callIntent);
         });
         binding.chatButton.setOnClickListener(view -> {

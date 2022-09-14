@@ -62,7 +62,7 @@ public class FrameFragment extends Fragment {
                                 user.image= document.get(Constants.KEY_IMAGE).toString();
                                 user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
                                 user.id = document.getId();
-                                user.phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
+                                user.mobile = document.get(Constants.KEY_MOBILE).toString();
                                 user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                                 user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                                 user.like = document.get(Constants.KEY_THEME_LIKE).toString();
@@ -93,7 +93,7 @@ public class FrameFragment extends Fragment {
                             user.email = document.get(Constants.KEY_EMAIL).toString();
                             user.image= document.get(Constants.KEY_IMAGE).toString();
                             user.id = document.getId();
-                            user.phone_number = document.get(Constants.KEY_PHONE_NUMBER).toString();
+                            user.mobile = document.get(Constants.KEY_MOBILE).toString();
                             user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                             user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();

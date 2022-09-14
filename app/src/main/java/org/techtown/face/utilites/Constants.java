@@ -35,7 +35,7 @@ public class Constants {
     public static final String REMOTE_MSG_REGISTRATION_IDS = "registration_ids";
 
     public static final String KEY_BIRTHDAY = "birthday";
-    public static final String KEY_PHONE_NUMBER = "phone_number";
+    public static final String KEY_MOBILE = "mobile";
     public static final String KEY_IDEAL_CONTACT = "ideal_contact";
     public static final String KEY_MIN_CONTACT = "min_contact";
     public static final String KEY_THEME_LIKE = "theme_like";
