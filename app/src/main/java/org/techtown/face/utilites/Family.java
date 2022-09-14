@@ -37,11 +37,11 @@ public class Family {
             this.name = name;
         }
 
-        public String getScalePhoneNumber() {
+        public String getScaleMoible() {
             return mobile;
         }
 
-        public void setScalePhoneNumber(String mobile) {
+        public void setScaleMobile(String mobile) {
             this.mobile = mobile;
         }
 
