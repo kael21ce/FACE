@@ -27,7 +27,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //getIncomingNum: 입력된 연락처로부터 수신된 횟수 가져오기
-    private int getIncomingNum(Context context, String mobile) {
+    public int getIncomingNum(Context context, String mobile) {
         callSet = new String[] { CallLog.Calls.DATE, CallLog.Calls.TYPE, CallLog.Calls.NUMBER,
                 CallLog.Calls.DURATION };
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
@@ -63,7 +63,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력된 연락처에게 발신한 횟수 가져오기
-    private int getOutgoingNum(Context context, String mobile) {
+    public int getOutgoingNum(Context context, String mobile) {
         callSet = new String[] { CallLog.Calls.DATE, CallLog.Calls.TYPE, CallLog.Calls.NUMBER,
                 CallLog.Calls.DURATION };
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
@@ -99,7 +99,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력된 연락처와의 통화 수 차이 가져오기
-    private int differenceCall(Context context, String mobile) {
+    public int differenceCall(Context context, String mobile) {
         int numI = getIncomingNum(context, mobile);
         int numO = getOutgoingNum(context, mobile);
 
@@ -107,7 +107,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력된 연락처와의 연락 수 차이 가져오기
-    private float differenceContact(Context context, String mobile) {
+    public float differenceContact(Context context, String mobile) {
         int numCall = differenceCall(context, mobile);
         float y = 1.0f* numCall;
         return y;

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -22,12 +23,14 @@ import org.techtown.face.utilites.Family.FamilyScale;
 import org.techtown.face.R;
 import org.techtown.face.adapters.ScaleAdapter;
 import org.techtown.face.utilites.PreferenceManager;
+import org.techtown.face.utilites.ScaleInfo;
 
 public class ScaleFragment extends Fragment {
 
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "FACEdatabase";
+    ScaleInfo scaleInfo = new ScaleInfo();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +40,31 @@ public class ScaleFragment extends Fragment {
         //리사이클러뷰 객체
         RecyclerView recyclerView = v.findViewById(R.id.scaleRecyclerView);
         //
+
+        //데이터베이스에 연락저울 각도 입력
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (!currentUserId.equals(document.getId())) {
+                                    String mobile = document.get("mobile").toString();
+                                    float angle = scaleInfo.differenceContact(v.getContext(), mobile);
+                                    DocumentReference documentReference
+                                            = document.getDocumentReference("angle");
+                                    documentReference.
+                                            update("angle", angle);
+                                    Log.w(TAG, "Successfully uploaded");
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Error uploading data.", task.getException());
+                        }
+                    }
+                });
 
         //리사이클러뷰 레이아웃 매니저 생성
         LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(),
@@ -58,6 +86,7 @@ public class ScaleFragment extends Fragment {
                                 if (!currentUserId.equals(document.getId())) {
                                     String name = document.get("name").toString();
                                     String mobile = document.get("mobile").toString();
+
                                     float angle = Float.parseFloat(document.get("angle").toString());
                                     adapter.addItem(new FamilyScale(name, mobile, angle));
                                     Log.w(TAG, "Successfully loaded");
