@@ -113,6 +113,23 @@ public class ScaleInfo extends ContentProvider {
         return y;
     }
 
+    //각도 산출하기
+    public float getAngle(Context context, String mobile) {
+        float angle = 0;
+        float y = differenceContact(context, mobile);
+        if (y<10 || y>-10) {
+            angle = 4*y;
+        } else {
+            if (y>0) {
+                angle = 45.0f;
+            } else {
+                angle = -45.0f;
+            }
+        }
+
+        return angle;
+    }
+
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {

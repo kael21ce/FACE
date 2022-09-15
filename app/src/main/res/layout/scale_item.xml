@@ -34,6 +34,7 @@
                 android:layout_gravity="right"
                 android:background="#2196F3"
                 android:gravity="right"
+                android:paddingEnd="10dp"
                 android:text="이름"
                 android:textColor="#FFFFFF"
                 android:textSize="25sp"
