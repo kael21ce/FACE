@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,14 +22,12 @@ import org.techtown.face.utilites.Family.FamilyScale;
 import org.techtown.face.R;
 import org.techtown.face.adapters.ScaleAdapter;
 import org.techtown.face.utilites.PreferenceManager;
-import org.techtown.face.utilites.ScaleInfo;
 
 public class ScaleFragment extends Fragment {
 
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "FACEdatabase";
-    ScaleInfo scaleInfo = new ScaleInfo();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,7 +49,7 @@ public class ScaleFragment extends Fragment {
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    final String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
