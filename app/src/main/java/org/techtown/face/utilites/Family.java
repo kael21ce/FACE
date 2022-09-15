@@ -21,12 +21,10 @@ public class Family {
     public static class FamilyScale {
         String name;
         String mobile;
-        float angle;
 
-        public FamilyScale(String name, String mobile, float angle) {
+        public FamilyScale(String name, String mobile) {
             this.name = name;
             this.mobile = mobile;
-            this.angle = angle;
         }
 
         public String getScaleName() {
@@ -44,14 +42,7 @@ public class Family {
         public void setScaleMobile(String mobile) {
             this.mobile = mobile;
         }
-
-        public float getScaleAngle() {
-            return angle;
-        }
-
-        public void setScaleAngle(float angle) {
-            this.angle = angle;
-        }
+        
     }
 }
 

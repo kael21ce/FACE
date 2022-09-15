@@ -41,36 +41,6 @@ public class ScaleFragment extends Fragment {
 
         //리사이클러뷰 객체
         RecyclerView recyclerView = v.findViewById(R.id.scaleRecyclerView);
-        //
-
-        //데이터베이스에 연락저울 각도 입력
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (!currentUserId.equals(document.getId())) {
-                                    String mobile = document.get("mobile").toString();
-                                    float angle = 0;
-                                    float differenceContact = scaleInfo.differenceContact(v.getContext(), mobile);
-                                    if (differenceContact<10 || differenceContact>-10) {
-                                        angle = 4*differenceContact;
-                                    } else {
-                                        angle = 45;
-                                    }
-                                    db.collection("users")
-                                            .document(document.getId()).update("angle", angle);
-                                    Log.w(TAG, "Successfully uploaded");
-                                }
-                            }
-                        } else {
-                            Log.w(TAG, "Error uploading data.", task.getException());
-                        }
-                    }
-                });
 
         //리사이클러뷰 레이아웃 매니저 생성
         LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(),
@@ -92,8 +62,7 @@ public class ScaleFragment extends Fragment {
                                 if (!currentUserId.equals(document.getId())) {
                                     String name = document.get("name").toString();
                                     String mobile = document.get("mobile").toString();
-                                    float angle = Float.parseFloat(document.get("angle").toString());
-                                    adapter.addItem(new FamilyScale(name, mobile, angle));
+                                    adapter.addItem(new FamilyScale(name, mobile));
                                     Log.w(TAG, "Successfully loaded");
                                 }
                             }
