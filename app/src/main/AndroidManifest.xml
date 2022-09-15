@@ -31,7 +31,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.FamilyActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.SignUpActivity"
             android:exported="true"
