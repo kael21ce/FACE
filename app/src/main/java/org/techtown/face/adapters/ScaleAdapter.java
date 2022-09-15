@@ -78,12 +78,13 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             ScaleInfo scaleInfo = new ScaleInfo();
 
             nameTxt.setText(item.getScaleName());
-            scaleHead.setRotation(item.getScaleAngle());
             String mobile = item.getScaleMoible();
             incomingNum.setText("수신: " + Integer.toString(scaleInfo.getIncomingNum(itemView.getContext(),
                     mobile)));
             outgoingNum.setText("발신: " + Integer.toString(scaleInfo.getOutgoingNum(itemView.getContext(),
                     mobile)));
+            float angle = scaleInfo.getAngle(itemView.getContext(), mobile);
+            scaleHead.setRotation(angle);
 
 
         }
