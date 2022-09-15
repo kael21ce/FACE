@@ -77,13 +77,8 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
         }
 
         public void setItem(Family item) {
-<<<<<<< HEAD
             nameTxt.setText(item.getUserContact().name);
             familyImg.setImageBitmap(getUserImage(item.getUserContact().image));
-=======
-            nameTxt.setText(item.getName());
-            familyImg.setImageBitmap(getUserImage(item.getImage()));
->>>>>>> main
         }
     }
     public void addItem(Family item) {
