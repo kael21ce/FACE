@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.techtown.face.databinding.ActivitySignInBinding;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.yanzhenjie.permission.Action;
@@ -23,6 +26,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private ActivitySignInBinding binding;
     private PreferenceManager preferenceManager;
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +68,22 @@ public class SignInActivity extends AppCompatActivity {
 
         binding.buttonSignIn.setOnClickListener(view -> {
             if (isValidSignInDetails()){
-                signIn();
+                auth(binding.inputEmail.getText().toString(),binding.inputPassword.getText().toString());
             }
         });
     }
+
+    private void auth(String email, String password){
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this,task -> {
+           if(task.isSuccessful()){
+               signIn();
+           } else {
+               showToast("authentication failed");
+           }
+        });
+    }
+
     private void signIn(){
         loading(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -83,6 +100,7 @@ public class SignInActivity extends AppCompatActivity {
                         preferenceManager.putString(Constants.KEY_NAME,documentSnapshot.getString(Constants.KEY_NAME));
                         preferenceManager.putString(Constants.KEY_IMAGE,documentSnapshot.getString(Constants.KEY_IMAGE));
                         preferenceManager.putString(Constants.KEY_MOBILE,documentSnapshot.getString(Constants.KEY_MOBILE));
+                        preferenceManager.putString(Constants.KEY_BIRTHDAY,documentSnapshot.getString(Constants.KEY_BIRTHDAY));
                         preferenceManager.putString(Constants.KEY_THEME_LIKE,documentSnapshot.getString(Constants.KEY_THEME_LIKE));
                         preferenceManager.putString(Constants.KEY_THEME_DISLIKE,documentSnapshot.getString(Constants.KEY_THEME_DISLIKE));
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
@@ -125,5 +143,4 @@ public class SignInActivity extends AppCompatActivity {
         }
 
     }
-
 }

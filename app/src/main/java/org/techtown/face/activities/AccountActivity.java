@@ -1,12 +1,21 @@
 package org.techtown.face.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,6 +38,7 @@ public class AccountActivity extends BaseActivity {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
         binding.SignOut.setOnClickListener(view -> signOut());
+        binding.deleteAccount.setOnClickListener(view -> deleteUser());
         binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
         binding.imageView.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
         binding.like.setText(preferenceManager.getString(Constants.KEY_THEME_LIKE));
@@ -61,6 +71,10 @@ public class AccountActivity extends BaseActivity {
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
     }
 
+    private void deleteUser(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.delete().addOnCompleteListener(task -> {if(task.isSuccessful()){showToast("Delete Successful");}});
+    }
 
 
 }

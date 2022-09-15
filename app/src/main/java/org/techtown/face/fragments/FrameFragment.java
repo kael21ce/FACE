@@ -58,7 +58,6 @@ public class FrameFragment extends Fragment {
                             if (currentUserId.equals(document.getId())){
                                 User user = new User();
                                 user.name = "나";
-                                user.email = document.get(Constants.KEY_EMAIL).toString();
                                 user.image= document.get(Constants.KEY_IMAGE).toString();
                                 user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
                                 user.id = document.getId();
@@ -90,7 +89,6 @@ public class FrameFragment extends Fragment {
                             }
                             User user = new User();
                             user.name = document.get(Constants.KEY_NAME).toString();
-                            user.email = document.get(Constants.KEY_EMAIL).toString();
                             user.image= document.get(Constants.KEY_IMAGE).toString();
                             user.id = document.getId();
                             user.mobile = document.get(Constants.KEY_MOBILE).toString();
