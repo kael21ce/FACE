@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,15 +16,13 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.databinding.ActivitySignUpBinding;
 import org.techtown.face.utilites.Constants;
@@ -36,10 +33,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+
+
 public class SignUpActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private ActivitySignUpBinding binding;
     private String encodedImage;
+    private Uri fimageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUp(){
         loading(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
-
         HashMap<String, Object> user = new HashMap<>();
         user.put(Constants.KEY_NAME,binding.inputName.getText().toString());
         user.put(Constants.KEY_EMAIL,binding.inputEmail.getText().toString());
@@ -98,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_USER_ID,documentReference.getId());
                     preferenceManager.putString(Constants.KEY_NAME,binding.inputName.getText().toString());
                     preferenceManager.putString(Constants.KEY_IMAGE,encodedImage);
-
+                    uploadImage(fimageUri);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -110,6 +109,18 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void uploadImage(Uri uri){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        UploadTask uploadTask;
+        String id = preferenceManager.getString(Constants.KEY_USER_ID);
+        showToast(uri +id);
+        StorageReference imageRef = storageReference.child(id+"/5.jpg");
+        uploadTask = imageRef.putFile(uri);
+        uploadTask.addOnFailureListener(exception -> showToast("Upload Failed"))
+                .addOnSuccessListener(taskSnapshot -> showToast("Upload Success"));
     }
 
     private void auth(String email, String password){
@@ -137,6 +148,7 @@ public class SignUpActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),result -> {
                 if (result.getResultCode() == RESULT_OK){
                     if (result.getData()!= null){
+                        Log.e(TAG,result.getData().toString());
                         Uri imageUri = result.getData().getData();
                         try {
                             InputStream inputStream = getContentResolver().openInputStream(imageUri);
@@ -144,13 +156,14 @@ public class SignUpActivity extends AppCompatActivity {
                             binding.imageProfile.setImageBitmap(bitmap);
                             binding.textAddImage.setVisibility(View.GONE);
                             encodedImage = encodeImage(bitmap);
-
+                            fimageUri = imageUri;
                         }catch (FileNotFoundException e){
                             e.printStackTrace();
                         }
                     }
                 }
             });
+
     private Boolean isValidSignUpDetails(){
         if (encodedImage == null){
             showToast("Select Profile image");
