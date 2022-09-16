@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_gravity="center"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/phoneNumber"
@@ -103,7 +104,7 @@
             android:id="@+id/deleteAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30"
+            android:layout_marginTop="30dp"
             android:text="탈퇴" />
 
     </LinearLayout>
