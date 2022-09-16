@@ -71,6 +71,11 @@ public class SignInActivity extends AppCompatActivity {
                 auth(binding.inputEmail.getText().toString(),binding.inputPassword.getText().toString());
             }
         });
+
+        binding.forgotPassword.setOnClickListener(view -> {
+            Intent intent = new Intent(SignInActivity.this,PasswordResetActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void auth(String email, String password){
