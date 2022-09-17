@@ -94,6 +94,13 @@
             android:text="선호하는거" />
 
         <Button
+            android:id="@+id/changeInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="계정 설정 변경" />
+
+        <Button
             android:id="@+id/SignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
