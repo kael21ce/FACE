@@ -40,11 +40,17 @@ public class AccountActivity extends BaseActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         binding.SignOut.setOnClickListener(view -> signOut());
         binding.deleteAccount.setOnClickListener(view -> deleteUser());
+        binding.changeInfo.setOnClickListener(view -> changeInformation());
         binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
         binding.imageView.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
         binding.like.setText(preferenceManager.getString(Constants.KEY_THEME_LIKE));
         binding.dislike.setText(preferenceManager.getString(Constants.KEY_THEME_DISLIKE));
 
+    }
+
+    private void changeInformation(){
+        Intent intent = new Intent(AccountActivity.this,ChangeInfoActivity.class);
+        startActivity(intent);
     }
 
     private void signOut() {
@@ -63,15 +69,6 @@ public class AccountActivity extends BaseActivity {
                 .addOnFailureListener(e -> showToast("Unable to sign out"));
     }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private static Bitmap getUserImage(String encodedImage){
-        byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-    }
-
     private void deleteUser(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         user.delete().addOnCompleteListener(task -> {if(task.isSuccessful()){showToast("Delete Successful");}});
@@ -88,6 +85,17 @@ public class AccountActivity extends BaseActivity {
                 })
                 .addOnFailureListener(runnable -> showToast("Failed delete"));
     }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private static Bitmap getUserImage(String encodedImage){
+        byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+    }
+
+
 
 
 }
