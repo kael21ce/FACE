@@ -96,6 +96,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     public void setItem(int position, Family item) {
         items.set(position, item);
     }
+
     private static Bitmap getUserImage(String encodedImage){
         byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);

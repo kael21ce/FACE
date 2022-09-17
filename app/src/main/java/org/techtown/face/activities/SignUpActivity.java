@@ -116,7 +116,6 @@ public class SignUpActivity extends AppCompatActivity {
         StorageReference storageReference = storage.getReference();
         UploadTask uploadTask;
         String id = preferenceManager.getString(Constants.KEY_USER_ID);
-        showToast(uri +id);
         StorageReference imageRef = storageReference.child(id+"/5.jpg");
         uploadTask = imageRef.putFile(uri);
         uploadTask.addOnFailureListener(exception -> showToast("Upload Failed"))

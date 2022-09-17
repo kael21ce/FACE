@@ -47,8 +47,8 @@ public class FrameFragment extends Fragment {
             startActivity(contactIntent);
         });
         //db에서 데이터 가져오기
-        //나에 대한 정보 추가
 
+        //나에 대한 정보 추가
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -76,8 +76,9 @@ public class FrameFragment extends Fragment {
                         Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
+
         //다른 사람 정보 추가
-       db.collection(Constants.KEY_COLLECTION_USERS)
+        db.collection(Constants.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
                     String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
