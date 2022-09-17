@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 
 import org.techtown.face.R;
 import org.techtown.face.databinding.ActivityFamilyBinding;
@@ -14,8 +13,6 @@ import org.techtown.face.utilites.PreferenceManager;
 
 public class FamilyActivity extends BaseActivity {
 
-    TextView themeLike;
-    TextView themeDislike;
     PreferenceManager preferenceManager;
     ActivityFamilyBinding binding;
     User user;
@@ -28,11 +25,6 @@ public class FamilyActivity extends BaseActivity {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
         user = new User();
-
-        themeLike = findViewById(R.id.themeLike);
-        themeDislike = findViewById(R.id.themeDislike);
-
-
 
         Button exitButton = findViewById(R.id.exit);
         exitButton.setOnClickListener(view -> finish());

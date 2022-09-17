@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         int curId = item.getItemId();
         switch (curId) {
             case R.id.add_family:
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivity(searchIntent);
                 break;
             case R.id.setting:
                 Intent settingIntent = new Intent(this, SettingActivity.class);

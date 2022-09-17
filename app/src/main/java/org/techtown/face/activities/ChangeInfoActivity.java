@@ -2,9 +2,23 @@ package org.techtown.face.activities;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
-import org.techtown.face.R;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.techtown.face.databinding.ActivityChangeInfoBinding;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
