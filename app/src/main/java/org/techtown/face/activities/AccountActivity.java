@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,6 +75,18 @@ public class AccountActivity extends BaseActivity {
     private void deleteUser(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         user.delete().addOnCompleteListener(task -> {if(task.isSuccessful()){showToast("Delete Successful");}});
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .delete()
+                .addOnSuccessListener(unused -> {
+                    showToast("Deleted User Success");
+                    preferenceManager.clear();
+                    Intent intent = new Intent(AccountActivity.this,SignInActivity.class);
+                    startActivity(intent);
+                })
+                .addOnFailureListener(runnable -> showToast("Failed delete"));
     }
 
 
