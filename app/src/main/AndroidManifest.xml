@@ -20,8 +20,8 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.SearchActivity"
-            android:exported="true" />
+            android:name=".activities.MomentCheckActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.ChangeInfoActivity"
             android:exported="true" />

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import me.relex.circleindicator.CircleIndicator3;
 
 public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder> {
-    ArrayList<Moment> items = new ArrayList<Moment>();
+    ArrayList<Moment> items = new ArrayList<>();
 
     @NonNull
     @Override
@@ -50,7 +50,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             nameTxt = itemView.findViewById(R.id.momentName);
             imageViewPager = itemView.findViewById(R.id.imageViewPager);
             momentDate = itemView.findViewById(R.id.momentDate);
-            imgIndicator = (CircleIndicator3) itemView.findViewById(R.id.imgIndicator);
+            imgIndicator = itemView.findViewById(R.id.imgIndicator);
         }
 
         public void setItem(Moment item) {
@@ -70,6 +70,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             });
         }
     }
+
 
     public void addItem(Moment item) {
         items.add(item);

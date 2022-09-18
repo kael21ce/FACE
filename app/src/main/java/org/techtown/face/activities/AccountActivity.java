@@ -95,7 +95,4 @@ public class AccountActivity extends BaseActivity {
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
     }
 
-
-
-
 }

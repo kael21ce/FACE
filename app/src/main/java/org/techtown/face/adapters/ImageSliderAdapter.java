@@ -1,6 +1,9 @@
 package org.techtown.face.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.techtown.face.R;
 
+import java.util.BitSet;
+
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.MyViewHolder> {
     private Context context;
-    private int[] sliderImage;
+    private String[] sliderImage;
 
-    public ImageSliderAdapter(Context context, int[] sliderImage) {
+    public ImageSliderAdapter(Context context, String[] sliderImage) {
         this.context = context;
         this.sliderImage = sliderImage;
     }
@@ -45,8 +50,15 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
             imageView = itemView.findViewById(R.id.imgSlider);
         }
 
-        public void bindSliderImage(int image) {
-            imageView.setImageResource(image);
+        public void bindSliderImage(String image) {
+            imageView.setImageBitmap(getUserImage(image));
+        }
+
+        public Bitmap getUserImage(String encodedImage){
+            byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         }
     }
+
+
 }

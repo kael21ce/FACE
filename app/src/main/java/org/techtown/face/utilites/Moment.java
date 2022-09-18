@@ -9,11 +9,11 @@ public class Moment {
         this.name = name;
     }
 
-    public int[] getImages() {
+    public String[] getImages() {
         return images;
     }
 
-    public void setImages(int[] images) {
+    public void setImages(String[] images) {
         this.images = images;
     }
 
@@ -25,13 +25,13 @@ public class Moment {
         this.dates = dates;
     }
 
-    public Moment(String name, int[] images, String[] dates) {
+    public Moment(String name, String[] images, String[] dates) {
         this.name = name;
         this.images = images;
         this.dates = dates;
     }
 
     String name;
-    int[] images;
+    String[] images;
     String[] dates;
 }

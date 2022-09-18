@@ -3,6 +3,7 @@ package org.techtown.face.utilites;
 import java.util.HashMap;
 
 public class Constants {
+    public static final String KEY_COLLECTION_IMAGES = "images";
     public static final String KEY_COLLECTION_USERS = "users";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
@@ -44,6 +45,8 @@ public class Constants {
     public static final String KEY_LOCATION = "location";
     public static final String KEY_MEET = "meet";
     public static final String KEY_ANGLE = "angle";
+
+    public static final String KEY_INT = "int";
 
 
     public static HashMap<String, String> remoteMsgHeaders = null;

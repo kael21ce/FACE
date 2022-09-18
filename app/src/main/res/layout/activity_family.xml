@@ -203,33 +203,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/themeLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="선호"
+                android:textColor="#009688" />
+
+            <TextView
+                android:id="@+id/themeDislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="불호"
+                android:textColor="#F44336" />
+
+            <Button
+                android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="순간에 이미지 올리기" />
 
-                <TextView
-                    android:id="@+id/themeLike"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="선호"
-                    android:textColor="#009688" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/button2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:text="나의 순간 보기" />
 
-                <TextView
-                    android:id="@+id/themeDislike"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="불호"
-                    android:textColor="#F44336" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

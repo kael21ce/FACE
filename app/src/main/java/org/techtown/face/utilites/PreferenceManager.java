@@ -3,6 +3,11 @@ package org.techtown.face.utilites;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.techtown.face.models.User;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class PreferenceManager {
     private final SharedPreferences sharedPreferences ;
     public PreferenceManager(Context context){
@@ -23,6 +28,14 @@ public class PreferenceManager {
     }
     public String getString(String key){
         return sharedPreferences.getString(key,null);
+    }
+    public void putInt(String key, int value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,value);
+        editor.apply();
+    }
+    public Integer getInt(String key){
+        return sharedPreferences.getInt(key,0);
     }
     public void clear(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
