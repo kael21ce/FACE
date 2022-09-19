@@ -12,6 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.Family;
 import org.techtown.face.R;
@@ -78,7 +82,10 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
 
         public void setItem(Family item) {
             nameTxt.setText(item.getUserContact().name);
-            familyImg.setImageBitmap(getUserImage(item.getUserContact().image));
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(item.getUserContact().path);
+            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Glide.with(itemView).load(uri.toString()).into(familyImg);
+            });
         }
     }
     public void addItem(Family item) {
@@ -96,11 +103,5 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     public void setItem(int position, Family item) {
         items.set(position, item);
     }
-
-    private static Bitmap getUserImage(String encodedImage){
-        byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-    }
-
 }
 

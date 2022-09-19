@@ -72,57 +72,6 @@ public class FamilyActivity extends BaseActivity {
         });
         binding.themeLike.setText(user.like);
         binding.themeDislike.setText(user.dislike);
-        binding.button.setOnClickListener(v -> {
-            Intent intent2 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent2.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            pickImage.launch(intent2);
-        });
-        binding.button2.setOnClickListener(v -> {
-            Intent intent3 = new Intent(FamilyActivity.this,MomentCheckActivity.class);
-            startActivity(intent3);
-        });
     }
 
-    private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == RESULT_OK){
-                    if (result.getData()!= null){
-                        Log.e(TAG,result.getData().toString());
-                        Uri imageUri = result.getData().getData();
-                        try {
-                            InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                            long now = System.currentTimeMillis();
-                            Date date = new Date(now);
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            String getTime = sdf.format(date);
-                            imageMap.put(Constants.KEY_NAME,preferenceManager.getString(Constants.KEY_NAME));
-                            imageMap.put(Constants.KEY_TIMESTAMP, getTime);
-                            imageMap.put(Constants.KEY_IMAGE,encodeImage(bitmap));
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                                    .collection(Constants.KEY_COLLECTION_IMAGES)
-                                    .add(imageMap)
-                                    .addOnCompleteListener(task -> showToast("upload success"));
-                        }catch (FileNotFoundException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-
-    private void showToast(String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private String encodeImage(Bitmap bitmap){
-        int previewWidth = 150;
-        int previewHeight = bitmap.getHeight()*previewWidth/bitmap.getWidth();
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap,previewWidth,previewHeight,false);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
-        byte [] bytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(bytes,Base64.DEFAULT);
-    }
 }

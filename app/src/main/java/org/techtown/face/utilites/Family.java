@@ -16,8 +16,6 @@ public class Family {
         this.user = user;
     }
 
-
-
     User user;
 
     public static class FamilyScale {
