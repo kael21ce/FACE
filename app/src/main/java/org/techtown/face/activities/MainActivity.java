@@ -23,6 +23,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 import org.techtown.face.R;
 import org.techtown.face.adapters.RecentConversionsAdapter;
 import org.techtown.face.databinding.ActivityMainBinding;
+import org.techtown.face.fragments.AddFragment;
 import org.techtown.face.fragments.FrameFragment;
 import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     FrameFragment frameFragment;
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
+    AddFragment addFragment;
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
@@ -59,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
         switch (curId) {
-            case R.id.add_family:
-                break;
             case R.id.setting:
                 Intent settingIntent = new Intent(this, SettingActivity.class);
                 startActivity(settingIntent);
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         frameFragment = new FrameFragment();
         scaleFragment = new ScaleFragment();
         momentFragment = new MomentFragment();
+        addFragment = new AddFragment();
 
         abar = getSupportActionBar();
 
@@ -114,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                             abar.setTitle("FACE: 순간");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     momentFragment).commit();
+
+                            return true;
+                        case R.id.addTab:
+                            abar.setTitle("FACE: 가족 추가");
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                                    addFragment).commit();
 
                             return true;
                     }
