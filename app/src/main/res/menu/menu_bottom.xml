@@ -26,4 +26,12 @@
         android:icon="@drawable/gallery"
         />
 
+    <item
+        android:id="@+id/addTab"
+        app:showAsAction="ifRoom"
+        android:enabled="true"
+        android:title="가족 추가"
+        android:icon="@drawable/add_member"
+        />
+
 </menu>
