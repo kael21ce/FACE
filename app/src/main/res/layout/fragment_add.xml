@@ -5,9 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="새로 들어온 소식" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addFloatingActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:clickable="true"
+        app:srcCompat="@drawable/add_member"
+        android:contentDescription="TODO"
+        android:focusable="true" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="780dp"
+        android:layout_height="760dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -21,14 +37,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addFloatingActionButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:clickable="true"
-            app:srcCompat="@drawable/add_member"
-            android:contentDescription="TODO"
-            android:focusable="true" />
+
     </LinearLayout>
 </LinearLayout>

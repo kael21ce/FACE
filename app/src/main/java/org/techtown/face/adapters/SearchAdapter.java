@@ -3,10 +3,8 @@ package org.techtown.face.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,15 +18,14 @@ import org.techtown.face.utilites.SearchItem;
 
 import java.util.ArrayList;
 
-public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     ArrayList<SearchItem> items = new ArrayList<>();
-
 
     @NonNull
     @Override
-    public AddAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View itemView = layoutInflater.inflate(R.layout.add_item, parent, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        View itemView = inflater.inflate(R.layout.search_item, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
@@ -38,38 +35,23 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
         holder.setItem(item);
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    interface OnItemClickListener{
-        void onItemClick(View v, int position);
-        void onDeleteClick(View v, int position);
-    }
-
-    private static OnItemClickListener mListener = null;
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = listener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
         TextView mobileTxt;
         ImageView image;
-        Button delete;
-        Button add;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTxt = itemView.findViewById(R.id.addedName);
-            mobileTxt = itemView.findViewById(R.id.addedMobile);
-            image = itemView.findViewById(R.id.addedImage);
-            delete = itemView.findViewById(R.id.deleteButton);
-            add = itemView.findViewById(R.id.addButton);
-
+            nameTxt = itemView.findViewById(R.id.searchName);
+            mobileTxt = itemView.findViewById(R.id.searchMobile);
+            image = itemView.findViewById(R.id.searchImage);
         }
 
         public void setItem(SearchItem item) {
@@ -80,24 +62,6 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
             imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> Glide.with(itemView)
                     .load(downloadUrl.toString())
                     .into(image));
-            delete.setOnClickListener (view -> {
-                int position = getAdapterPosition();
-                if (position!=RecyclerView.NO_POSITION){
-                    if (mListener!=null) {
-                        mListener.onDeleteClick(view, position);
-                    }
-                }
-                Toast.makeText(itemView.getContext(), "삭제되었습니다",Toast.LENGTH_SHORT).show();
-            });
-            add.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position!=RecyclerView.NO_POSITION){
-                    if (mListener!=null) {
-                        mListener.onDeleteClick(v, position);
-                    }
-                }
-                Toast.makeText(itemView.getContext(), "추가되었습니다",Toast.LENGTH_SHORT).show();
-            });
         }
     }
 
@@ -117,6 +81,4 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
     public void setItem(int position, SearchItem item) {
         items.set(position, item);
     }
-
-
 }

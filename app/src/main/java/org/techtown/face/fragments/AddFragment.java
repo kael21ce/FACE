@@ -11,10 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.R;
 import org.techtown.face.activities.SearchActivity;
 import org.techtown.face.adapters.AddAdapter;
+import org.techtown.face.utilites.Constants;
+import org.techtown.face.utilites.SearchItem;
 
 public class AddFragment extends Fragment {
 
@@ -29,7 +33,18 @@ public class AddFragment extends Fragment {
         addRecyclerView.setLayoutManager(layoutManager);
         AddAdapter addAdapter = new AddAdapter();
 
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                    String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
+                    String name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
+                    String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
+                    addAdapter.addItem(new SearchItem(path, name, mobile));
+                    addRecyclerView.setAdapter(addAdapter);
+                }
+            }
+        });
         addButton.setOnClickListener(v1 -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
