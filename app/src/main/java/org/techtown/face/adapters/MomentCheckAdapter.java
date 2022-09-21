@@ -14,7 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.R;
 import org.techtown.face.utilites.Constants;
@@ -63,7 +67,8 @@ public class MomentCheckAdapter extends RecyclerView.Adapter<MomentCheckAdapter.
 
             nameTxt.setText(item.getName()+"의 순간");
             momentDate.setText("| "+item.getDates()+" |");
-            image.setImageBitmap(getUserImage(item.getImages()));
+            StorageReference imgRef = FirebaseStorage.getInstance().getReference().child(item.getImages());
+            imgRef.getDownloadUrl().addOnSuccessListener(command -> Glide.with(itemView).load(command.toString()).into(image));
             button.setOnClickListener(v -> {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection(Constants.KEY_COLLECTION_USERS)
@@ -76,10 +81,6 @@ public class MomentCheckAdapter extends RecyclerView.Adapter<MomentCheckAdapter.
                         });
             });
 
-        }
-        public Bitmap getUserImage(String encodedImage){
-            byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         }
     }
 
