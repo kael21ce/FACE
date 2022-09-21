@@ -101,11 +101,17 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
                 }
                 HashMap<String, String> user = new HashMap<>();
                 user.put(Constants.KEY_USER, item.getUserId());
+                HashMap<String, String> myUser = new HashMap<>();
+                user.put(Constants.KEY_USER, item.getMyId());
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())
                         .collection(Constants.KEY_COLLECTION_USERS)
                         .add(user);
+                db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(item.getUserId())
+                        .collection(Constants.KEY_COLLECTION_USERS)
+                        .add(myUser);
                 add.setVisibility(View.INVISIBLE);
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())
