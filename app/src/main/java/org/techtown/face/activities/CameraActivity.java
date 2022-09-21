@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,6 +37,9 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
 
+        binding.imageUpload.setVisibility(View.INVISIBLE);
+        binding.next.setVisibility(View.INVISIBLE);
+
         binding.cameraSet.setOnClickListener(v -> setCamera());
         binding.imageUpload.setOnClickListener(v -> upload());
         binding.next.setOnClickListener(v -> {
@@ -51,6 +55,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void upload(){
+
         if(binding.cameraImage.getDrawable()!=null){
             String path = preferenceManager.getString(Constants.KEY_USER_ID)+"/"+"profile"+"5";
             preferenceManager.putString(Constants.KEY_PATH,path);
@@ -70,7 +75,10 @@ public class CameraActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                    .update(Constants.KEY_PATH,path).addOnSuccessListener(unused -> Log.e("Camera", "Succeed"));
+                    .update(Constants.KEY_PATH,path).addOnSuccessListener(unused -> {
+                        binding.next.setVisibility(View.VISIBLE);
+                        Log.e("Camera", "Succeed");
+                    });
         }
 
     }
@@ -82,7 +90,7 @@ public class CameraActivity extends AppCompatActivity {
                         Bundle extras = result.getData().getExtras();
                         bitmap = (Bitmap) extras.get("data");
                         binding.cameraImage.setImageBitmap(bitmap);
-
+                        binding.imageUpload.setVisibility(View.VISIBLE);
                     }
                 }
             });
