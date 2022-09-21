@@ -58,7 +58,6 @@ public class FrameFragment extends Fragment {
                             if (currentUserId.equals(document.getId())){
                                 User user = new User();
                                 user.name = "나";
-                                user.image= document.get(Constants.KEY_IMAGE).toString();
                                 user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
                                 user.id = document.getId();
                                 user.mobile = document.get(Constants.KEY_MOBILE).toString();
@@ -66,6 +65,7 @@ public class FrameFragment extends Fragment {
                                 user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                                 user.like = document.get(Constants.KEY_THEME_LIKE).toString();
                                 user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                                user.path = document.get(Constants.KEY_PATH).toString();
                                 adapter.addItem(new Family(user));
                                 recyclerView.setAdapter(adapter);
                             }
@@ -97,6 +97,7 @@ public class FrameFragment extends Fragment {
                             user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
                             user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                            user.path = document.get(Constants.KEY_PATH).toString();
                             int expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
                             boolean meet = (Boolean) document.get(Constants.KEY_MEET);
 

@@ -1,13 +1,20 @@
 package org.techtown.face.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,22 +23,22 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.yanzhenjie.permission.Action;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.R;
-import org.techtown.face.adapters.RecentConversionsAdapter;
 import org.techtown.face.databinding.ActivityMainBinding;
 import org.techtown.face.fragments.AddFragment;
 import org.techtown.face.fragments.FrameFragment;
 import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
-import org.techtown.face.models.ChatMessage;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
     AddFragment addFragment;
+    UploadTask uploadTask;
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
@@ -66,15 +74,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingIntent);
                 break;
             case R.id.add_moment:
-                //데이터베이스 구현 후 추가
+                Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                pickImage.launch(momentIntent);
                 break;
             case R.id.delete_moment:
-                //데이터베이스 구현 후 추가
+                Intent deleteIntent = new Intent(this, MomentCheckActivity.class);
+                startActivity(deleteIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-    //
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +140,52 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK){
+                    if (result.getData()!= null){
+                        Log.e(TAG,result.getData().toString());
+                        Uri imageUri = result.getData().getData();
+                        String path = preferenceManager.getString(Constants.KEY_USER_ID)+"/"+imageUri.getLastPathSegment();
+
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        StorageReference imageRef = storageReference.child(path);
+                        uploadTask = imageRef.putFile(imageUri);
+                        uploadTask.addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+                                showToast("We did it!");
+                            } else {
+                                showToast("Failed");
+                            }
+                        });
+
+                        HashMap<String,Object> images = new HashMap<>();
+
+                        String name = preferenceManager.getString(Constants.KEY_NAME);
+                        String image = path;
+                        long now = System.currentTimeMillis();
+                        Date date = new Date(now);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        String dates = sdf.format(date);
+
+                        images.put(Constants.KEY_NAME,name);
+                        images.put(Constants.KEY_IMAGE,image);
+                        images.put(Constants.KEY_TIMESTAMP,dates);
+
+                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                .collection(Constants.KEY_COLLECTION_IMAGES)
+                                .add(images)
+                                .addOnCompleteListener(task -> {
+                                    if(task.isSuccessful()){
+                                        showToast("horray");
+                                    } else {
+                                        showToast("fuck");
+                                    }
+                                });
+                    }
+                }
+            });
 
     private void getToken() {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);

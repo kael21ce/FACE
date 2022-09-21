@@ -46,7 +46,7 @@ public class Constants {
     public static final String KEY_MEET = "meet";
     public static final String KEY_ANGLE = "angle";
 
-    public static final String KEY_INT = "int";
+    public static final String KEY_PATH = "path";
 
 
     public static HashMap<String, String> remoteMsgHeaders = null;

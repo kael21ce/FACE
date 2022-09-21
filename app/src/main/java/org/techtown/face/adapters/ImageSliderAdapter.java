@@ -1,9 +1,7 @@
 package org.techtown.face.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +10,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.techtown.face.R;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.BitSet;
+import org.techtown.face.R;
 
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.MyViewHolder> {
     private Context context;
@@ -50,13 +51,12 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
             imageView = itemView.findViewById(R.id.imgSlider);
         }
 
-        public void bindSliderImage(String image) {
-            imageView.setImageBitmap(getUserImage(image));
-        }
-
-        public Bitmap getUserImage(String encodedImage){
-            byte[] bytes = Base64.decode(String.valueOf(encodedImage),Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        public void bindSliderImage(String path) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference imageRef = storageReference.child(path);
+            imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> Glide.with(itemView)
+                    .load(downloadUrl.toString())
+                    .into(imageView));
         }
     }
 

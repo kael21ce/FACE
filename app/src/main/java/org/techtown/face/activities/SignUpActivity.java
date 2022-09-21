@@ -39,7 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private ActivitySignUpBinding binding;
     private String encodedImage;
-    private Uri fimageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_USER_ID,documentReference.getId());
                     preferenceManager.putString(Constants.KEY_NAME,binding.inputName.getText().toString());
                     preferenceManager.putString(Constants.KEY_IMAGE,encodedImage);
-                    uploadImage(fimageUri);
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),CameraActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 })
@@ -109,17 +108,6 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
-    }
-
-    private void uploadImage(Uri uri){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
-        UploadTask uploadTask;
-        String id = preferenceManager.getString(Constants.KEY_USER_ID);
-        StorageReference imageRef = storageReference.child(id+"/5.jpg");
-        uploadTask = imageRef.putFile(uri);
-        uploadTask.addOnFailureListener(exception -> showToast("Upload Failed"))
-                .addOnSuccessListener(taskSnapshot -> showToast("Upload Success"));
     }
 
     private void auth(String email, String password){
@@ -155,7 +143,6 @@ public class SignUpActivity extends AppCompatActivity {
                             binding.imageProfile.setImageBitmap(bitmap);
                             binding.textAddImage.setVisibility(View.GONE);
                             encodedImage = encodeImage(bitmap);
-                            fimageUri = imageUri;
                         }catch (FileNotFoundException e){
                             e.printStackTrace();
                         }

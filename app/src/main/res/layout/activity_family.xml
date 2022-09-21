@@ -219,18 +219,6 @@
                 android:text="불호"
                 android:textColor="#F44336" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="순간에 이미지 올리기" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="나의 순간 보기" />
-
         </LinearLayout>
     </ScrollView>
 

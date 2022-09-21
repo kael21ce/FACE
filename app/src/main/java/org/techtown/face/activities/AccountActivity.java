@@ -1,7 +1,5 @@
 package org.techtown.face.activities;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,22 +8,19 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.databinding.ActivityAccountBinding;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class AccountActivity extends BaseActivity {
 
@@ -74,6 +69,42 @@ public class AccountActivity extends BaseActivity {
         user.delete().addOnCompleteListener(task -> {if(task.isSuccessful()){showToast("Delete Successful");}});
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        firestore.collection(Constants.KEY_COLLECTION_CHAT).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                    String chatId = queryDocumentSnapshot.getId();
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    String senderId = queryDocumentSnapshot.getString(Constants.KEY_SENDER_ID);
+                    String userId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    if(Objects.equals(senderId, userId)){
+                        db.collection(Constants.KEY_COLLECTION_CHAT)
+                                .document(chatId)
+                                .delete()
+                                .addOnSuccessListener(unused->showToast("delete chat succeed"));
+                    }
+
+                }
+            }
+        });
+
+        firestore.collection(Constants.KEY_COLLECTION_CONVERSIONS).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                    String conversionId = queryDocumentSnapshot.getId();
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    String senderId = queryDocumentSnapshot.getString(Constants.KEY_SENDER_ID);
+                    String userId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    if(Objects.equals(senderId,userId)){
+                        db.collection(Constants.KEY_COLLECTION_CONVERSIONS)
+                                .document(conversionId)
+                                .delete()
+                                .addOnSuccessListener(unused -> showToast("delete conversion succeed"));
+                    }
+                }
+            }
+        });
+
         firestore.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
                 .delete()

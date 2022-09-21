@@ -8,19 +8,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.techtown.face.databinding.ActivitySignInBinding;
-import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.PreferenceManager;
-
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
 
-import java.util.List;
+import org.techtown.face.databinding.ActivitySignInBinding;
+import org.techtown.face.utilites.Constants;
+import org.techtown.face.utilites.PreferenceManager;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -31,6 +30,11 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseApp.initializeApp(this);
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+                SafetyNetAppCheckProviderFactory.getInstance());
 
         AndPermission.with(this)
                 .runtime()
@@ -98,6 +102,7 @@ public class SignInActivity extends AppCompatActivity {
                         preferenceManager.putString(Constants.KEY_BIRTHDAY,documentSnapshot.getString(Constants.KEY_BIRTHDAY));
                         preferenceManager.putString(Constants.KEY_THEME_LIKE,documentSnapshot.getString(Constants.KEY_THEME_LIKE));
                         preferenceManager.putString(Constants.KEY_THEME_DISLIKE,documentSnapshot.getString(Constants.KEY_THEME_DISLIKE));
+                        preferenceManager.putString(Constants.KEY_PATH,documentSnapshot.getString(Constants.KEY_PATH));
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
