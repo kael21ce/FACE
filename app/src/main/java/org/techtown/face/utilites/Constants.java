@@ -47,6 +47,8 @@ public class Constants {
     public static final String KEY_ANGLE = "angle";
 
     public static final String KEY_PATH = "path";
+    public static final String KEY_COLLECTION_NOTIFICATION = "notifications";
+    public static final String KEY_NOTIFICATION = "notification";
 
 
     public static HashMap<String, String> remoteMsgHeaders = null;

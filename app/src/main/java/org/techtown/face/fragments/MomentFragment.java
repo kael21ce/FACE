@@ -17,8 +17,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.techtown.face.R;
 import org.techtown.face.adapters.MomentAdapter;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.Moment;
-import org.techtown.face.utilites.PreferenceManager;
+import org.techtown.face.models.Moment;
 
 public class MomentFragment extends Fragment {
 

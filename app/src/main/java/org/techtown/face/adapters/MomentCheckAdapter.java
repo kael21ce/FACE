@@ -1,6 +1,5 @@
 package org.techtown.face.adapters;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -18,9 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.techtown.face.R;
-import org.techtown.face.activities.MomentCheckActivity;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.MomentCheckItem;
+import org.techtown.face.models.MomentCheckItem;
 
 import java.util.ArrayList;
 

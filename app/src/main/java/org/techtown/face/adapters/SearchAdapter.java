@@ -3,20 +3,26 @@ package org.techtown.face.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
-import org.techtown.face.utilites.SearchItem;
+import org.techtown.face.utilites.Constants;
+import org.techtown.face.models.SearchItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     ArrayList<SearchItem> items = new ArrayList<>();
@@ -45,6 +51,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         TextView nameTxt;
         TextView mobileTxt;
         ImageView image;
+        Button delete;
+        Button add;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -52,6 +60,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             nameTxt = itemView.findViewById(R.id.searchName);
             mobileTxt = itemView.findViewById(R.id.searchMobile);
             image = itemView.findViewById(R.id.searchImage);
+            add = itemView.findViewById(R.id.addFamilyButton);
+
         }
 
         public void setItem(SearchItem item) {
@@ -62,6 +72,29 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> Glide.with(itemView)
                     .load(downloadUrl.toString())
                     .into(image));
+            FirebaseFirestore database = FirebaseFirestore.getInstance();
+            database.collection(Constants.KEY_COLLECTION_USERS).document(item.getMyId()).collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task -> {
+               if(task.isSuccessful()){
+                   for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                       String userId = documentSnapshot.getId();
+                       if(item.getUserId()==userId){
+                           add.setVisibility(View.INVISIBLE);
+                       }
+                   }
+               }
+            });
+            add.setOnClickListener(v -> {
+                HashMap<String, String> notification = new HashMap<>();
+                notification.put(Constants.KEY_NOTIFICATION, item.getMyId());
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(item.getUserId())
+                        .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                        .add(notification)
+                        .addOnCompleteListener(task -> {
+                           Toast.makeText(itemView.getContext(),"요청 성공했습니다.",Toast.LENGTH_SHORT).show();
+                        });
+            });
         }
     }
 
@@ -80,5 +113,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public void setItem(int position, SearchItem item) {
         items.set(position, item);
+    }
+
+    public void deleteItem(int position){
+        this.items.remove(position);
     }
 }

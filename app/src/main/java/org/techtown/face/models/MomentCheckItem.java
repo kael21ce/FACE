@@ -1,4 +1,4 @@
-package org.techtown.face.utilites;
+package org.techtown.face.models;
 
 public class MomentCheckItem {
     public String getName() {

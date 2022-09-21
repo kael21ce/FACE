@@ -1,8 +1,5 @@
 package org.techtown.face.adapters;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +14,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.models.User;
-import org.techtown.face.utilites.Family;
+import org.techtown.face.models.Family;
 import org.techtown.face.R;
 
 import java.util.ArrayList;
