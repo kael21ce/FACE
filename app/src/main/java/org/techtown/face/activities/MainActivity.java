@@ -1,7 +1,6 @@
 package org.techtown.face.activities;
 
 import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -39,6 +39,8 @@ import org.techtown.face.utilites.PreferenceManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
+    long now = System.currentTimeMillis();
 
     ActionBar abar;
 
@@ -138,6 +141,107 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
         );
+
+        //표정 계산하기
+        final long[] lastNow = {0};
+        String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(currentUserId)
+                .collection(Constants.KEY_COLLECTION_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    AtomicInteger idealContact = new AtomicInteger();
+                    AtomicInteger minContact = new AtomicInteger();
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            //상대방의 window 가져오기
+                            lastNow[0] = (long) document.get("window");
+                            //
+                            db.collection("users")
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document1 : task1.getResult()) {
+                                                idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
+                                                        .toString()) * 86400000);
+                                                minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
+                                                        .toString()) * 86400000);
+                                            }
+                                        }
+                                    });
+                            long term = (minContact.get() - idealContact.get()) / 3;
+                            if (now - lastNow[0] < idealContact.get()) {
+                                //나의 데이터베이스에 상대방 expression 업데이트
+                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(currentUserId)
+                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(document.get("user").toString())
+                                        .update("expression", 5);
+                                //상대방 데이터베이스에 내 expression 업데이트
+                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(document.get("user").toString())
+                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(currentUserId)
+                                        .update("expression", 5);
+                            }
+                            if (now - lastNow[0] >= idealContact.get()) {
+                                if (now - lastNow[0] < idealContact.get() + term) {
+                                    //나의 데이터베이스에 상대방 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .update("expression", 4);
+                                    //상대방 데이터베이스에 내 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .update("expression", 4);
+                                } else if (now - lastNow[0] < idealContact.get() + term*2) {
+                                    //나의 데이터베이스에 상대방 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .update("expression", 3);
+                                    //상대방 데이터베이스에 내 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .update("expression", 3);
+                                } else if (now - lastNow[0] < idealContact.get() + term*3) {
+                                    //나의 데이터베이스에 상대방 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .update("expression", 2);
+                                    //상대방 데이터베이스에 내 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .update("expression", 2);
+                                } else {
+                                    //나의 데이터베이스에 상대방 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .update("expression", 1);
+                                    //상대방 데이터베이스에 내 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.get("user").toString())
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .update("expression", 1);
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
