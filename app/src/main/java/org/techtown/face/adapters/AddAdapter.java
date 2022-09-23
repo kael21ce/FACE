@@ -12,16 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
-import org.techtown.face.utilites.SearchItem;
+import org.techtown.face.models.AddItem;
+import org.techtown.face.utilites.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
-    ArrayList<SearchItem> items = new ArrayList<>();
+    ArrayList<AddItem> items = new ArrayList<>();
 
 
     @NonNull
@@ -34,7 +37,7 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        SearchItem item = items.get(position);
+        AddItem item = items.get(position);
         holder.setItem(item);
     }
 
@@ -72,7 +75,7 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
 
         }
 
-        public void setItem(SearchItem item) {
+        public void setItem(AddItem item) {
             nameTxt.setText(item.getName());
             mobileTxt.setText(item.getMobile());
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -96,25 +99,45 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
                         mListener.onDeleteClick(v, position);
                     }
                 }
-                Toast.makeText(itemView.getContext(), "추가되었습니다",Toast.LENGTH_SHORT).show();
+                HashMap<String, String> user = new HashMap<>();
+                user.put(Constants.KEY_USER, item.getUserId());
+                HashMap<String, String> myUser = new HashMap<>();
+                myUser.put(Constants.KEY_USER, item.getMyId());
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(item.getMyId())
+                        .collection(Constants.KEY_COLLECTION_USERS)
+                        .add(user);
+                db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(item.getUserId())
+                        .collection(Constants.KEY_COLLECTION_USERS)
+                        .add(myUser);
+                add.setVisibility(View.INVISIBLE);
+                db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(item.getMyId())
+                        .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                        .document(item.getDocId())
+                        .delete()
+                        .addOnCompleteListener(task -> Toast.makeText(itemView.getContext(), "가족으로 추가되었습니다",Toast.LENGTH_SHORT).show());
             });
         }
     }
 
 
-    public void addItem(SearchItem item) {
+    public void addItem(AddItem item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<SearchItem> items) {
+    public void setItems(ArrayList<AddItem> items) {
         this.items = items;
     }
 
-    public SearchItem getItem(int position) {
+    public AddItem getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, SearchItem item) {
+    public void setItem(int position, AddItem item) {
         items.set(position, item);
     }
 

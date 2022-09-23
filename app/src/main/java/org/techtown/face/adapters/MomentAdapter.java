@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import org.techtown.face.utilites.Moment;
+import org.techtown.face.models.Moment;
 import org.techtown.face.R;
 
 import java.util.ArrayList;

@@ -18,7 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.Family.FamilyScale;
+import org.techtown.face.models.Family.FamilyScale;
 import org.techtown.face.R;
 import org.techtown.face.adapters.ScaleAdapter;
 import org.techtown.face.utilites.PreferenceManager;

@@ -20,7 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.techtown.face.activities.FamilyActivity;
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.Family;
+import org.techtown.face.models.Family;
 import org.techtown.face.R;
 import org.techtown.face.utilites.ScaleInfo;
 

@@ -19,7 +19,7 @@ import org.techtown.face.activities.FamilyActivity;
 import org.techtown.face.adapters.FamilyAdapter;
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.Family;
+import org.techtown.face.models.Family;
 import org.techtown.face.utilites.PreferenceManager;
 
 public class FrameFragment extends Fragment {
@@ -47,6 +47,8 @@ public class FrameFragment extends Fragment {
             startActivity(contactIntent);
         });
         //db에서 데이터 가져오기
+
+        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
         //나에 대한 정보 추가
         db.collection(Constants.KEY_COLLECTION_USERS)
@@ -79,47 +81,58 @@ public class FrameFragment extends Fragment {
 
         //다른 사람 정보 추가
         db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(myId)
+                .collection(Constants.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
-                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (currentUserId.equals(document.getId())){
-                                continue;
+                            String userId = document.getString(Constants.KEY_USER);
+                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                            firestore.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task1 -> {
+                                if(task1.isSuccessful()){
+                                    for(QueryDocumentSnapshot queryDocumentSnapshot : task1.getResult()){
+                                        String thisId = queryDocumentSnapshot.getId();
+                                        if(userId.equals(thisId)){
+                                            User user = new User();
+                                            user.name = queryDocumentSnapshot.get(Constants.KEY_NAME).toString();
+                                            user.image= queryDocumentSnapshot.get(Constants.KEY_IMAGE).toString();
+                                            user.id = queryDocumentSnapshot.getId();
+                                            user.mobile = queryDocumentSnapshot.get(Constants.KEY_MOBILE).toString();
+                                            user.min_contact = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_MIN_CONTACT).toString());
+                                            user.ideal_contact = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_IDEAL_CONTACT).toString());
+                                            user.like = queryDocumentSnapshot.get(Constants.KEY_THEME_LIKE).toString();
+                                            user.dislike = queryDocumentSnapshot.get(Constants.KEY_THEME_DISLIKE).toString();
+                                            user.path = queryDocumentSnapshot.get(Constants.KEY_PATH).toString();
+                                            int expression = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_EXPRESSION).toString());
+                                            boolean meet = (Boolean) queryDocumentSnapshot.get(Constants.KEY_MEET);
 
-                            }
-                            User user = new User();
-                            user.name = document.get(Constants.KEY_NAME).toString();
-                            user.image= document.get(Constants.KEY_IMAGE).toString();
-                            user.id = document.getId();
-                            user.mobile = document.get(Constants.KEY_MOBILE).toString();
-                            user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
-                            user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
-                            user.like = document.get(Constants.KEY_THEME_LIKE).toString();
-                            user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
-                            user.path = document.get(Constants.KEY_PATH).toString();
-                            int expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
-                            boolean meet = (Boolean) document.get(Constants.KEY_MEET);
+                                            if (meet) {
+
+                                                adapter.addItem(new Family(user));
+                                            } else {
+                                                if (expression==5) {
+                                                    adapter.addItem(new Family(user));
+                                                } else if (expression==4) {
+                                                    adapter.addItem(new Family(user));
+                                                } else if (expression==3) {
+                                                    adapter.addItem(new Family(user));
+                                                } else if (expression==2) {
+                                                    adapter.addItem(new Family(user));
+                                                } else if (expression==1) {
+                                                    adapter.addItem(new Family(user));
+                                                } else {
+                                                    adapter.addItem(new Family(user));
+                                                }
+                                            }
+                                            recyclerView.setAdapter(adapter);
+                                        }
+                                    }
+                                }
+                            });
 
                             //대면 만남 여부, 표정 변화 단계에 따라 이미지 달리하여 추가하기
-                            if (meet) {
 
-                                adapter.addItem(new Family(user));
-                            } else {
-                                if (expression==5) {
-                                    adapter.addItem(new Family(user));
-                                } else if (expression==4) {
-                                    adapter.addItem(new Family(user));
-                                } else if (expression==3) {
-                                    adapter.addItem(new Family(user));
-                                } else if (expression==2) {
-                                    adapter.addItem(new Family(user));
-                                } else if (expression==1) {
-                                    adapter.addItem(new Family(user));
-                                } else {
-                                    adapter.addItem(new Family(user));
-                                }
-                            }
                         }
                         Log.w(TAG, "Successfully loaded");}
                 });

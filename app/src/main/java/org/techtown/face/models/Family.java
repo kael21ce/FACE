@@ -1,4 +1,4 @@
-package org.techtown.face.utilites;
+package org.techtown.face.models;
 
 import org.techtown.face.models.User;
 

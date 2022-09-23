@@ -13,7 +13,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.techtown.face.adapters.MomentCheckAdapter;
 import org.techtown.face.databinding.ActivityMomentCheckBinding;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.utilites.MomentCheckItem;
+import org.techtown.face.models.MomentCheckItem;
 import org.techtown.face.utilites.PreferenceManager;
 
 public class MomentCheckActivity extends AppCompatActivity {
