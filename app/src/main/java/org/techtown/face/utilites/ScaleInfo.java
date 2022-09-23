@@ -3,6 +3,7 @@ package org.techtown.face.utilites;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
@@ -17,6 +18,7 @@ public class ScaleInfo extends ContentProvider {
     long now = System.currentTimeMillis();
     //데이터 수집 윈도우: 일주일
     public long weekago = now - 604800000;
+
 
     @Override
     public boolean onCreate() {
@@ -130,7 +132,7 @@ public class ScaleInfo extends ContentProvider {
         return angle;
     }
 
-    @Nullable
+   @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         return null;

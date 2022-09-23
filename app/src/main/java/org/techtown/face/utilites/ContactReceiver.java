@@ -9,7 +9,7 @@ import android.util.Log;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import org.techtown.face.services.ContactService;
+import org.techtown.face.activities.MainActivity;
 
 import java.util.Objects;
 
@@ -36,7 +36,7 @@ public class ContactReceiver extends BroadcastReceiver {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (Objects.equals(document.get(Constants.KEY_MOBILE), callingMobile)) {
                                     //데이터베이스에 전화번호 있을 때만 ContactService로 인텐트 전송
-                                    Intent serviceIntent = new Intent(context, ContactService.class);
+                                    Intent serviceIntent = new Intent(context, MainActivity.class);
                                     serviceIntent.putExtra("mobile", callingMobile);
                                     context.startService(serviceIntent);
                                     Log.i(STAG, "Start Service");
