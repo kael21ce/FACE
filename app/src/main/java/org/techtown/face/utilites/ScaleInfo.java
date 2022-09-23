@@ -10,16 +10,13 @@ import android.provider.CallLog;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.text.SimpleDateFormat;
-
 //의사소통의 양 측정을 위한 메소드를 포함하고 있는 클래스
 public class ScaleInfo extends ContentProvider {
 
-    SimpleDateFormat simpleDateFormat;
     String[] callSet;
     long now = System.currentTimeMillis();
     //데이터 수집 윈도우: 일주일
-    long weekago = now - 604800000;
+    public long weekago = now - 604800000;
 
     @Override
     public boolean onCreate() {
@@ -43,14 +40,16 @@ public class ScaleInfo extends ContentProvider {
         for (int i=0; i < recordCount; i++) {
             String shiftMobile = cursor.getString(2);
             if (shiftMobile.equals(mobile)) {
-                //통화 시간이 5초 이상인 연락만 인정
-                if (Integer.parseInt(cursor.getString(3))>=5) {
-                    if (cursor.getInt(1) == CallLog.Calls.INCOMING_TYPE) {
-                        numIncoming += 1;
+                if (cursor.getLong(0)>=weekago) {
+                    //통화 시간이 20초 이상인 연락만 인정
+                    if (Integer.parseInt(cursor.getString(3))>=20) {
+                        if (cursor.getInt(1) == CallLog.Calls.INCOMING_TYPE) {
+                            numIncoming += 1;
+                        }
+                        cursor.moveToNext();
                     } else {
-                        numIncoming = numIncoming;
+                        cursor.moveToNext();
                     }
-                    cursor.moveToNext();
                 } else {
                     cursor.moveToNext();
                 }
@@ -79,14 +78,16 @@ public class ScaleInfo extends ContentProvider {
         for (int i=0; i < recordCount; i++) {
             String shiftMobile = cursor.getString(2);
             if (shiftMobile.equals(mobile)) {
-                //통화 시간이 5초 이상인 연락만 인정
-                if (Integer.parseInt(cursor.getString(3))>=5) {
-                    if (cursor.getInt(1) == CallLog.Calls.OUTGOING_TYPE) {
-                        numOutgoing += 1;
+                if (cursor.getLong(0)>=weekago) {
+                    //통화 시간이 20초 이상인 연락만 인정
+                    if (Integer.parseInt(cursor.getString(3))>=20) {
+                        if (cursor.getInt(1) == CallLog.Calls.INCOMING_TYPE) {
+                            numOutgoing += 1;
+                        }
+                        cursor.moveToNext();
                     } else {
-                        numOutgoing = numOutgoing;
+                        cursor.moveToNext();
                     }
-                    cursor.moveToNext();
                 } else {
                     cursor.moveToNext();
                 }
@@ -109,18 +110,17 @@ public class ScaleInfo extends ContentProvider {
     //입력된 연락처와의 연락 수 차이 가져오기
     public float differenceContact(Context context, String mobile) {
         int numCall = differenceCall(context, mobile);
-        float y = 1.0f* numCall;
-        return y;
+        return 1.0f* numCall;
     }
 
     //각도 산출하기
     public float getAngle(Context context, String mobile) {
-        float angle = 0;
+        float angle;
         float y = differenceContact(context, mobile);
-        if (y<10 || y>-10) {
+        if (Float.compare(y, 10)==1 || Float.compare(y, -10)==1) {
             angle = 4*y;
         } else {
-            if (y>0) {
+            if (Float.compare(y, 0)==1) {
                 angle = 45.0f;
             } else {
                 angle = -45.0f;
