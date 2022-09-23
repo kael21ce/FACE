@@ -93,16 +93,20 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
                 Toast.makeText(itemView.getContext(), "삭제되었습니다",Toast.LENGTH_SHORT).show();
             });
             add.setOnClickListener(v -> {
+                long now = System.currentTimeMillis();
                 int position = getAdapterPosition();
                 if (position!=RecyclerView.NO_POSITION){
                     if (mListener!=null) {
                         mListener.onDeleteClick(v, position);
                     }
                 }
-                HashMap<String, String> user = new HashMap<>();
+                //문서 id와 추가되는 시간 데이터베이스에 입력
+                HashMap<String, Object> user = new HashMap<>();
                 user.put(Constants.KEY_USER, item.getUserId());
-                HashMap<String, String> myUser = new HashMap<>();
+                user.put(Constants.KEY_WINDOW, now);
+                HashMap<String, Object> myUser = new HashMap<>();
                 myUser.put(Constants.KEY_USER, item.getMyId());
+                myUser.put(Constants.KEY_WINDOW, now);
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection(Constants.KEY_COLLECTION_USERS)
