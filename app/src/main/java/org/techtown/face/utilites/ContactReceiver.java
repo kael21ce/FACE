@@ -36,19 +36,25 @@ public class ContactReceiver extends BroadcastReceiver {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (Objects.equals(document.get(Constants.KEY_MOBILE), callingMobile)) {
-                                    //상대방 데이터베이스에 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS).document(document.getId())
-                                                    .update("expression", 5);
-                                    //상대방 데이터베이스에 window 업데이트
+                                    //상대방 데이터베이스에 내 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.getId())
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .update("expression", 5);
+                                    //상대방 데이터베이스에 내 window 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(document.getId())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
                                                             .document(currentUserId)
                                                                     .update("window", now);
-                                    //나의 데이터베이스에 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS).document(currentUserId)
+                                    //나의 데이터베이스에 상대방 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(currentUserId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(document.getId())
                                             .update("expression", 5);
-                                    //나의 데이터베이스에 window 업데이트
+                                    //나의 데이터베이스에 상대방 window 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)

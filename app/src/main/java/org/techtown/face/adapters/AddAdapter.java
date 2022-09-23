@@ -104,9 +104,11 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
                 HashMap<String, Object> user = new HashMap<>();
                 user.put(Constants.KEY_USER, item.getUserId());
                 user.put(Constants.KEY_WINDOW, now);
+                user.put(Constants.KEY_EXPRESSION, 5);
                 HashMap<String, Object> myUser = new HashMap<>();
                 myUser.put(Constants.KEY_USER, item.getMyId());
                 myUser.put(Constants.KEY_WINDOW, now);
+                myUser.put(Constants.KEY_EXPRESSION, 5);
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection(Constants.KEY_COLLECTION_USERS)
