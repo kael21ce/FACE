@@ -9,6 +9,8 @@ import android.util.Log;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import org.techtown.face.services.ContactService;
+
 import java.util.Objects;
 
 public class ContactReceiver extends BroadcastReceiver {
