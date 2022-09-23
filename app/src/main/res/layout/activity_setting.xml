@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
         android:clickable="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/rulerImg"
@@ -24,12 +25,12 @@
 
         <TextView
             android:id="@+id/rulerTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="의사소통 측정 설정"
+            android:text="의사소통"
             android:textColor="#000000"
             android:textSize="24sp" />
     </LinearLayout>
@@ -41,7 +42,8 @@
         android:background="@drawable/border_layout"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/alarmImg"
@@ -51,12 +53,12 @@
 
         <TextView
             android:id="@+id/alarmTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="알림 설정"
+            android:text="알림"
             android:textColor="#000000"
             android:textSize="24sp" />
     </LinearLayout>
@@ -68,7 +70,8 @@
         android:background="@drawable/border_layout"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/locationImg"
@@ -78,12 +81,12 @@
 
         <TextView
             android:id="@+id/locationTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="GPS 설정"
+            android:text="위치 정보"
             android:textColor="#000000"
             android:textSize="24sp" />
     </LinearLayout>
@@ -95,7 +98,8 @@
         android:background="@drawable/border_layout"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/accountImg"
@@ -105,12 +109,40 @@
 
         <TextView
             android:id="@+id/accountTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="계정 설정"
+            android:text="계정"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setGarden"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_layout"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/gardenImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/plant_pot" />
+
+        <TextView
+            android:id="@+id/gardenTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="가족 정원"
             android:textColor="#000000"
             android:textSize="24sp" />
     </LinearLayout>
