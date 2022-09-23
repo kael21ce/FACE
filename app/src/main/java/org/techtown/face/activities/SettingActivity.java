@@ -10,17 +10,24 @@ import org.techtown.face.R;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private LinearLayout setAccount;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        setAccount = findViewById(R.id.setAccount);
+        //계정 설정
+        LinearLayout setAccount = findViewById(R.id.setAccount);
         setAccount.setOnClickListener(view -> {
             Intent intent = new Intent(SettingActivity.this, AccountActivity.class);
             startActivity(intent);
         });
+
+        //가족 정원 설정
+        LinearLayout setGarden = findViewById(R.id.setGarden);
+        setGarden.setOnClickListener(view -> {
+            Intent intent = new Intent(SettingActivity.this, GardenActivity.class);
+            startActivity(intent);
+        });
+
     }
 }
