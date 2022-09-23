@@ -175,11 +175,11 @@ public class MainActivity extends AppCompatActivity {
                                 db.collection(Constants.KEY_COLLECTION_USERS)
                                         .document(currentUserId)
                                         .collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(document.get("user").toString())
+                                        .document(Objects.requireNonNull(document.get("user")).toString())
                                         .update("expression", 5);
                                 //상대방 데이터베이스에 내 expression 업데이트
                                 db.collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(document.get("user").toString())
+                                        .document(Objects.requireNonNull(document.get("user")).toString())
                                         .collection(Constants.KEY_COLLECTION_USERS)
                                         .document(currentUserId)
                                         .update("expression", 5);
@@ -190,11 +190,11 @@ public class MainActivity extends AppCompatActivity {
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .update("expression", 4);
                                     //상대방 데이터베이스에 내 expression 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .update("expression", 4);
@@ -203,11 +203,11 @@ public class MainActivity extends AppCompatActivity {
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .update("expression", 3);
                                     //상대방 데이터베이스에 내 expression 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .update("expression", 3);
@@ -216,11 +216,11 @@ public class MainActivity extends AppCompatActivity {
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .update("expression", 2);
                                     //상대방 데이터베이스에 내 expression 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .update("expression", 2);
@@ -229,11 +229,11 @@ public class MainActivity extends AppCompatActivity {
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .update("expression", 1);
                                     //상대방 데이터베이스에 내 expression 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.get("user").toString())
+                                            .document(Objects.requireNonNull(document.get("user")).toString())
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .update("expression", 1);
