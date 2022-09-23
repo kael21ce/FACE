@@ -16,7 +16,6 @@ import java.util.Objects;
 public class ContactReceiver extends BroadcastReceiver {
 
     String RTAG = "ContactReceiver";
-    String STAG = "ContactService";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "FACEdatabase";
@@ -35,13 +34,12 @@ public class ContactReceiver extends BroadcastReceiver {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (Objects.equals(document.get(Constants.KEY_MOBILE), callingMobile)) {
-                                    //데이터베이스에 전화번호 있을 때만 ContactService로 인텐트 전송
-                                    Intent serviceIntent = new Intent(context, MainActivity.class);
-                                    serviceIntent.putExtra("mobile", callingMobile);
-                                    context.startService(serviceIntent);
-                                    Log.i(STAG, "Start Service");
+                                    //데이터베이스에 expression 업데이트
+                                    db.collection(Constants.KEY_COLLECTION_USERS).document(document.getId())
+                                                    .update("expression", 5);
+                                    Log.i(TAG, "Update expression and window by " + RTAG);
                                 } else {
-                                    Log.i(RTAG, "Not send to service");
+                                    Log.i(RTAG, "Not update " + TAG);
                                 }
                             }
                         }
