@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         db = FirebaseFirestore.getInstance();
         getToken();
+        Handler mHandler = new Handler();
 
         preferenceManager = new PreferenceManager(MainActivity.this);
 
@@ -157,90 +159,106 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             //상대방의 window 가져오기
-                            lastNow[0] = (long) document.get("window");
+                            lastNow[0] = (long) document.get(Constants.KEY_WINDOW);
+                            String userId = document.get(Constants.KEY_USER).toString();
+                            preferenceManager.putInt("ideal" + userId, 0);
+                            preferenceManager.putInt("min" + userId, 0);
                             //
-                            db.collection("users")
+                            db.collection(Constants.KEY_COLLECTION_USERS)
                                     .get()
                                     .addOnCompleteListener(task1 -> {
                                         if (task.isSuccessful()) {
                                             for (QueryDocumentSnapshot document1 : task1.getResult()) {
-                                                idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
-                                                        .toString()) * 86400000);
-                                                minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
-                                                        .toString()) * 86400000);
+                                                if (userId.equals(document1.getId())) {
+                                                    idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
+                                                            .toString()) * 86400000);
+                                                    preferenceManager.putInt("ideal" + userId, idealContact.get());
+                                                    minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
+                                                            .toString()) * 86400000);
+                                                    preferenceManager.putInt("min" + userId, minContact.get());
+                                                }
                                             }
                                         }
                                     });
-                            long term = (minContact.get() - idealContact.get()) / 3;
-                            if (now - lastNow[0] < idealContact.get()) {
-                                //나의 데이터베이스에 상대방 expression 업데이트
-                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(currentUserId)
-                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(Objects.requireNonNull(document.get("user")).toString())
-                                        .update("expression", 5);
-                                //상대방 데이터베이스에 내 expression 업데이트
-                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(Objects.requireNonNull(document.get("user")).toString())
-                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(currentUserId)
-                                        .update("expression", 5);
-                            }
-                            if (now - lastNow[0] >= idealContact.get()) {
-                                if (now - lastNow[0] < idealContact.get() + term) {
-                                    //나의 데이터베이스에 상대방 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .update("expression", 4);
-                                    //상대방 데이터베이스에 내 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .update("expression", 4);
-                                } else if (now - lastNow[0] < idealContact.get() + term*2) {
-                                    //나의 데이터베이스에 상대방 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .update("expression", 3);
-                                    //상대방 데이터베이스에 내 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .update("expression", 3);
-                                } else if (now - lastNow[0] < idealContact.get() + term*3) {
-                                    //나의 데이터베이스에 상대방 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .update("expression", 2);
-                                    //상대방 데이터베이스에 내 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .update("expression", 2);
-                                } else {
-                                    //나의 데이터베이스에 상대방 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .update("expression", 1);
-                                    //상대방 데이터베이스에 내 expression 업데이트
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(Objects.requireNonNull(document.get("user")).toString())
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .update("expression", 1);
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d("MainActivity", userId + "-" + "idealContact: "
+                                            + preferenceManager.getInt("ideal" + userId) +
+                                            " | " + "minContact: "
+                                            + preferenceManager.getInt("min" + userId));
+                                    long term = (minContact.get() - idealContact.get()) / 3;
+                                    if (now - lastNow[0] < idealContact.get()) {
+                                        //나의 데이터베이스에 상대방 expression 업데이트
+                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(currentUserId)
+                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(Objects.requireNonNull(document.get("user")).toString())
+                                                .update("expression", 5);
+                                        //상대방 데이터베이스에 내 expression 업데이트
+                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(Objects.requireNonNull(document.get("user")).toString())
+                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(currentUserId)
+                                                .update("expression", 5);
+                                    }
+                                    if (now - lastNow[0] >= idealContact.get()) {
+                                        if (now - lastNow[0] < idealContact.get() + term) {
+                                            //나의 데이터베이스에 상대방 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .update("expression", 4);
+                                            //상대방 데이터베이스에 내 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .update("expression", 4);
+                                        } else if (now - lastNow[0] < idealContact.get() + term*2) {
+                                            //나의 데이터베이스에 상대방 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .update("expression", 3);
+                                            //상대방 데이터베이스에 내 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .update("expression", 3);
+                                        } else if (now - lastNow[0] < idealContact.get() + term*3) {
+                                            //나의 데이터베이스에 상대방 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .update("expression", 2);
+                                            //상대방 데이터베이스에 내 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .update("expression", 2);
+                                        } else {
+                                            //나의 데이터베이스에 상대방 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .update("expression", 1);
+                                            //상대방 데이터베이스에 내 expression 업데이트
+                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                    .document(currentUserId)
+                                                    .update("expression", 1);
+                                            }
+                                        }
                                 }
-                            }
+                            }, 1000);
                         }
                     }
                 });
