@@ -25,7 +25,6 @@ public class ScaleInfo extends ContentProvider {
     //FACEdatabase
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String TAG = "FACEdatabase";
 
 
     @Override
@@ -118,7 +117,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력한 연락처에서 채팅 받은 횟수 가져오기
-    public int getInboxNum(Context context, String mobile) {
+    public int getInboxNum(String mobile) {
         AtomicInteger numInbox = new AtomicInteger();
         //db에서 상대방 document ID로 필터링
         db.collection(Constants.KEY_COLLECTION_USERS)
@@ -148,7 +147,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력한 연락처에게 채팅 보낸 횟수 가져오기
-    public int getSentNum(Context context, String mobile) {
+    public int getSentNum(String mobile) {
         AtomicInteger numSent = new AtomicInteger();
         //db에서 상대방 document ID로 필터링
         db.collection(Constants.KEY_COLLECTION_USERS)
@@ -178,9 +177,9 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력된 연락처와의 채팅 수 차이 가져오기
-    public int differenceChat(Context context, String mobile) {
-        int numI = getInboxNum(context, mobile);
-        int numS = getSentNum(context, mobile);
+    public int differenceChat(String mobile) {
+        int numI = getInboxNum(mobile);
+        int numS = getSentNum(mobile);
 
         return numI-numS;
     }
@@ -188,7 +187,8 @@ public class ScaleInfo extends ContentProvider {
     //입력된 연락처와의 연락 수 차이 가져오기
     public float differenceContact(Context context, String mobile) {
         int numCall = differenceCall(context, mobile);
-        return 1.0f* numCall;
+        int numChat = differenceChat(mobile);
+        return 1.0f * numCall + 1.0f * numChat;
     }
 
     //각도 산출하기
