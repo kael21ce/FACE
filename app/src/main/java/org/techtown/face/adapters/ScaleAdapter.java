@@ -95,9 +95,9 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             nameTxt.setText(item.getScaleName());
             String mobileForScale = item.getScaleMoible();
             int numI = scaleInfo.getIncomingNum(itemView.getContext(), mobileForScale)
-                    + scaleInfo.getInboxNum(mobileForScale);
+                    + scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
             int numO = scaleInfo.getOutgoingNum(itemView.getContext(), mobileForScale)
-                    + scaleInfo.getSentNum(mobileForScale);
+                    + scaleInfo.getSentNum(itemView.getContext(), mobileForScale);
             incomingNum.setText("수신: " + numI);
             outgoingNum.setText("발신: " + numO);
             float angle = scaleInfo.getAngle(itemView.getContext(), mobileForScale);

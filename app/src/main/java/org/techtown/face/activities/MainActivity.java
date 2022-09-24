@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         getToken();
 
+        preferenceManager = new PreferenceManager(MainActivity.this);
+
         frameFragment = new FrameFragment();
         scaleFragment = new ScaleFragment();
         momentFragment = new MomentFragment();

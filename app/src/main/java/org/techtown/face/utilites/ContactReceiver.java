@@ -29,6 +29,7 @@ public class ContactReceiver extends BroadcastReceiver {
             String callingMobile = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
             long now = System.currentTimeMillis();
             Log.i(TAG, "Calling mobile: " + callingMobile);
+            preferenceManager = new PreferenceManager(context);
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .get()
                     .addOnCompleteListener(task -> {
