@@ -45,25 +45,33 @@ public class ScaleFragment extends Fragment {
         //ScaleAdapter 생성
         ScaleAdapter adapter = new ScaleAdapter();
 
+        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+
         //db에서 데이터 가져오기
-        db.collection("users")
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(myId)
+                .collection(Constants.KEY_COLLECTION_USERS)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    final String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (!currentUserId.equals(document.getId())) {
-                                    String name = document.get("name").toString();
-                                    String mobile = document.get("mobile").toString();
-                                    adapter.addItem(new FamilyScale(name, mobile));
-                                    Log.w(TAG, "Successfully loaded");
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String userId = document.getString(Constants.KEY_USER);
+                            db.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                        String thisId = documentSnapshot.getId();
+                                        if (userId.equals(thisId)) {
+                                            String name = documentSnapshot.get(Constants.KEY_NAME).toString();
+                                            String mobile = documentSnapshot.get(Constants.KEY_MOBILE).toString();
+                                            adapter.addItem(new FamilyScale(name, mobile));
+                                            Log.w(TAG, "Successfully loaded");
+                                        }
+                                    }
+                                    recyclerView.setAdapter(adapter);
+                                } else {
+                                    Log.w(TAG, "Error getting documents.", task.getException());
                                 }
-                            }
-                            recyclerView.setAdapter(adapter);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            });
                         }
                     }
                 });

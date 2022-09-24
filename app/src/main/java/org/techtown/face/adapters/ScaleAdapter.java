@@ -3,6 +3,7 @@ package org.techtown.face.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import org.techtown.face.models.User;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.models.Family;
 import org.techtown.face.R;
+import org.techtown.face.utilites.PreferenceManager;
 import org.techtown.face.utilites.ScaleInfo;
 
 import java.util.ArrayList;
@@ -70,6 +72,8 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String TAG = "FACEdatabase";
+        String STAG = "ScaleAdapter";
+        PreferenceManager preferenceManager;
 
         TextView nameTxt;
         TextView incomingNum;
@@ -91,17 +95,33 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
         @SuppressLint("SetTextI18n")
         public void setItem(Family.FamilyScale item) {
             ScaleInfo scaleInfo = new ScaleInfo();
+            preferenceManager = new PreferenceManager(itemView.getContext());
+            Handler mHandler = new Handler();
+            final int[] numI = {0};
+            final int[] numO = {0};
+            float y = 0;
+            final float[] angle = {0};
 
             nameTxt.setText(item.getScaleName());
             String mobileForScale = item.getScaleMoible();
-            int numI = scaleInfo.getIncomingNum(itemView.getContext(), mobileForScale)
-                    + scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
-            int numO = scaleInfo.getOutgoingNum(itemView.getContext(), mobileForScale)
-                    + scaleInfo.getSentNum(itemView.getContext(), mobileForScale);
-            incomingNum.setText("수신: " + numI);
-            outgoingNum.setText("발신: " + numO);
-            float angle = scaleInfo.getAngle(itemView.getContext(), mobileForScale);
-            scaleHead.setRotation(angle);
+            scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
+            scaleInfo.getSentNum(itemView.getContext(), mobileForScale);
+            scaleInfo.getAngle(itemView.getContext(), mobileForScale);
+            mHandler.postDelayed(() -> {
+                numI[0] = scaleInfo.getIncomingNum(itemView.getContext(), mobileForScale)
+                        + preferenceManager.getInt("in" + mobileForScale);
+                numO[0] = scaleInfo.getOutgoingNum(itemView.getContext(), mobileForScale)
+                        + preferenceManager.getInt("out" + mobileForScale);
+                Log.w(STAG, "Inbox in adapter-" + preferenceManager.getInt("in" + mobileForScale));
+                Log.w(STAG, "Sent in adapter-" + preferenceManager.getInt("out" + mobileForScale));
+                incomingNum.setText("수신: " + numI[0]);
+                outgoingNum.setText("발신: " + numO[0]);
+                //각도
+                angle[0] = preferenceManager.getFloat("angle" + mobileForScale);
+                Log.w(STAG, "Angle in adapter-" + angle[0]);
+                scaleHead.setRotation(angle[0]);
+            }, 2000);
+
 
             //interactButton 클릭 시 FamilyActivity로 넘어가기
             interactButton.setOnClickListener(v -> {
