@@ -185,27 +185,6 @@ public class ScaleInfo extends ContentProvider {
         handler.postDelayed(() -> Log.w("FACEdatabase", "Sent-" + mobile + ": " + preferenceManager.getInt("out" + mobile)), 1000);
     }
 
-    //입력된 연락처와의 연락 수 차이 가져오기
-    public float differenceContact(Context context, String mobile) {
-        //통화
-        int numCall = getIncomingNum(context, mobile)-getOutgoingNum(context, mobile);
-        //채팅
-        final int[] numChat = {0};
-        preferenceManager = new PreferenceManager(context);
-        getInboxNum(context, mobile);
-        getSentNum(context, mobile);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                numChat[0] = preferenceManager.getInt("in" + mobile)
-                        -preferenceManager.getInt("out" + mobile);
-                Log.w("FACEdatabase", "call: " + numCall + " & " + "chat: " + numChat[0]);
-            }
-        }, 1000);
-
-        return 1.0f * numCall + 1.0f * numChat[0];
-    }
-
     //각도 산출하기
     public void getAngle(Context context, String mobile) {
         final float[] angle = new float[1];
@@ -217,27 +196,24 @@ public class ScaleInfo extends ContentProvider {
         preferenceManager = new PreferenceManager(context);
         getInboxNum(context, mobile);
         getSentNum(context, mobile);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                numChat[0] = preferenceManager.getInt("in" + mobile)
-                        -preferenceManager.getInt("out" + mobile);
-                Log.w("FACEdatabase", "call: " + numCall + " & " + "chat: " + numChat[0]);
-                //연락 수 차이
-                y[0] = 1.0f * numCall + 1.0f * numChat[0];
-                //각도 계산
-                if (Float.compare(y[0], 10)==1 || Float.compare(y[0], -10)==1) {
-                    angle[0] = 4* y[0];
+        handler.postDelayed(() -> {
+            numChat[0] = preferenceManager.getInt("in" + mobile)
+                    -preferenceManager.getInt("out" + mobile);
+            Log.w("FACEdatabase", "call: " + numCall + " & " + "chat: " + numChat[0]);
+            //연락 수 차이
+            y[0] = 1.0f * numCall + 1.0f * numChat[0];
+            //각도 계산
+            if (Float.compare(y[0], 10)==1 || Float.compare(y[0], -10)==1) {
+                angle[0] = 4* y[0];
+            } else {
+                if (Float.compare(y[0], 0)==1) {
+                    angle[0] = 45.0f;
                 } else {
-                    if (Float.compare(y[0], 0)==1) {
-                        angle[0] = 45.0f;
-                    } else {
-                        angle[0] = -45.0f;
-                    }
+                    angle[0] = -45.0f;
                 }
-                Log.w("ScaleInfo", "Angle resulted: " + angle[0]);
-                preferenceManager.putFloat("angle" + mobile, angle[0]);
             }
+            Log.w("ScaleInfo", "Angle resulted: " + angle[0]);
+            preferenceManager.putFloat("angle" + mobile, angle[0]);
         }, 1000);
     }
 
