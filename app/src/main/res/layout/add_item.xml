@@ -9,7 +9,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="알림이 도착했어요"
+        android:text="가족으로 추가하시겠습니까?"
         android:layout_marginTop="30dp"/>
 
     <LinearLayout

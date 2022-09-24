@@ -1,4 +1,4 @@
 package org.techtown.face.models;
 
-public class MetItem {
+public class MeetItem {
 }
