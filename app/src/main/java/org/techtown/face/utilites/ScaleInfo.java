@@ -177,6 +177,14 @@ public class ScaleInfo extends ContentProvider {
         return numSent.get();
     }
 
+    //입력된 연락처와의 채팅 수 차이 가져오기
+    public int differenceChat(Context context, String mobile) {
+        int numI = getInboxNum(context, mobile);
+        int numS = getSentNum(context, mobile);
+
+        return numI-numS;
+    }
+
     //입력된 연락처와의 연락 수 차이 가져오기
     public float differenceContact(Context context, String mobile) {
         int numCall = differenceCall(context, mobile);
