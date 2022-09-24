@@ -10,6 +10,11 @@ import android.provider.CallLog;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 //의사소통의 양 측정을 위한 메소드를 포함하고 있는 클래스
 public class ScaleInfo extends ContentProvider {
 
@@ -17,6 +22,10 @@ public class ScaleInfo extends ContentProvider {
     long now = System.currentTimeMillis();
     //데이터 수집 윈도우: 일주일
     public long weekago = now - 604800000;
+    //FACEdatabase
+    PreferenceManager preferenceManager;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String TAG = "FACEdatabase";
 
 
     @Override
@@ -106,6 +115,66 @@ public class ScaleInfo extends ContentProvider {
         int numO = getOutgoingNum(context, mobile);
 
         return numI-numO;
+    }
+
+    //입력한 연락처에서 채팅 받은 횟수 가져오기
+    public int getInboxNum(Context context, String mobile) {
+        AtomicInteger numInbox = new AtomicInteger();
+        //db에서 상대방 document ID로 필터링
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (task.isSuccessful()) {
+                            if (mobile.equals(document.get(Constants.KEY_MOBILE))) {
+                                String senderId = document.getId();
+                                //chat 컬렉션에서 senderId와 일치하는 대화 가져오기
+                                db.collection(Constants.KEY_COLLECTION_CHAT)
+                                        .get()
+                                        .addOnCompleteListener(task1 -> {
+                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                if (senderId.equals(documentSnapshot.get(Constants.KEY_SENDER_ID))
+                                                && currentUserId.equals(documentSnapshot.get(Constants.KEY_RECEIVER_ID))) {
+                                                    numInbox.addAndGet(1);
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+        return numInbox.get();
+    }
+
+    //입력한 연락처에게 채팅 보낸 횟수 가져오기
+    public int getSentNum(Context context, String mobile) {
+        AtomicInteger numSent = new AtomicInteger();
+        //db에서 상대방 document ID로 필터링
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (task.isSuccessful()) {
+                            if (mobile.equals(document.get(Constants.KEY_MOBILE))) {
+                                String receiverId = document.getId();
+                                //chat 컬렉션에서 senderId와 일치하는 대화 가져오기
+                                db.collection(Constants.KEY_COLLECTION_CHAT)
+                                        .get()
+                                        .addOnCompleteListener(task1 -> {
+                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                if (receiverId.equals(documentSnapshot.get(Constants.KEY_RECEIVER_ID))
+                                                        && currentUserId.equals(documentSnapshot.get(Constants.KEY_SENDER_ID))) {
+                                                    numSent.addAndGet(1);
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+        return numSent.get();
     }
 
     //입력된 연락처와의 연락 수 차이 가져오기
