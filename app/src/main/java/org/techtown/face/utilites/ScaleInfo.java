@@ -5,15 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.CallLog;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 //의사소통의 양 측정을 위한 메소드를 포함하고 있는 클래스
 public class ScaleInfo extends ContentProvider {
@@ -25,6 +25,9 @@ public class ScaleInfo extends ContentProvider {
     //FACEdatabase
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String TAG = "FACEdatabase";
+
+    public Handler handler = new Handler();
 
 
     @Override
@@ -108,18 +111,10 @@ public class ScaleInfo extends ContentProvider {
         return numOutgoing;
     }
 
-    //입력된 연락처와의 통화 수 차이 가져오기
-    public int differenceCall(Context context, String mobile) {
-        int numI = getIncomingNum(context, mobile);
-        int numO = getOutgoingNum(context, mobile);
-
-        return numI-numO;
-    }
-
     //입력한 연락처에서 채팅 받은 횟수 가져오기
-    public int getInboxNum(Context context, String mobile) {
+    public void getInboxNum(Context context, String mobile) {
         preferenceManager = new PreferenceManager(context);
-        AtomicInteger numInbox = new AtomicInteger();
+        preferenceManager.putInt("in" + mobile, 0);
         //db에서 상대방 document ID로 필터링
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .get()
@@ -133,24 +128,30 @@ public class ScaleInfo extends ContentProvider {
                                 db.collection(Constants.KEY_COLLECTION_CHAT)
                                         .get()
                                         .addOnCompleteListener(task1 -> {
+                                            int num = 0;
                                             for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                 if (senderId.equals(documentSnapshot.get(Constants.KEY_SENDER_ID))
                                                 && currentUserId.equals(documentSnapshot.get(Constants.KEY_RECEIVER_ID))) {
-                                                    numInbox.addAndGet(1);
+                                                    num+=1;
+                                                    Log.w(TAG, "Successfully counted: " + mobile);
+                                                } else {
+                                                    Log.w(TAG, "no chat");
                                                 }
                                             }
+                                            Log.w(TAG, "Result for " + mobile + ": " + num);
+                                            preferenceManager.putInt("in" + mobile , num);
                                         });
                             }
                         }
                     }
                 });
-        return numInbox.get();
+        handler.postDelayed(() -> Log.w("FACEdatabase", "Inbox-" + mobile + ": " + preferenceManager.getInt("in" + mobile)), 1000);
     }
 
     //입력한 연락처에게 채팅 보낸 횟수 가져오기
-    public int getSentNum(Context context, String mobile) {
+    public void getSentNum(Context context, String mobile) {
         preferenceManager = new PreferenceManager(context);
-        AtomicInteger numSent = new AtomicInteger();
+        preferenceManager.putInt("out" + mobile, 0);
         //db에서 상대방 document ID로 필터링
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .get()
@@ -164,50 +165,80 @@ public class ScaleInfo extends ContentProvider {
                                 db.collection(Constants.KEY_COLLECTION_CHAT)
                                         .get()
                                         .addOnCompleteListener(task1 -> {
+                                            int num = 0;
                                             for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                 if (receiverId.equals(documentSnapshot.get(Constants.KEY_RECEIVER_ID))
                                                         && currentUserId.equals(documentSnapshot.get(Constants.KEY_SENDER_ID))) {
-                                                    numSent.addAndGet(1);
+                                                    num+=1;
+                                                    Log.w(TAG, "Successfully counted: " + mobile);
+                                                }else {
+                                                    Log.w(TAG, "no chat");
                                                 }
                                             }
+                                            Log.w(TAG, "Result for " + mobile + ": " + num);
+                                            preferenceManager.putInt("out" + mobile , num);
                                         });
                             }
                         }
                     }
                 });
-        return numSent.get();
-    }
-
-    //입력된 연락처와의 채팅 수 차이 가져오기
-    public int differenceChat(Context context, String mobile) {
-        int numI = getInboxNum(context, mobile);
-        int numS = getSentNum(context, mobile);
-
-        return numI-numS;
+        handler.postDelayed(() -> Log.w("FACEdatabase", "Sent-" + mobile + ": " + preferenceManager.getInt("out" + mobile)), 1000);
     }
 
     //입력된 연락처와의 연락 수 차이 가져오기
     public float differenceContact(Context context, String mobile) {
-        int numCall = differenceCall(context, mobile);
-        int numChat = differenceChat(context, mobile);
-        return 1.0f * numCall + 1.0f * numChat;
+        //통화
+        int numCall = getIncomingNum(context, mobile)-getOutgoingNum(context, mobile);
+        //채팅
+        final int[] numChat = {0};
+        preferenceManager = new PreferenceManager(context);
+        getInboxNum(context, mobile);
+        getSentNum(context, mobile);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                numChat[0] = preferenceManager.getInt("in" + mobile)
+                        -preferenceManager.getInt("out" + mobile);
+                Log.w("FACEdatabase", "call: " + numCall + " & " + "chat: " + numChat[0]);
+            }
+        }, 1000);
+
+        return 1.0f * numCall + 1.0f * numChat[0];
     }
 
     //각도 산출하기
-    public float getAngle(Context context, String mobile) {
-        float angle;
-        float y = differenceContact(context, mobile);
-        if (Float.compare(y, 10)==1 || Float.compare(y, -10)==1) {
-            angle = 4*y;
-        } else {
-            if (Float.compare(y, 0)==1) {
-                angle = 45.0f;
-            } else {
-                angle = -45.0f;
+    public void getAngle(Context context, String mobile) {
+        final float[] angle = new float[1];
+        final float[] y = new float[1];
+        //통화
+        int numCall = getIncomingNum(context, mobile)-getOutgoingNum(context, mobile);
+        //채팅
+        final int[] numChat = {0};
+        preferenceManager = new PreferenceManager(context);
+        getInboxNum(context, mobile);
+        getSentNum(context, mobile);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                numChat[0] = preferenceManager.getInt("in" + mobile)
+                        -preferenceManager.getInt("out" + mobile);
+                Log.w("FACEdatabase", "call: " + numCall + " & " + "chat: " + numChat[0]);
+                //연락 수 차이
+                y[0] = 1.0f * numCall + 1.0f * numChat[0];
+                //각도 계산
+                if (Float.compare(y[0], 10)==1 || Float.compare(y[0], -10)==1) {
+                    angle[0] = 4* y[0];
+                } else {
+                    if (Float.compare(y[0], 0)==1) {
+                        angle[0] = 45.0f;
+                    } else {
+                        angle[0] = -45.0f;
+                    }
+                }
+                Log.w("ScaleInfo", "Angle resulted: " + angle[0]);
+                preferenceManager.putFloat("angle" + mobile, angle[0]);
             }
-        }
-
-        return angle;
+        }, 1000);
     }
 
    @Nullable
