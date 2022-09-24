@@ -50,7 +50,9 @@ public class Constants {
     public static final String KEY_PATH = "path";
     public static final String KEY_COLLECTION_NOTIFICATION = "notifications";
     public static final String KEY_NOTIFICATION = "notification";
-
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_FAMILY_REQUEST = "family_request";
+    public static final String KEY_MEET_REQUEST = "meet_request";
 
     public static HashMap<String, String> remoteMsgHeaders = null;
     public static HashMap<String,String> getRemoteMsgHeaders(){

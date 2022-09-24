@@ -86,6 +86,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
                 HashMap<String, String> notification = new HashMap<>();
+                notification.put(Constants.KEY_TYPE, Constants.KEY_FAMILY_REQUEST);
                 notification.put(Constants.KEY_NOTIFICATION, item.getMyId());
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection(Constants.KEY_COLLECTION_USERS)
