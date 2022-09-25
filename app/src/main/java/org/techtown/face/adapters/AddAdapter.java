@@ -92,6 +92,8 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
                 }
                 Toast.makeText(itemView.getContext(), "삭제되었습니다",Toast.LENGTH_SHORT).show();
             });
+
+            //가족 추가 버튼을 누르면 나와 상대방의 users 데이터베이스에 서로의 정보가 추가된다.
             add.setOnClickListener(v -> {
                 long now = System.currentTimeMillis();
                 int position = getAdapterPosition();

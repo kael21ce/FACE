@@ -55,6 +55,7 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
                     .into(imageView));
             nameTxt.setText(item.getName());
             mobileTxt.setText(item.getMobile());
+
             delete.setOnClickListener (view -> {
                 delete.setVisibility(View.INVISIBLE);
                 addMeet.setVisibility(View.INVISIBLE);
@@ -66,6 +67,7 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
             meet.put(Constants.KEY_WINDOW, now);
             meet.put(Constants.KEY_EXPRESSION, 5);
 
+            //대면 만남 수락 버튼을 누르면 나의 users 데이터베이스와 상대방의 users의 데이터 베이스의 대면 만남 정보가 업데이트 된다.
             addMeet.setOnClickListener(v -> {
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())
@@ -76,7 +78,6 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
                                for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
                                    if(Objects.equals(item.getUserId(), documentSnapshot.getString(Constants.KEY_USER))){
                                        String meetDocId = documentSnapshot.getId();
-                                       Log.e("yeah", "this is->"+meetDocId);
                                        db.collection(Constants.KEY_COLLECTION_USERS)
                                                .document(item.getUserId())
                                                .collection(Constants.KEY_COLLECTION_USERS)
@@ -95,7 +96,6 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
                                 for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
                                     if(Objects.equals(item.getMyId(), documentSnapshot.getString(Constants.KEY_USER))){
                                         String meetDocId = documentSnapshot.getId();
-                                        Log.e("yeah", "this is->"+meetDocId);
                                         db.collection(Constants.KEY_COLLECTION_USERS)
                                                 .document(item.getUserId())
                                                 .collection(Constants.KEY_COLLECTION_USERS)
