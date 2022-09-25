@@ -54,6 +54,10 @@ public class Constants {
     public static final String KEY_FAMILY_REQUEST = "family_request";
     public static final String KEY_MEET_REQUEST = "meet_request";
 
+    public static final int LOCATION_SERVICE_ID = 175;
+    public static final String ACTION_START_LOCATION_SERVICE = "startLocationService";
+    public static final String ACTION_STOP_LOCATION_SERVICE = "stopLocationService";
+
     public static HashMap<String, String> remoteMsgHeaders = null;
     public static HashMap<String,String> getRemoteMsgHeaders(){
         if (remoteMsgHeaders == null){

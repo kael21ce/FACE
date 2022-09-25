@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -25,10 +26,10 @@ import com.google.android.gms.location.LocationServices;
 import org.techtown.face.R;
 import org.techtown.face.utilites.Constants;
 
-public class LocationService extends Service {
-    private LocationCallback mLocationCallback = new LocationCallback() {
+public class GeoService extends Service {
+    private final LocationCallback mLocationCallback = new LocationCallback() {
         @Override
-        public void onLocationResult(LocationResult locationResult) {
+        public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
