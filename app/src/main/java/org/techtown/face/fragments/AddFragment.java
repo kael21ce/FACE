@@ -18,7 +18,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.techtown.face.R;
 import org.techtown.face.activities.SearchActivity;
 import org.techtown.face.adapters.AddAdapter;
+import org.techtown.face.adapters.MeetAdapter;
 import org.techtown.face.models.AddItem;
+import org.techtown.face.models.MeetItem;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
@@ -37,6 +39,7 @@ public class AddFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
         addRecyclerView.setLayoutManager(layoutManager);
         AddAdapter addAdapter = new AddAdapter();
+        MeetAdapter meetAdapter = new MeetAdapter();
 
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
@@ -68,8 +71,11 @@ public class AddFragment extends Fragment {
                         firestore1.collection(Constants.KEY_COLLECTION_USERS).document(userId).get().addOnCompleteListener(task1 -> {
                             DocumentSnapshot documentSnapshot = task1.getResult();
                             if(task1.isSuccessful()){
-                                String meet = documentSnapshot.getString(Constants.KEY_MEET);
-
+                                String path = documentSnapshot.getString(Constants.KEY_PATH);
+                                String name = documentSnapshot.getString(Constants.KEY_NAME);
+                                String mobile = documentSnapshot.getString(Constants.KEY_MOBILE);
+                                meetAdapter.addItem(new MeetItem(path, name, mobile, myId, userId, docId));
+                                addRecyclerView.setAdapter(meetAdapter);
                             }
                         });
                     }

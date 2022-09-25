@@ -1,5 +1,6 @@
 package org.techtown.face.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -23,6 +25,7 @@ import org.techtown.face.utilites.Constants;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
     ArrayList<MeetItem> items = new ArrayList<>();
@@ -67,13 +70,42 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())
                         .collection(Constants.KEY_COLLECTION_USERS)
-                        .document(item.getUserId())
-                        .update(meet);
+                        .get()
+                        .addOnCompleteListener(task -> {
+                           if(task.isSuccessful()){
+                               for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
+                                   if(Objects.equals(item.getUserId(), documentSnapshot.getString(Constants.KEY_USER))){
+                                       String meetDocId = documentSnapshot.getId();
+                                       Log.e("yeah", "this is->"+meetDocId);
+                                       db.collection(Constants.KEY_COLLECTION_USERS)
+                                               .document(item.getUserId())
+                                               .collection(Constants.KEY_COLLECTION_USERS)
+                                               .document(meetDocId)
+                                               .update(meet);
+                                   }
+                               }
+                           }
+                        });
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getUserId())
                         .collection(Constants.KEY_COLLECTION_USERS)
-                        .document(item.getMyId())
-                        .update(meet);
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+                                for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
+                                    if(Objects.equals(item.getMyId(), documentSnapshot.getString(Constants.KEY_USER))){
+                                        String meetDocId = documentSnapshot.getId();
+                                        Log.e("yeah", "this is->"+meetDocId);
+                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(item.getUserId())
+                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(meetDocId)
+                                                .update(meet);
+                                    }
+                                }
+                            }
+                        });
+
                 delete.setVisibility(View.INVISIBLE);
                 addMeet.setVisibility(View.INVISIBLE);
                 db.collection(Constants.KEY_COLLECTION_USERS)
@@ -81,7 +113,7 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
                         .collection(Constants.KEY_COLLECTION_NOTIFICATION)
                         .document(item.getDocId())
                         .delete()
-                        .addOnCompleteListener(task -> Toast.makeText(itemView.getContext(), "가족으로 추가되었습니다",Toast.LENGTH_SHORT).show());
+                        .addOnCompleteListener(task -> Toast.makeText(itemView.getContext(), "요청이 수락되었습니다.",Toast.LENGTH_SHORT).show());
             });
 
         }
