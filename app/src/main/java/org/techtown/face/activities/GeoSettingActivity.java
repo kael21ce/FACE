@@ -16,6 +16,6 @@ public class GeoSettingActivity extends AppCompatActivity {
         binding = ActivityGeoSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+        
     }
 }
