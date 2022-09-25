@@ -7,24 +7,31 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 
 import org.techtown.face.R;
+import org.techtown.face.databinding.ActivitySettingBinding;
 
 public class SettingActivity extends AppCompatActivity {
-
+    ActivitySettingBinding binding;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        binding = ActivitySettingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        //GPS 설정
+        binding.setLocation.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingActivity.this, GeoSettingActivity.class);
+            startActivity(intent);
+        });
+        
         //계정 설정
-        LinearLayout setAccount = findViewById(R.id.setAccount);
-        setAccount.setOnClickListener(view -> {
+        binding.setAccount.setOnClickListener(view -> {
             Intent intent = new Intent(SettingActivity.this, AccountActivity.class);
             startActivity(intent);
         });
 
         //가족 정원 설정
-        LinearLayout setGarden = findViewById(R.id.setGarden);
-        setGarden.setOnClickListener(view -> {
+        binding.setGarden.setOnClickListener(view -> {
             Intent intent = new Intent(SettingActivity.this, GardenActivity.class);
             startActivity(intent);
         });
