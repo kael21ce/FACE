@@ -35,6 +35,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //앱체크, 스토리지 사용을 위해서 필요함
         FirebaseApp.initializeApp(this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
@@ -45,41 +46,21 @@ public class SignInActivity extends AppCompatActivity {
             AndPermission.with(this)
                     .runtime()
                     .permission(Permission.READ_CALL_LOG, Permission.READ_CONTACTS,
-                            Permission.READ_PHONE_NUMBERS)
-                    .onGranted(new Action<List<String>>() {
-                        @Override
-                        public void onAction(List<String> permissions) {
-                            Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .onDenied(new Action<List<String>>() {
-                        @Override
-                        public void onAction(List<String> permissions) {
-                            Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    })
+                            Permission.READ_PHONE_NUMBERS, Permission.ACCESS_FINE_LOCATION)
+                    .onGranted(permissions -> Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
+                            Toast.LENGTH_SHORT).show())
+                    .onDenied(permissions -> Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
+                            Toast.LENGTH_SHORT).show())
                     .start();
         } else {
             AndPermission.with(this)
                     .runtime()
                     .permission(Permission.READ_CALL_LOG, Permission.READ_CONTACTS,
-                            Permission.READ_PHONE_STATE)
-                    .onGranted(new Action<List<String>>() {
-                        @Override
-                        public void onAction(List<String> permissions) {
-                            Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .onDenied(new Action<List<String>>() {
-                        @Override
-                        public void onAction(List<String> permissions) {
-                            Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    })
+                            Permission.READ_PHONE_STATE, Permission.ACCESS_FINE_LOCATION)
+                    .onGranted(permissions -> Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
+                            Toast.LENGTH_SHORT).show())
+                    .onDenied(permissions -> Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
+                            Toast.LENGTH_SHORT).show())
                     .start();
         }
         //

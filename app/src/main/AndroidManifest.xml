@@ -27,7 +27,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".GeoSettingActivity"
+            android:name=".activities.GeoSettingActivity"
             android:exported="false" />
 
         <uses-library
