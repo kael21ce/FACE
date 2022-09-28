@@ -21,7 +21,6 @@ import android.widget.Toast;
 import org.techtown.face.R;
 import org.techtown.face.adapters.PairedAdapter;
 import org.techtown.face.adapters.SurroundAdapter;
-import org.techtown.face.databinding.PairedItemBinding;
 import org.techtown.face.models.Bluetooth;
 
 import java.util.ArrayList;
@@ -56,6 +55,7 @@ public class GardenActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(GardenActivity.this,
                 LinearLayoutManager.VERTICAL, false);
 
+        searchButton = findViewById(R.id.searchButton);
         connectedRecycler = findViewById(R.id.connectedRecycler);
         toConnectRecycler = findViewById(R.id.toConnectRecycler);
         PairedAdapter pairedAdapter = new PairedAdapter();
@@ -67,7 +67,7 @@ public class GardenActivity extends AppCompatActivity {
             Intent btIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
                     != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "블루투스 활성화가 필요합니다.", Toast.LENGTH_LONG);
+                Toast.makeText(this, "블루투스 활성화가 필요합니다.", Toast.LENGTH_LONG).show();
                 return;
             }
             startActivityForResult(btIntent, REQUEST_ENABLED_BT);
@@ -76,9 +76,6 @@ public class GardenActivity extends AppCompatActivity {
         //페어링된 기기 목록
         devicePairedArrayList = new ArrayList<>();
         devicePairedRight = new ArrayList<>();
-        if (devicePairedArrayList != null && devicePairedArrayList.isEmpty()) {
-            devicePairedArrayList.clear();
-        }
         pairedDevices = btAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
@@ -108,9 +105,6 @@ public class GardenActivity extends AppCompatActivity {
         } else {
             if (btAdapter.isEnabled()) {
                 btAdapter.startDiscovery();
-                if (deviceLocalArrayList != null && deviceLocalArrayList.isEmpty()) {
-                    deviceLocalArrayList.clear();
-                }
                 IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
                 registerReceiver(receiver, filter);
             } else {
