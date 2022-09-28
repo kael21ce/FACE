@@ -3,19 +3,31 @@ package org.techtown.face.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.techtown.face.R;
+import org.techtown.face.models.Bluetooth;
 import org.techtown.face.models.Family;
+import org.techtown.face.models.User;
 
 import java.util.ArrayList;
 
 public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHolder> {
-    ArrayList items = new ArrayList();
-    ArrayList<Family> itemFamily = new ArrayList<>();
+    ArrayList<Bluetooth> items = new ArrayList<>();
+
+    public interface OnItemClickListener {
+        void onItemClicked(int position, User user);
+    }
+
+    private PairedAdapter.OnItemClickListener itemClickListener;
+
+    public void setOnItemClickListener (PairedAdapter.OnItemClickListener listener) {
+        itemClickListener=listener;
+    }
 
     @NonNull
     @Override
@@ -41,6 +53,7 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView pairedName;
         TextView statusText;
+        Button connectButton;
 
 
         public ViewHolder(View itemVIew) {
@@ -48,6 +61,7 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
 
             pairedName = itemVIew.findViewById(R.id.pairedName);
             statusText = itemVIew.findViewById(R.id.statusText);
+            connectButton = itemVIew.findViewById(R.id.connectButton);
         }
 
         public void setItem(Family item) {
