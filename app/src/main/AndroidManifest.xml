@@ -10,8 +10,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 연락 저울 퍼미션 -->
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- 의사소통 측정 퍼미션 -->
+<<<<<<< Updated upstream
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/><!-- 블루투스 퍼미션 -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+=======
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/> <!--자꾸 오류떠서 로그에서 추가하라고 한 퍼미션-->
+>>>>>>> Stashed changes
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"
         android:maxSdkVersion="29" />

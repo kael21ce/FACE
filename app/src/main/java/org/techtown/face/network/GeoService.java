@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -22,22 +23,108 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.R;
 import org.techtown.face.utilites.Constants;
+import org.techtown.face.utilites.PreferenceManager;
+
+import java.util.HashMap;
 
 public class GeoService extends Service {
+
+
+
+    //위도 경도 게산식이 있는 코드
     private final LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
+            SharedPreferences preferences = getApplicationContext().getSharedPreferences(Constants.KEY_PREFERENCE_NAME, Context.MODE_MULTI_PROCESS);
+            String myId = preferences.getString(Constants.KEY_USER_ID, null);
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
-                Log.v("LOCATION_UPDATE", latitude + ", " + longitude);
+                HashMap<String,Object> location = new HashMap<>();
+                location.put(Constants.KEY_LATITUDE, latitude);
+                location.put(Constants.KEY_LONGITUDE, longitude);
+                Log.e("LOCATION_UPDATE", latitude + ", " + longitude);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection(Constants.KEY_COLLECTION_USERS).document(myId).update(location);
+                db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(myId)
+                        .collection(Constants.KEY_COLLECTION_USERS)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                           if(task.isSuccessful()){
+                               for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                   String userId = documentSnapshot.getString(Constants.KEY_USER);
+                                   db.collection(Constants.KEY_COLLECTION_USERS)
+                                           .document(userId)
+                                           .get()
+                                           .addOnCompleteListener(task1 -> {
+                                               if(task1.isSuccessful()) {
+                                                   DocumentSnapshot documentSnapshot1 = task1.getResult();
+                                                   String latitude1 = documentSnapshot1.getString(Constants.KEY_LATITUDE);
+                                                   String longitude1 = documentSnapshot1.getString(Constants.KEY_LONGITUDE);
+                                                   if(latitude1 != null && longitude1 !=null){
+                                                       double lat1 = Double.parseDouble(latitude1);
+                                                       double lon1 = Double.parseDouble(longitude1);
+                                                       double dist = distance(latitude,longitude,lat1,lon1,"meter");
+                                                       if(dist<50){
+                                                           HashMap<String,Object> now = new HashMap<>();
+                                                           now.put(Constants.KEY_TIMESTAMP, System.currentTimeMillis());
+                                                           db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                   .document(myId)
+                                                                   .collection(Constants.KEY_COLLECTION_USERS)
+                                                                   .document(userId)
+                                                                   .update(now);
+                                                       }
+                                                   }else{
+                                                       Log.e("Hey", "상대방이 GPS를 사용하지 않고 있습니다.");
+                                                   }
+                                               }else{
+                                                   Log.e("SHit","fuck");
+                                               }
+                                           });
+                               }
+                           } else {
+                               Log.e("Oh","Fuck");
+                           }
+                        });
             }
         }
     };
+
+    private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+
+        if(unit == "meter"){
+            dist = dist * 1609.344;
+        }
+
+        return (dist);
+    }
+
+
+    // This function converts decimal degrees to radians
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    // This function converts radians to decimal degrees
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
 
     @Nullable
     @Override
@@ -49,7 +136,7 @@ public class GeoService extends Service {
         String channelId = "location_notification_channel";
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Intent resultIntent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentTitle("Location Service");
@@ -68,18 +155,11 @@ public class GeoService extends Service {
         }
 
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(4000);
-        locationRequest.setFastestInterval(2000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(40000);
+        locationRequest.setFastestInterval(20000);
+        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, mLocationCallback, Looper.getMainLooper());
