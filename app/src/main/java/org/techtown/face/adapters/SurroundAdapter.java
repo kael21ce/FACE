@@ -64,7 +64,7 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
         }
 
         public void setItem(Bluetooth item) {
-            connectButton.setText(item.getDevice());
+            surroundName.setText(item.getDevice());
         }
     }
     public void addItem(Bluetooth item) {

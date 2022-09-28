@@ -24,7 +24,7 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
     ArrayList<Bluetooth> items = new ArrayList<>();
 
     public interface OnItemClickListener {
-        void onItemClicked(int position, User user);
+        void onItemClicked(int position, Bluetooth item);
     }
 
     private PairedAdapter.OnItemClickListener itemClickListener;
@@ -72,7 +72,7 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
         }
 
         public void setItem(Bluetooth item) {
-
+            pairedName.setText(item.getDevice());
         }
     }
     public void addItem(Bluetooth item) {
