@@ -1,12 +1,16 @@
 package org.techtown.face.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
@@ -30,6 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     private ActivitySignInBinding binding;
     private PreferenceManager preferenceManager;
     private FirebaseAuth firebaseAuth;
+    String TAG = "Permission";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,30 +45,6 @@ public class SignInActivity extends AppCompatActivity {
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
                 SafetyNetAppCheckProviderFactory.getInstance());
-
-        //퍼미션 설정
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
-            AndPermission.with(this)
-                    .runtime()
-                    .permission(Permission.READ_CALL_LOG, Permission.READ_CONTACTS,
-                            Permission.READ_PHONE_NUMBERS, Permission.ACCESS_FINE_LOCATION)
-                    .onGranted(permissions -> Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
-                            Toast.LENGTH_SHORT).show())
-                    .onDenied(permissions -> Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
-                            Toast.LENGTH_SHORT).show())
-                    .start();
-        } else {
-            AndPermission.with(this)
-                    .runtime()
-                    .permission(Permission.READ_CALL_LOG, Permission.READ_CONTACTS,
-                            Permission.READ_PHONE_STATE, Permission.ACCESS_FINE_LOCATION)
-                    .onGranted(permissions -> Toast.makeText(SignInActivity.this, "허용된 권한 개수"+permissions.size(),
-                            Toast.LENGTH_SHORT).show())
-                    .onDenied(permissions -> Toast.makeText(SignInActivity.this, "거부된 권한 개수"+permissions.size(),
-                            Toast.LENGTH_SHORT).show())
-                    .start();
-        }
-        //
 
         preferenceManager = new PreferenceManager(getApplicationContext());
         if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)){
