@@ -116,7 +116,9 @@
             android:name=".network.GeoService"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="location"></service>
+            android:foregroundServiceType="location">
+            
+        </service>
     </application>
 
 </manifest>
