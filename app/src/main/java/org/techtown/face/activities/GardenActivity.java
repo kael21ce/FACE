@@ -24,6 +24,7 @@ import org.techtown.face.R;
 import org.techtown.face.adapters.PairedAdapter;
 import org.techtown.face.adapters.SurroundAdapter;
 import org.techtown.face.models.Bluetooth;
+import org.techtown.face.utilites.ConnectedThread;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -40,6 +41,7 @@ public class GardenActivity extends AppCompatActivity {
     RecyclerView toConnectRecycler;
     BluetoothAdapter btAdapter;
     BluetoothSocket btSocket;
+    ConnectedThread connectedThread;
     private final static int REQUEST_ENABLED_BT = 101;
     String garden = "GARDEN";
 
