@@ -1,30 +1,24 @@
 package org.techtown.face.adapters;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import org.techtown.face.R;
 import org.techtown.face.models.Bluetooth;
-import org.techtown.face.models.Family;
-import org.techtown.face.models.User;
-
 import java.util.ArrayList;
 
 public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder> {
     ArrayList<Bluetooth> items = new ArrayList<>();
 
     public interface OnItemClickListener {
-        void onItemClicked(int position, Bluetooth item);
+        void onItemClicked(int position, BluetoothDevice device, boolean flag);
     }
 
     private PairedAdapter.OnItemClickListener itemClickListener;
@@ -40,9 +34,18 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
         View itemView = inflater.inflate(R.layout.paired_item, viewGroup, false);
 
         PairedAdapter.ViewHolder viewHolder = new PairedAdapter.ViewHolder(itemView);
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         itemView.setOnClickListener(view -> {
-
+            int position = viewHolder.getAdapterPosition();
+            BluetoothDevice device = null;
+            boolean flag = false;
+            if (position != RecyclerView.NO_POSITION) {
+                String address = items.get(position).getAddress();
+                device = btAdapter.getRemoteDevice(address);
+                flag = true;
+            }
+            itemClickListener.onItemClicked(position, device, flag);
         });
 
 
@@ -50,8 +53,9 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        Bluetooth item = items.get(position);
+        viewHolder.setItem(item);
     }
 
     @Override
@@ -73,6 +77,10 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
 
         public void setItem(Bluetooth item) {
             pairedName.setText(item.getDevice());
+            statusText.setText("페어링됨. 연결되지 않음.");
+            if (item.isFlag() == true) {
+                statusText.setText("연결됨.");
+            }
         }
     }
     public void addItem(Bluetooth item) {
