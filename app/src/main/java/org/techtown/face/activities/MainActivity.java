@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
         ActivityResultLauncher<String> permissionLauncher
                 = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
             if (isGranted) {
-                Log.d(TAG, "권한이 허용되었습니다.");
+                Log.d("MainActivity", "권한이 허용되었습니다.");
             } else {
-                Log.d(TAG, "앱 사용에 차질이 발생할 수 있습니다.");
+                Log.d("MainActivity", "앱 사용에 차질이 발생할 수 있습니다.");
             }
         });
 
-        String[] permissionListQ = {
+        String[] permissionListS = {
                 Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
@@ -173,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.BLUETOOTH_CONNECT
         };
 
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q) {
-            for (String p : permissionListQ) {
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.S) {
+            for (String p : permissionListS) {
                 permissionLauncher.launch(p);
             }
         } else {
