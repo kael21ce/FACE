@@ -14,14 +14,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
+import org.techtown.face.models.Bluetooth;
 import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
 
 import java.util.ArrayList;
 
 public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder> {
-    ArrayList items = new ArrayList();
-    ArrayList<Family> itemFamily = new ArrayList<>();
+    ArrayList<Bluetooth> items = new ArrayList<>();
 
     public interface OnItemClickListener {
         void onItemClicked(int position, User user);
@@ -71,24 +71,24 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
             statusText = itemVIew.findViewById(R.id.statusText);
         }
 
-        public void setItem(Family item) {
+        public void setItem(Bluetooth item) {
 
         }
     }
-    public void addItem(Family item) {
-        itemFamily.add(item);
+    public void addItem(Bluetooth item) {
+        items.add(item);
     }
 
-    public void setItems(ArrayList<Family> items) {
+    public void setItems(ArrayList<Bluetooth> items) {
         this.items = items;
     }
 
-    public Family getItem(int position) {
-        return itemFamily.get(position);
+    public Bluetooth getItem(int position) {
+        return items.get(position);
     }
 
-    public void setItem(int position, Family item) {
-        itemFamily.set(position, item);
+    public void setItem(int position, Bluetooth item) {
+        items.set(position, item);
     }
 }
 

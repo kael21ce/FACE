@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.techtown.face.R;
 import org.techtown.face.models.Bluetooth;
-import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
 
 import java.util.ArrayList;
@@ -23,9 +22,9 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
         void onItemClicked(int position, User user);
     }
 
-    private PairedAdapter.OnItemClickListener itemClickListener;
+    private OnItemClickListener itemClickListener;
 
-    public void setOnItemClickListener (PairedAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener (SurroundAdapter.OnItemClickListener listener) {
         itemClickListener=listener;
     }
 
@@ -33,7 +32,7 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.paired_item, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.surround_item, viewGroup, false);
 
         SurroundAdapter.ViewHolder viewHolder = new SurroundAdapter.ViewHolder(itemView);
 
@@ -47,40 +46,40 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return items.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView pairedName;
-        TextView statusText;
+        TextView surroundName;
+        TextView surroundStatus;
         Button connectButton;
 
 
         public ViewHolder(View itemVIew) {
             super(itemVIew);
 
-            pairedName = itemVIew.findViewById(R.id.pairedName);
-            statusText = itemVIew.findViewById(R.id.statusText);
+            surroundName = itemVIew.findViewById(R.id.surroundName);
+            surroundStatus = itemVIew.findViewById(R.id.surroundStatus);
             connectButton = itemVIew.findViewById(R.id.connectButton);
         }
 
-        public void setItem(Family item) {
-
+        public void setItem(Bluetooth item) {
+            connectButton.setText(item.getDevice());
         }
     }
-    public void addItem(Family item) {
-        itemFamily.add(item);
+    public void addItem(Bluetooth item) {
+        items.add(item);
     }
 
-    public void setItems(ArrayList<Family> items) {
+    public void setItems(ArrayList<Bluetooth> items) {
         this.items = items;
     }
 
-    public Family getItem(int position) {
-        return itemFamily.get(position);
+    public Bluetooth getItem(int position) {
+        return items.get(position);
     }
 
-    public void setItem(int position, Family item) {
-        itemFamily.set(position, item);
+    public void setItem(int position, Bluetooth item) {
+        items.set(position, item);
     }
 }
