@@ -70,10 +70,12 @@ public class GardenActivity extends AppCompatActivity {
         PairedAdapter pairedAdapter = new PairedAdapter();
         SurroundAdapter surroundAdapter = new SurroundAdapter();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(GardenActivity.this,
+        LinearLayoutManager layoutManagerC = new LinearLayoutManager(GardenActivity.this,
                 LinearLayoutManager.VERTICAL, false);
-        connectedRecycler.setLayoutManager(layoutManager);
-        toConnectRecycler.setLayoutManager(layoutManager);
+        connectedRecycler.setLayoutManager(layoutManagerC);
+        LinearLayoutManager layoutManagerT = new LinearLayoutManager(GardenActivity.this,
+                LinearLayoutManager.VERTICAL, false);
+        toConnectRecycler.setLayoutManager(layoutManagerT);
 
         //블루투스 연결 상태 확인
         btAdapter = BluetoothAdapter.getDefaultAdapter();
