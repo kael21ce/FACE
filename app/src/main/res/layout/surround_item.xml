@@ -29,7 +29,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/surroundStatus"
+                android:id="@+id/surroundAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
