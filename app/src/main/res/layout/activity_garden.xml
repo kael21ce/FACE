@@ -25,11 +25,21 @@
                 android:background="@drawable/border_layout"
                 android:gravity="center_horizontal"
                 android:paddingTop="5dp"
-                android:paddingEnd="5dp"
+                android:paddingBottom="5dp"
                 android:text="연결된 가족 정원"
                 android:textColor="#3F51B5"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/connectedExist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingStart="5dp"
+                android:text="페어링된 기기가 없습니다."
+                android:textSize="20sp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connectedRecycler"
@@ -44,7 +54,7 @@
                 android:background="@drawable/border_layout"
                 android:gravity="center_horizontal"
                 android:paddingTop="5dp"
-                android:paddingEnd="5dp"
+                android:paddingBottom="5dp"
                 android:text="연결할 가족 정원 찾기"
                 android:textColor="#3F51B5"
                 android:textSize="24sp"
@@ -61,6 +71,15 @@
                 android:text="검색"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/toConnectExist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:text="주변에 연결 가능한 기기가 없습니다."
+                android:textSize="20sp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/toConnectRecycler"
