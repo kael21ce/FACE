@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class GardenActivity extends AppCompatActivity {
     ConnectedThread connectedThread;
     private final static int REQUEST_ENABLED_BT = 101;
     String garden = "GARDEN";
+    String TAG = "Bluetooth";
 
     //페어링된 기기 관련
     ArrayList<String> devicePairedArrayList;
@@ -115,10 +117,29 @@ public class GardenActivity extends AppCompatActivity {
         //주변 기기 목록
         deviceLocalArrayList = new ArrayList<>();
         deviceLocalNameList = new ArrayList<>();
+        //기기 검색
+        if (ActivityCompat.checkSelfPermission(GardenActivity.this, Manifest.permission.BLUETOOTH_SCAN)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (btAdapter.isDiscovering()) {
+            btAdapter.cancelDiscovery();
+        } else {
+            if (btAdapter.isEnabled()) {
+                btAdapter.startDiscovery();
+                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                registerReceiver(receiver, filter);
+            } else {
+                Toast.makeText(GardenActivity.this, "블루투스 어댑터 연결에 실패했습니다.", Toast.LENGTH_LONG).show();
+            }
+        }
 
         //검색 버튼 클릭 시
         searchButton.setOnClickListener(view -> {
             toConnectExist.setVisibility(View.GONE);
+            deviceLocalArrayList = new ArrayList<>();
+            deviceLocalNameList = new ArrayList<>();
             //기기 검색
             if (ActivityCompat.checkSelfPermission(GardenActivity.this, Manifest.permission.BLUETOOTH_SCAN)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -150,18 +171,30 @@ public class GardenActivity extends AppCompatActivity {
         //터치 이벤트 추가
         pairedAdapter.setOnItemClickListener(((position, device, flag) -> {
             try {
-                btSocket = createBluetoothSocket(device);
-                flag = true;
-                pairedAdapter.getItem(position).setFlag(flag);
+                if (device != null) {
+                    btSocket = createBluetoothSocket(device);
+                    flag = true;
+                    pairedAdapter.getItem(position).setFlag(flag);
+                } else {
+                    Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                            , Toast.LENGTH_LONG).show();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 flag = false;
                 pairedAdapter.getItem(position).setFlag(flag);
+                Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                        , Toast.LENGTH_LONG).show();
             }
 
             if (flag) {
-                connectedThread = new ConnectedThread(btSocket);
-                connectedThread.start();
+                if (btSocket != null) {
+                    connectedThread = new ConnectedThread(btSocket);
+                    connectedThread.start();
+                } else {
+                    Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                            , Toast.LENGTH_LONG).show();
+                }
             }
             if (connectedThread != null) {
                 connectedThread.write("3");
@@ -179,11 +212,14 @@ public class GardenActivity extends AppCompatActivity {
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress();
-                if (deviceName.contains(garden)) {
-                    deviceLocalArrayList.add(deviceHardwareAddress);
-                    deviceLocalNameList.add(deviceName);
+                if (device != null) {
+                    String deviceName = device.getName();
+                    String deviceHardwareAddress = device.getAddress();
+                    Log.w(TAG, "Address of " + deviceName + ": " + deviceHardwareAddress);
+                    if (deviceName != null && deviceName.contains(garden)) {
+                        deviceLocalArrayList.add(deviceHardwareAddress);
+                        deviceLocalNameList.add(deviceName);
+                    }
                 }
             }
         }
@@ -198,19 +234,21 @@ public class GardenActivity extends AppCompatActivity {
     //createBluetoothSocket 메서드
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         try {
-            final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[]{UUID.class});
-            return (BluetoothSocket) m.invoke(device, uuid);
-        } catch (Exception e) {
+            if (deviceLocalArrayList.contains(device.getAddress())) {
+                final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[]{UUID.class});
+                return (BluetoothSocket) m.invoke(device, uuid);
+            } else {
+                Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                        , Toast.LENGTH_LONG).show();
+            }
+
+        } catch (Exception ignored) {
 
         }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                 != PackageManager.PERMISSION_GRANTED) {
             return null;
         }
-        try {
-            return device.createRfcommSocketToServiceRecord(uuid);
-        } catch (Exception e) {
-            return null;
-        }
+        return null;
     }
 }
