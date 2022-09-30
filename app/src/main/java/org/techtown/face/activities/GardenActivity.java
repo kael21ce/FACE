@@ -173,7 +173,7 @@ public class GardenActivity extends AppCompatActivity {
         pairedAdapter.setOnItemClickListener(((position, address, flag) -> {
             try {
                 device = btAdapter.getRemoteDevice(address);
-                Log.d(TAG, "Clicked device: " + device + " / " + address);
+                Log.d(TAG, "Clicked device: " + device.getName() + " / " + address);
                 if (deviceLocalArrayList.contains(device.getAddress())) {
                     btSocket = createBluetoothSocket(device);
                     flag = true;
@@ -183,11 +183,13 @@ public class GardenActivity extends AppCompatActivity {
                         Log.e(TAG, "Could not close the client socket", closeException);
                     }
                 } else {
+                    Log.w(TAG, "Not in location-1: " + device.getName());
                     Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
                             , Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 flag = false;
+                Log.e(TAG, "Not in location-2: " + device.getName(), e);
                 Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
                         , Toast.LENGTH_LONG).show();
             }
@@ -197,6 +199,7 @@ public class GardenActivity extends AppCompatActivity {
                     connectedThread = new ConnectedThread(btSocket);
                     connectedThread.start();
                 } else {
+                    Log.w(TAG, "Not in location-3: " + device.getName());
                     Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
                             , Toast.LENGTH_LONG).show();
                 }
