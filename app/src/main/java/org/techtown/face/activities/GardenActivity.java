@@ -169,23 +169,25 @@ public class GardenActivity extends AppCompatActivity {
             }
         });
 
-        //터치 이벤트 추가
+        //터치 이벤트 추가 - 기기 연결 상태 바꾸는 것 필요
         pairedAdapter.setOnItemClickListener(((position, address, flag) -> {
             try {
                 device = btAdapter.getRemoteDevice(address);
                 Log.d(TAG, "Clicked device: " + device + " / " + address);
-                if (device != null) {
+                if (deviceLocalArrayList.contains(device.getAddress())) {
                     btSocket = createBluetoothSocket(device);
                     flag = true;
-                    pairedAdapter.getItem(position).setFlag(flag);
+                    try {
+                        btSocket.connect();
+                    } catch (IOException closeException) {
+                        Log.e(TAG, "Could not close the client socket", closeException);
+                    }
                 } else {
                     Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
                             , Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
                 flag = false;
-                pairedAdapter.getItem(position).setFlag(flag);
                 Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
                         , Toast.LENGTH_LONG).show();
             }
@@ -236,22 +238,16 @@ public class GardenActivity extends AppCompatActivity {
 
     //createBluetoothSocket 메서드
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
+        BluetoothSocket tmp = null;
         try {
-            if (deviceLocalArrayList.contains(device.getAddress())) {
-                final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[]{UUID.class});
-                return (BluetoothSocket) m.invoke(device, uuid);
-            } else {
-                Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
-                        , Toast.LENGTH_LONG).show();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다.",
+                        Toast.LENGTH_LONG).show();
             }
-
-        } catch (Exception ignored) {
-
+            tmp = device.createRfcommSocketToServiceRecord(uuid);
+        } catch (IOException e) {
+            Log.e(TAG, "Socket's create() method failed", e);
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-        return null;
+        return tmp;
     }
 }
