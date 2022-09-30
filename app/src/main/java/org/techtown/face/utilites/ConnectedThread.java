@@ -41,7 +41,7 @@ public class ConnectedThread extends Thread {
             try {
                 numBytes = mmInstream.read(mmBuffer);
             } catch (IOException e) {
-                Log.e(TAG, "Input steam was disconnected", e);
+                Log.e(TAG, "Input stream was disconnected", e);
                 break;
             }
         }
@@ -52,7 +52,7 @@ public class ConnectedThread extends Thread {
         try {
             mmOutStream.write(bytes);
         } catch (IOException e) {
-            Log.e(TAG, "Error occured when sending data", e);
+            Log.e(TAG, "Error occurred when sending data", e);
         }
     }
 
