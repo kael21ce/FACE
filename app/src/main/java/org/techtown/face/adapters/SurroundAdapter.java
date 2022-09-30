@@ -17,13 +17,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.techtown.face.R;
-import org.techtown.face.activities.GardenActivity;
 import org.techtown.face.models.Bluetooth;
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.ConnectedThread;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
 

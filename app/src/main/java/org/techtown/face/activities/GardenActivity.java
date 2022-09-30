@@ -42,10 +42,11 @@ public class GardenActivity extends AppCompatActivity {
     RecyclerView toConnectRecycler;
     BluetoothAdapter btAdapter;
     BluetoothSocket btSocket;
-    ConnectedThread connectedThread;
+    BluetoothDevice device;
     private final static int REQUEST_ENABLED_BT = 101;
     String garden = "GARDEN";
     String TAG = "Bluetooth";
+    ConnectedThread connectedThread;
 
     //페어링된 기기 관련
     ArrayList<String> devicePairedArrayList;
@@ -169,8 +170,10 @@ public class GardenActivity extends AppCompatActivity {
         });
 
         //터치 이벤트 추가
-        pairedAdapter.setOnItemClickListener(((position, device, flag) -> {
+        pairedAdapter.setOnItemClickListener(((position, address, flag) -> {
             try {
+                device = btAdapter.getRemoteDevice(address);
+                Log.d(TAG, "Clicked device: " + device + " / " + address);
                 if (device != null) {
                     btSocket = createBluetoothSocket(device);
                     flag = true;

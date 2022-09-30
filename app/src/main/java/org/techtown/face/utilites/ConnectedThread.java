@@ -1,21 +1,17 @@
 package org.techtown.face.utilites;
 
 import android.bluetooth.BluetoothSocket;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.annotation.Native;
 
-public class ConnectedThread extends Thread{
+public class ConnectedThread extends Thread {
     private final BluetoothSocket mmSocket;
-    private final InputStream mmInStream;
+    private final InputStream mmInstream;
     private final OutputStream mmOutStream;
+    private byte[] mmBuffer;
     String TAG = "ConnectedThread";
 
     public ConnectedThread(BluetoothSocket socket) {
@@ -25,34 +21,28 @@ public class ConnectedThread extends Thread{
 
         try {
             tmpIn = socket.getInputStream();
+        } catch (IOException e) {
+            Log.e(TAG, "Error occurred when creating input stream", e);
+        }
+        try {
             tmpOut = socket.getOutputStream();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error occurred when creating output stream", e);
         }
 
-        mmInStream = tmpIn;
+        mmInstream = tmpIn;
         mmOutStream = tmpOut;
-        Log.w(TAG, "Stream: Instream-" + mmInStream + " & " + "Outstream-" + mmOutStream);
     }
-    @Override
-    public void run() {
-        byte[] buffer = new byte[1024];
-        int bytes;
-        if (mmInStream != null) {
-            while (true) {
-                try {
-                    bytes = mmInStream.available();
-                    if (bytes != 0) {
-                        buffer = new byte[1024];
-                        SystemClock.sleep(100);
-                        bytes = mmInStream.available();
-                        bytes = mmInStream.read(buffer, 0, bytes);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
 
-                    break;
-                }
+    public void run() {
+        mmBuffer = new byte[1024];
+        int numBytes;
+        while (true) {
+            try {
+                numBytes = mmInstream.read(mmBuffer);
+            } catch (IOException e) {
+                Log.e(TAG, "Input steam was disconnected", e);
+                break;
             }
         }
     }
@@ -60,10 +50,9 @@ public class ConnectedThread extends Thread{
     public void write(String input) {
         byte[] bytes = input.getBytes();
         try {
-            if (mmOutStream != null) {
-                mmOutStream.write(bytes);
-            }
+            mmOutStream.write(bytes);
         } catch (IOException e) {
+            Log.e(TAG, "Error occured when sending data", e);
         }
     }
 
@@ -71,6 +60,7 @@ public class ConnectedThread extends Thread{
         try {
             mmSocket.close();
         } catch (IOException e) {
+            Log.e(TAG, "Could not close the client socket", e);
         }
     }
 }
