@@ -75,7 +75,7 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
 
         public void setItem(Bluetooth item) {
             pairedName.setText(item.getDevice());
-            statusText.setText("페어링됨. 연결되지 않음.");
+            statusText.setText("페어링됨.");
             if (item.isFlag() == true) {
                 statusText.setText("연결됨.");
             }
