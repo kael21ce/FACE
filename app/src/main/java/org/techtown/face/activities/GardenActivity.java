@@ -215,7 +215,7 @@ public class GardenActivity extends AppCompatActivity {
                     String deviceName = device.getName();
                     String deviceHardwareAddress = device.getAddress();
                     Log.w(TAG, "Address of " + deviceName + ": " + deviceHardwareAddress);
-                    if (deviceName != null && deviceName.contains(garden)) {
+                    if (deviceName != null && deviceName.contains(garden) && !deviceLocalNameList.contains(deviceName)) {
                         deviceLocalArrayList.add(deviceHardwareAddress);
                         deviceLocalNameList.add(deviceName);
                         //리사이클러뷰에 보여주기
