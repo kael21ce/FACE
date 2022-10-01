@@ -21,11 +21,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import org.techtown.face.R;
 import org.techtown.face.adapters.PairedAdapter;
 import org.techtown.face.adapters.SurroundAdapter;
 import org.techtown.face.models.Bluetooth;
 import org.techtown.face.utilites.ConnectedThread;
+import org.techtown.face.utilites.Constants;
+import org.techtown.face.utilites.PreferenceManager;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -62,12 +67,20 @@ public class GardenActivity extends AppCompatActivity {
     ArrayList<String> deviceLocalNameList;
     SurroundAdapter surroundAdapter = new SurroundAdapter();
 
+    //데이터베이스
+    PreferenceManager preferenceManager;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String fTAG = "FACEdatabase";
+
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garden);
+
+        preferenceManager = new PreferenceManager(GardenActivity.this);
+        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
         connectedExist = findViewById(R.id.connectedExist);
         connectedExist.setVisibility(View.GONE);
@@ -206,7 +219,41 @@ public class GardenActivity extends AppCompatActivity {
                 }
             }
             if (connectedThread != null) {
-                connectedThread.write("3");
+                db.collection(Constants.KEY_COLLECTION_GARDEN)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    //데이터베이스에 등록된 가족 정원이 있는 경우
+                                    if (document.get(Constants.KEY_ADDRESS).equals(device.getAddress())) {
+                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(myId)
+                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                .get()
+                                                .addOnCompleteListener(task1 -> {
+                                                    if (task1.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                            if (documentSnapshot.get(Constants.KEY_USER)
+                                                                    .equals(document.get(Constants.KEY_USER))) {
+                                                                connectedThread.write(documentSnapshot
+                                                                        .get(Constants.KEY_EXPRESSION).toString());
+                                                                Log.w(fTAG, "Expression " + documentSnapshot
+                                                                        .get(Constants.KEY_EXPRESSION).toString()
+                                                                        + " is sent to " + device.getName());
+                                                            } else {
+                                                                Toast.makeText(GardenActivity.this,
+                                                                        "가족 정원이 등록되지 않았습니다.",
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        //데이터베이스에 가족정원이 등록되지 않은 경우
+                                    }
+                                }
+                            }
+                        });
             }
         }));
     }

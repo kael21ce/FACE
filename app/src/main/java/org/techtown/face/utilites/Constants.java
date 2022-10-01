@@ -47,6 +47,9 @@ public class Constants {
     public static final String KEY_ANGLE = "angle";
     public static final String KEY_WINDOW = "window";
 
+    public static final String KEY_COLLECTION_GARDEN = "garden";
+    public static final String KEY_ADDRESS = "address";
+
     public static final String KEY_PATH = "path";
     public static final String KEY_COLLECTION_NOTIFICATION = "notifications";
     public static final String KEY_NOTIFICATION = "notification";
