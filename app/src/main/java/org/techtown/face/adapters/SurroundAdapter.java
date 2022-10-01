@@ -52,7 +52,8 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-
+        Bluetooth item = items.get(position);
+        viewHolder.setItem(item);
     }
 
     @Override

@@ -52,10 +52,12 @@ public class GardenActivity extends AppCompatActivity {
     ArrayList<String> devicePairedArrayList;
     ArrayList<String> devicePairedNameList;
     Set<BluetoothDevice> pairedDevices;
+    PairedAdapter pairedAdapter = new PairedAdapter();
 
     //주변 기기 관련
     ArrayList<String> deviceLocalArrayList;
     ArrayList<String> deviceLocalNameList;
+    SurroundAdapter surroundAdapter = new SurroundAdapter();
 
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
@@ -70,8 +72,6 @@ public class GardenActivity extends AppCompatActivity {
         searchButton = findViewById(R.id.searchButton);
         connectedRecycler = findViewById(R.id.connectedRecycler);
         toConnectRecycler = findViewById(R.id.toConnectRecycler);
-        PairedAdapter pairedAdapter = new PairedAdapter();
-        SurroundAdapter surroundAdapter = new SurroundAdapter();
 
         LinearLayoutManager layoutManagerC = new LinearLayoutManager(GardenActivity.this,
                 LinearLayoutManager.VERTICAL, false);
@@ -158,15 +158,6 @@ public class GardenActivity extends AppCompatActivity {
                     Toast.makeText(GardenActivity.this, "블루투스 어댑터 연결에 실패했습니다.", Toast.LENGTH_LONG).show();
                 }
             }
-            //리사이클러뷰에 보여주기
-            int localLength = deviceLocalArrayList.size();
-            for (int i = 0; i < localLength; i++) {
-                surroundAdapter.addItem(new Bluetooth(deviceLocalNameList.get(i), deviceLocalArrayList.get(i), false));
-            }
-            toConnectRecycler.setAdapter(surroundAdapter);
-            if (localLength == 0) {
-                toConnectExist.setVisibility(View.VISIBLE);
-            }
         });
 
         //터치 이벤트 추가 - 기기 연결 상태 바꾸는 것 필요
@@ -227,6 +218,16 @@ public class GardenActivity extends AppCompatActivity {
                     if (deviceName != null && deviceName.contains(garden)) {
                         deviceLocalArrayList.add(deviceHardwareAddress);
                         deviceLocalNameList.add(deviceName);
+                        //리사이클러뷰에 보여주기
+                        int localLength = deviceLocalArrayList.size();
+                        for (int i = 0; i < localLength; i++) {
+                            surroundAdapter.addItem(new Bluetooth(deviceLocalNameList.get(i), deviceLocalArrayList.get(i), false));
+                            Log.w(TAG, "Item is added: " + deviceLocalNameList.get(i));
+                        }
+                        toConnectRecycler.setAdapter(surroundAdapter);
+                        if (localLength == 0) {
+                            toConnectExist.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
