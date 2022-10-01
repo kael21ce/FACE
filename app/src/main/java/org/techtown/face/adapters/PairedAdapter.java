@@ -34,7 +34,6 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
         View itemView = inflater.inflate(R.layout.paired_item, viewGroup, false);
 
         PairedAdapter.ViewHolder viewHolder = new PairedAdapter.ViewHolder(itemView);
-        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         itemView.setOnClickListener(view -> {
             int position = viewHolder.getAdapterPosition();

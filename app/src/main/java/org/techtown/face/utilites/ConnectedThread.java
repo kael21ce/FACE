@@ -39,7 +39,8 @@ public class ConnectedThread extends Thread {
         int numBytes;
         while (true) {
             try {
-                numBytes = mmInstream.read(mmBuffer);
+                numBytes = mmInstream.available();
+                numBytes = mmInstream.read(mmBuffer, 0, numBytes);
             } catch (IOException e) {
                 Log.e(TAG, "Input stream was disconnected", e);
                 break;
