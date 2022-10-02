@@ -37,19 +37,20 @@ public class RegisterAdapter extends RecyclerView.Adapter<RegisterAdapter.ViewHo
 
         RegisterAdapter.ViewHolder viewHolder = new RegisterAdapter.ViewHolder(itemView);
 
+        final boolean[] phase = {true};
+
         itemView.setOnClickListener(view -> {
             int position = viewHolder.getAdapterPosition();
-            boolean turn = true;
             String userId = items.get(position).getUserContact().id;
             TextView registerContainer = itemView.findViewById(R.id.nameRegisted);
-            if (turn) {
+            if (phase[0]) {
                 registerContainer.setBackgroundColor(Color.parseColor("#3F51B5"));
                 registerContainer.setTextColor(Color.WHITE);
-                turn = false;
+                phase[0] = false;
             } else {
                 registerContainer.setBackgroundColor(Color.WHITE);
                 registerContainer.setTextColor(Color.parseColor("#3F51B5"));
-                turn = true;
+                phase[0] = true;
             }
             itemClickListener.onItemClicked(position, userId);
         });

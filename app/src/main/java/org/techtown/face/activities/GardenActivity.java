@@ -220,55 +220,55 @@ public class GardenActivity extends AppCompatActivity {
             }
 
             if (flag) {
-                if (btSocket != null) {
-                    connectedThread = new ConnectedThread(btSocket);
-                    connectedThread.start();
-                } else {
-                    Log.w(TAG, "Not in location-3: " + device.getName());
-                    Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
-                            , Toast.LENGTH_LONG).show();
-                }
-            }
-            db.collection(Constants.KEY_COLLECTION_GARDEN)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //데이터베이스에 등록된 가족 정원이 있는 경우
-                                if (document.get(Constants.KEY_ADDRESS).equals(device.getAddress())) {
-                                    db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(myId)
-                                            .collection(Constants.KEY_COLLECTION_USERS)
-                                            .get()
-                                            .addOnCompleteListener(task1 -> {
-                                                if (task1.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                        if (documentSnapshot.get(Constants.KEY_USER)
-                                                                .equals(document.get(Constants.KEY_USER))) {
-                                                            connectedThread.write(documentSnapshot
-                                                                    .get(Constants.KEY_EXPRESSION).toString());
-                                                            Log.w(TAG, "Expression " + documentSnapshot
-                                                                    .get(Constants.KEY_EXPRESSION).toString()
-                                                                    + " is sent to " + device.getName());
-                                                        } else {
-                                                            Toast.makeText(GardenActivity.this,
-                                                                    "가족 정원이 등록되지 않았습니다.",
-                                                                    Toast.LENGTH_SHORT).show();
+                db.collection(Constants.KEY_COLLECTION_GARDEN)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    //데이터베이스에 등록된 가족 정원이 있는 경우
+                                    if (document.get(Constants.KEY_ADDRESS).equals(device.getAddress())) {
+                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(myId)
+                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                .get()
+                                                .addOnCompleteListener(task1 -> {
+                                                    if (task1.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                            if (documentSnapshot.get(Constants.KEY_USER)
+                                                                    .equals(document.get(Constants.KEY_USER))) {
+                                                                if (btSocket != null) {
+                                                                    connectedThread = new ConnectedThread(btSocket);
+                                                                    connectedThread.start();
+                                                                } else {
+                                                                    Log.w(TAG, "Not in location-3: " + device.getName());
+                                                                    Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                                                                            , Toast.LENGTH_LONG).show();
+                                                                }
+                                                                connectedThread.write(documentSnapshot
+                                                                        .get(Constants.KEY_EXPRESSION).toString());
+                                                                Log.w(TAG, "Expression " + documentSnapshot
+                                                                        .get(Constants.KEY_EXPRESSION).toString()
+                                                                        + " is sent to " + device.getName());
+                                                            } else {
+                                                                Toast.makeText(GardenActivity.this,
+                                                                        "가족 정원이 등록되지 않았습니다.",
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
-                                } else {
-                                    //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
-                                    //등록할 유저 id 불러오기
-                                    registerDialog = new Dialog(GardenActivity.this);
-                                    registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    registerDialog.setContentView(R.layout.dialog_btregister);
-                                    showRegisterDialog(device);
+                                                });
+                                    } else {
+                                        //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
+                                        //등록할 유저 id 불러오기
+                                        registerDialog = new Dialog(GardenActivity.this);
+                                        registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        registerDialog.setContentView(R.layout.dialog_btregister);
+                                        showRegisterDialog(device);
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+            }
         }));
     }
 

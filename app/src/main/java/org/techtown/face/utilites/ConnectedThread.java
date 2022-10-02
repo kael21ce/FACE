@@ -1,6 +1,7 @@
 package org.techtown.face.utilites;
 
 import android.bluetooth.BluetoothSocket;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
@@ -40,7 +41,12 @@ public class ConnectedThread extends Thread {
         while (true) {
             try {
                 numBytes = mmInstream.available();
-                numBytes = mmInstream.read(mmBuffer, 0, numBytes);
+                if (numBytes != 0) {
+                    mmBuffer = new byte[1024];
+                    SystemClock.sleep(100);
+                    numBytes = mmInstream.available();
+                    numBytes = mmInstream.read(mmBuffer, 0, numBytes);
+                }
             } catch (IOException e) {
                 Log.e(TAG, "Input stream was disconnected", e);
                 break;
