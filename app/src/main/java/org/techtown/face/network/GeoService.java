@@ -45,15 +45,22 @@ public class GeoService extends Service {
             super.onLocationResult(locationResult);
             SharedPreferences preferences = getApplicationContext().getSharedPreferences(Constants.KEY_PREFERENCE_NAME, Context.MODE_MULTI_PROCESS);
             String myId = preferences.getString(Constants.KEY_USER_ID, null);
+
             if (locationResult != null && locationResult.getLastLocation() != null) {
+                //위도와 경도 받아서 로그로 출력하기
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
                 HashMap<String,Object> location = new HashMap<>();
                 location.put(Constants.KEY_LATITUDE, latitude);
                 location.put(Constants.KEY_LONGITUDE, longitude);
                 Log.e("LOCATION_UPDATE", latitude + ", " + longitude);
+
+
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //위도와 경도 데이터 유저 문서에 업데이트 하기
                 db.collection(Constants.KEY_COLLECTION_USERS).document(myId).update(location);
+
+                //위도와 경도로 거리 계산하고 업데이트 하기
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(myId)
                         .collection(Constants.KEY_COLLECTION_USERS)
@@ -62,6 +69,7 @@ public class GeoService extends Service {
                            if(task.isSuccessful()){
                                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
                                    String userId = documentSnapshot.getString(Constants.KEY_USER);
+                                   //상대방의 위도와 경도 데이터 가져오기기
                                    db.collection(Constants.KEY_COLLECTION_USERS)
                                            .document(userId)
                                            .get()
@@ -75,6 +83,8 @@ public class GeoService extends Service {
                                                        double lon1 = longitude1;
                                                        double dist = distance(latitude,longitude,lat1,lon1,"meter");
                                                        Log.e("This","Is->"+dist);
+
+                                                       //계산한 거리로 window 업데이트 하기
                                                        if(dist<50){
                                                            HashMap<String,Object> now = new HashMap<>();
                                                            now.put(Constants.KEY_TIMESTAMP, System.currentTimeMillis());
@@ -156,8 +166,8 @@ public class GeoService extends Service {
         }
 
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(40000);
-        locationRequest.setFastestInterval(20000);
+        locationRequest.setInterval(4000);
+        locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
