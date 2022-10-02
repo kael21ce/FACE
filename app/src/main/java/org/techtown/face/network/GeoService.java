@@ -74,6 +74,7 @@ public class GeoService extends Service {
                                                        double lat1 = latitude1;
                                                        double lon1 = longitude1;
                                                        double dist = distance(latitude,longitude,lat1,lon1,"meter");
+                                                       Log.e("This","Is->"+dist);
                                                        if(dist<50){
                                                            HashMap<String,Object> now = new HashMap<>();
                                                            now.put(Constants.KEY_TIMESTAMP, System.currentTimeMillis());
