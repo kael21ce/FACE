@@ -96,8 +96,10 @@ public class GeoService extends Service {
                                                            db.collection(Constants.KEY_COLLECTION_USERS)
                                                                    .document(myId)
                                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                                   .document(userId)
+                                                                   .document(documentSnapshot.getId())
                                                                    .update(now);
+                                                           Log.e("FACEGeo", "업데이트된 윈도우-"
+                                                                   + documentSnapshot1.getString(Constants.KEY_NAME) +": " + System.currentTimeMillis());
                                                        }
                                                    }else{
                                                        Log.e("Hey", "상대방이 GPS를 사용하지 않고 있습니다.");
