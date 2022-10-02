@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -17,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +28,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.R;
 import org.techtown.face.adapters.PairedAdapter;
+import org.techtown.face.adapters.RegisterAdapter;
 import org.techtown.face.adapters.SurroundAdapter;
 import org.techtown.face.models.Bluetooth;
+import org.techtown.face.models.Family;
+import org.techtown.face.models.User;
 import org.techtown.face.utilites.ConnectedThread;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
@@ -55,7 +60,9 @@ public class GardenActivity extends AppCompatActivity {
     String trying = "TRY";
     String success = "SUCCESS";
     String failed = "FAILED";
+    String userIdToRegister;
     ConnectedThread connectedThread;
+    Dialog registerDialog;
 
     //페어링된 기기 관련
     ArrayList<String> devicePairedArrayList;
@@ -255,7 +262,12 @@ public class GardenActivity extends AppCompatActivity {
                                         garden.put(Constants.KEY_ADDRESS, device.getAddress().toString());
                                         garden.put(Constants.KEY_NAME, device.getName().toString());
                                         //등록할 유저 id 불러오기
-
+                                        registerDialog = new Dialog(GardenActivity.this);
+                                        registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        registerDialog.setContentView(R.layout.dialog_btregister);
+                                        showRegisterDialog();
+                                        garden.put(Constants.KEY_USER, userIdToRegister);
+                                        db.collection(Constants.KEY_COLLECTION_GARDEN).add(garden);
                                     }
                                 }
                             }
@@ -320,5 +332,57 @@ public class GardenActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
         return device.createRfcommSocketToServiceRecord(uuid);
+    }
+
+    public void showRegisterDialog() {
+        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+        final String[] registedId = {null};
+        registerDialog.show();
+        //리사이클러뷰에 배치
+        RecyclerView registerRecycler = registerDialog.findViewById(R.id.registerRecycler);
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(registerDialog.getContext(), LinearLayoutManager.VERTICAL, false);
+        registerRecycler.setLayoutManager(layoutManager);
+        RegisterAdapter registerAdapter = new RegisterAdapter();
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(myId)
+                .collection(Constants.KEY_COLLECTION_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User user = new User();
+                            user.name = document.get(Constants.KEY_NAME).toString();
+                            user.id = document.getId();
+                            registerAdapter.addItem(new Family(user));
+                        }
+                        registerRecycler.setAdapter(registerAdapter);
+                    }
+
+                });
+        //아이템 터치 이벤트
+        registerAdapter.setOnItemClickListener(((position, userId) -> {
+            registedId[0] = userId;
+        }));
+
+        //취소 버튼
+        Button rejectButton = registerDialog.findViewById(R.id.rejectButton);
+        rejectButton.setOnClickListener(view -> {
+            registerDialog.dismiss();
+        });
+
+        //선택 버튼
+        Button selectButton = registerDialog.findViewById(R.id.selectButton);
+        selectButton.setOnClickListener(view -> {
+            if (registedId[0] == null) {
+                Toast.makeText(GardenActivity.this, "선택을 하지 않습니다.",
+                        Toast.LENGTH_SHORT).show();
+                registerDialog.dismiss();
+            } else {
+                userIdToRegister = registedId[0];
+                Log.w(TAG, "등록 id: " + registedId[0]);
+            }
+        });
     }
 }
