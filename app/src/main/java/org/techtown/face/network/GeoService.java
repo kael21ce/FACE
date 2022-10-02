@@ -68,11 +68,11 @@ public class GeoService extends Service {
                                            .addOnCompleteListener(task1 -> {
                                                if(task1.isSuccessful()) {
                                                    DocumentSnapshot documentSnapshot1 = task1.getResult();
-                                                   String latitude1 = documentSnapshot1.getString(Constants.KEY_LATITUDE);
-                                                   String longitude1 = documentSnapshot1.getString(Constants.KEY_LONGITUDE);
+                                                   Double latitude1 = documentSnapshot1.getDouble(Constants.KEY_LATITUDE);
+                                                   Double longitude1 = documentSnapshot1.getDouble(Constants.KEY_LONGITUDE);
                                                    if(latitude1 != null && longitude1 !=null){
-                                                       double lat1 = Double.parseDouble(latitude1);
-                                                       double lon1 = Double.parseDouble(longitude1);
+                                                       double lat1 = latitude1;
+                                                       double lon1 = longitude1;
                                                        double dist = distance(latitude,longitude,lat1,lon1,"meter");
                                                        if(dist<50){
                                                            HashMap<String,Object> now = new HashMap<>();

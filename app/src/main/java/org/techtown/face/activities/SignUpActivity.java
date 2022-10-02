@@ -84,7 +84,6 @@ public class SignUpActivity extends AppCompatActivity {
         user.put(Constants.KEY_THEME_LIKE,binding.inputThemeLike.getText().toString());
         user.put(Constants.KEY_THEME_DISLIKE,binding.inputThemeDislike.getText().toString());
         user.put(Constants.KEY_EXPRESSION,5);
-        user.put(Constants.KEY_LOCATION,"");
         user.put(Constants.KEY_ANGLE,0);
 
 
