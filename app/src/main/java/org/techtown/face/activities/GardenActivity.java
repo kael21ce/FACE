@@ -1,10 +1,5 @@
 package org.techtown.face.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
@@ -24,8 +19,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -60,9 +58,6 @@ public class GardenActivity extends AppCompatActivity {
     private final static int REQUEST_ENABLED_BT = 101;
     String garden = "GARDEN";
     String TAG = "FACEBluetooth";
-    String trying = "TRY";
-    String success = "SUCCESS";
-    String failed = "FAILED";
     String userIdToRegister;
     ConnectedThread connectedThread;
     Dialog registerDialog;
@@ -239,10 +234,6 @@ public class GardenActivity extends AppCompatActivity {
                                                                 if (btSocket != null) {
                                                                     connectedThread = new ConnectedThread(btSocket);
                                                                     connectedThread.start();
-                                                                } else {
-                                                                    Log.w(TAG, "Not in location-3: " + device.getName());
-                                                                    Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
-                                                                            , Toast.LENGTH_LONG).show();
                                                                 }
                                                                 connectedThread.write(documentSnapshot
                                                                         .get(Constants.KEY_EXPRESSION).toString());
@@ -364,23 +355,15 @@ public class GardenActivity extends AppCompatActivity {
                                         }
                                     });
                             //데이터베이스에 추가되는 딜레이 고려
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    user.name = preferenceManager.getString("register" + user.id);
-                                    registerAdapter.addItem(new Family(user));
-                                }
+                            mHandler.postDelayed(() -> {
+                                user.name = preferenceManager.getString("register" + user.id);
+                                registerAdapter.addItem(new Family(user));
                             }, 1000);
                             Log.w(TAG, "Item is added: name-"
                                     + preferenceManager.getString("register" + user.id)
                                     + " / address-" + user.id);
                         }
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                registerRecycler.setAdapter(registerAdapter);
-                            }
-                        }, 1000);
+                        mHandler.postDelayed(() -> registerRecycler.setAdapter(registerAdapter), 1000);
                     }
 
                 });
@@ -392,9 +375,7 @@ public class GardenActivity extends AppCompatActivity {
 
         //취소 버튼
         Button rejectButton = registerDialog.findViewById(R.id.rejectButton);
-        rejectButton.setOnClickListener(view -> {
-            registerDialog.dismiss();
-        });
+        rejectButton.setOnClickListener(view -> registerDialog.dismiss());
 
         //선택 버튼
         Button selectButton = registerDialog.findViewById(R.id.selectButton);
