@@ -105,26 +105,21 @@ public class FrameFragment extends Fragment {
                                             user.dislike = queryDocumentSnapshot.get(Constants.KEY_THEME_DISLIKE).toString();
                                             user.path = queryDocumentSnapshot.get(Constants.KEY_PATH).toString();
                                             int expression = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_EXPRESSION).toString());
-                                            boolean meet = (Boolean) queryDocumentSnapshot.get(Constants.KEY_MEET);
 
-                                            if (meet) {
-
+                                            if (expression==5) {
+                                                adapter.addItem(new Family(user));
+                                            } else if (expression==4) {
+                                                adapter.addItem(new Family(user));
+                                            } else if (expression==3) {
+                                                adapter.addItem(new Family(user));
+                                            } else if (expression==2) {
+                                                adapter.addItem(new Family(user));
+                                            } else if (expression==1) {
                                                 adapter.addItem(new Family(user));
                                             } else {
-                                                if (expression==5) {
-                                                    adapter.addItem(new Family(user));
-                                                } else if (expression==4) {
-                                                    adapter.addItem(new Family(user));
-                                                } else if (expression==3) {
-                                                    adapter.addItem(new Family(user));
-                                                } else if (expression==2) {
-                                                    adapter.addItem(new Family(user));
-                                                } else if (expression==1) {
-                                                    adapter.addItem(new Family(user));
-                                                } else {
-                                                    adapter.addItem(new Family(user));
-                                                }
+                                                adapter.addItem(new Family(user));
                                             }
+
                                             recyclerView.setAdapter(adapter);
                                         }
                                     }
