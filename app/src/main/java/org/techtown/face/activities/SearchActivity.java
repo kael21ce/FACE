@@ -51,7 +51,6 @@ public class SearchActivity extends AppCompatActivity {
                         String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
                         String userId = queryDocumentSnapshot.getId();
 
-
                         if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)){
                             String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
                             adapter.addItem(new SearchItem(path, name, mobile, userId, myId));

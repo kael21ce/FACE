@@ -56,7 +56,6 @@ public class ChangeInfoActivity extends AppCompatActivity {
             pickImage.launch(intent);
         });
         binding.layoutImage2.setOnClickListener(v -> {
-            reference.delete();
             Intent intent = new Intent(ChangeInfoActivity.this, CameraActivity.class);
             startActivity(intent);
         });
