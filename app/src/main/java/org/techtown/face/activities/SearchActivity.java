@@ -15,6 +15,8 @@ import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 import org.techtown.face.models.SearchItem;
 
+import java.util.Objects;
+
 public class SearchActivity extends AppCompatActivity {
 
     ActivitySearchBinding binding;
@@ -32,6 +34,8 @@ public class SearchActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
 
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+
+
         binding.button.setOnClickListener(v -> {
             int c = adapter.getItemCount();
             for(i=0;i<c;i++){
@@ -47,17 +51,30 @@ public class SearchActivity extends AppCompatActivity {
                         String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
                         String userId = queryDocumentSnapshot.getId();
 
-                        if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)){
-                            String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
-                            adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
-                            binding.searchRecyclerView.setAdapter(adapter);
-                        }
+                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(myId).collection(Constants.KEY_COLLECTION_USERS)
+                                .get()
+                                .addOnCompleteListener(task1 -> {
+                                    if(task1.isSuccessful()){
+                                        for(QueryDocumentSnapshot snapshot : task1.getResult()){
+                                            String familyId = snapshot.getString(Constants.KEY_USER);
+                                            if(!Objects.equals(familyId, userId)){
+                                                if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)){
+                                                    String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
+                                                    adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
+                                                    binding.searchRecyclerView.setAdapter(adapter);
+                                                }
+                                            }
+                                        }
+                                    }else{
+                                        Log.e("Got", "Fucked");
+                                    }
+                                });
                     }
                 } else {
                     Log.e("This", "is Fuck");
                 }
             });
-
         });
     }
 }

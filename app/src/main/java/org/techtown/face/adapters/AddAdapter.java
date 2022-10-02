@@ -122,6 +122,7 @@ public class AddAdapter extends RecyclerView.Adapter<AddAdapter.ViewHolder> {
                         .collection(Constants.KEY_COLLECTION_USERS)
                         .add(myUser);
                 add.setVisibility(View.INVISIBLE);
+                delete.setVisibility(View.INVISIBLE);
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())
                         .collection(Constants.KEY_COLLECTION_NOTIFICATION)
