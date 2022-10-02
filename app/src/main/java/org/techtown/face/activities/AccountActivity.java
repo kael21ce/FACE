@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,6 +37,8 @@ public class AccountActivity extends BaseActivity {
         ActivityAccountBinding binding = ActivityAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
+        StorageReference reference = FirebaseStorage.getInstance().getReference().child(preferenceManager.getString(Constants.KEY_PATH));
+        reference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(this).load(uri).into(binding.imageMe));
         binding.SignOut.setOnClickListener(view -> signOut());
         binding.deleteAccount.setOnClickListener(view -> deleteUser());
         binding.changeInfo.setOnClickListener(view -> changeInformation());

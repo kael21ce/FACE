@@ -17,7 +17,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.databinding.ActivityChangeInfoBinding;
 import org.techtown.face.utilites.Constants;
@@ -39,6 +42,8 @@ public class ChangeInfoActivity extends AppCompatActivity {
         binding = ActivityChangeInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
+        StorageReference reference = FirebaseStorage.getInstance().getReference().child(preferenceManager.getString(Constants.KEY_PATH));
+        reference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(this).load(uri).into(binding.imageView4));
         binding.imageView3.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
         binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
         binding.birthDay.setText(preferenceManager.getString(Constants.KEY_BIRTHDAY));
@@ -49,6 +54,11 @@ public class ChangeInfoActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             pickImage.launch(intent);
+        });
+        binding.layoutImage2.setOnClickListener(v -> {
+            reference.delete();
+            Intent intent = new Intent(ChangeInfoActivity.this, CameraActivity.class);
+            startActivity(intent);
         });
     }
 
