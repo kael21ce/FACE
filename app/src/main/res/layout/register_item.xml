@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RegisterContainer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/nameRegisted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
-        android:backgroundTint="#FFFFFF"
         android:paddingStart="5dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

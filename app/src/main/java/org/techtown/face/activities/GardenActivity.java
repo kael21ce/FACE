@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +24,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -56,7 +59,7 @@ public class GardenActivity extends AppCompatActivity {
     BluetoothDevice device;
     private final static int REQUEST_ENABLED_BT = 101;
     String garden = "GARDEN";
-    String TAG = "Bluetooth";
+    String TAG = "FACEBluetooth";
     String trying = "TRY";
     String success = "SUCCESS";
     String failed = "FAILED";
@@ -78,7 +81,7 @@ public class GardenActivity extends AppCompatActivity {
     //데이터베이스
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String fTAG = "FACEdatabase";
+    Handler mHandler = new Handler();
 
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
@@ -226,53 +229,46 @@ public class GardenActivity extends AppCompatActivity {
                             , Toast.LENGTH_LONG).show();
                 }
             }
-            if (connectedThread != null) {
-                db.collection(Constants.KEY_COLLECTION_GARDEN)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    //데이터베이스에 등록된 가족 정원이 있는 경우
-                                    if (document.get(Constants.KEY_ADDRESS).equals(device.getAddress())) {
-                                        db.collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(myId)
-                                                .collection(Constants.KEY_COLLECTION_USERS)
-                                                .get()
-                                                .addOnCompleteListener(task1 -> {
-                                                    if (task1.isSuccessful()) {
-                                                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                            if (documentSnapshot.get(Constants.KEY_USER)
-                                                                    .equals(document.get(Constants.KEY_USER))) {
-                                                                connectedThread.write(documentSnapshot
-                                                                        .get(Constants.KEY_EXPRESSION).toString());
-                                                                Log.w(fTAG, "Expression " + documentSnapshot
-                                                                        .get(Constants.KEY_EXPRESSION).toString()
-                                                                        + " is sent to " + device.getName());
-                                                            } else {
-                                                                Toast.makeText(GardenActivity.this,
-                                                                        "가족 정원이 등록되지 않았습니다.",
-                                                                        Toast.LENGTH_SHORT).show();
-                                                            }
+            db.collection(Constants.KEY_COLLECTION_GARDEN)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //데이터베이스에 등록된 가족 정원이 있는 경우
+                                if (document.get(Constants.KEY_ADDRESS).equals(device.getAddress())) {
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(myId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .get()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                        if (documentSnapshot.get(Constants.KEY_USER)
+                                                                .equals(document.get(Constants.KEY_USER))) {
+                                                            connectedThread.write(documentSnapshot
+                                                                    .get(Constants.KEY_EXPRESSION).toString());
+                                                            Log.w(TAG, "Expression " + documentSnapshot
+                                                                    .get(Constants.KEY_EXPRESSION).toString()
+                                                                    + " is sent to " + device.getName());
+                                                        } else {
+                                                            Toast.makeText(GardenActivity.this,
+                                                                    "가족 정원이 등록되지 않았습니다.",
+                                                                    Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
-                                                });
-                                    } else {
-                                        //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
-                                        HashMap<String, Object> garden = new HashMap<>();
-                                        garden.put(Constants.KEY_ADDRESS, device.getAddress().toString());
-                                        garden.put(Constants.KEY_NAME, device.getName().toString());
-                                        //등록할 유저 id 불러오기
-                                        registerDialog = new Dialog(GardenActivity.this);
-                                        registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        registerDialog.setContentView(R.layout.dialog_btregister);
-                                        showRegisterDialog();
-                                        garden.put(Constants.KEY_USER, userIdToRegister);
-                                        db.collection(Constants.KEY_COLLECTION_GARDEN).add(garden);
-                                    }
+                                                }
+                                            });
+                                } else {
+                                    //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
+                                    //등록할 유저 id 불러오기
+                                    registerDialog = new Dialog(GardenActivity.this);
+                                    registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    registerDialog.setContentView(R.layout.dialog_btregister);
+                                    showRegisterDialog(device);
                                 }
                             }
-                        });
-            }
+                        }
+                    });
         }));
     }
 
@@ -334,7 +330,7 @@ public class GardenActivity extends AppCompatActivity {
         return device.createRfcommSocketToServiceRecord(uuid);
     }
 
-    public void showRegisterDialog() {
+    public void showRegisterDialog(BluetoothDevice device) {
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
         final String[] registedId = {null};
         registerDialog.show();
@@ -353,17 +349,45 @@ public class GardenActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             User user = new User();
-                            user.name = document.get(Constants.KEY_NAME).toString();
-                            user.id = document.getId();
-                            registerAdapter.addItem(new Family(user));
+                            user.id = document.get(Constants.KEY_USER).toString();
+                            final String[] name = new String[1];
+                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                    .get().addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                if (documentSnapshot.getId().equals(user.id)) {
+                                                    name[0] = documentSnapshot.get(Constants.KEY_NAME).toString();
+                                                    preferenceManager.putString("register" + user.id
+                                                            , name[0]);
+                                                }
+                                            }
+                                        }
+                                    });
+                            //데이터베이스에 추가되는 딜레이 고려
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    user.name = preferenceManager.getString("register" + user.id);
+                                    registerAdapter.addItem(new Family(user));
+                                }
+                            }, 1000);
+                            Log.w(TAG, "Item is added: name-"
+                                    + preferenceManager.getString("register" + user.id)
+                                    + " / address-" + user.id);
                         }
-                        registerRecycler.setAdapter(registerAdapter);
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                registerRecycler.setAdapter(registerAdapter);
+                            }
+                        }, 1000);
                     }
 
                 });
         //아이템 터치 이벤트
         registerAdapter.setOnItemClickListener(((position, userId) -> {
             registedId[0] = userId;
+            Log.w(TAG, "Touched: " + registedId[0]);
         }));
 
         //취소 버튼
@@ -381,7 +405,19 @@ public class GardenActivity extends AppCompatActivity {
                 registerDialog.dismiss();
             } else {
                 userIdToRegister = registedId[0];
-                Log.w(TAG, "등록 id: " + registedId[0]);
+                HashMap<String, Object> garden = new HashMap<>();
+                garden.put(Constants.KEY_ADDRESS, device.getAddress());
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다.",
+                            Toast.LENGTH_LONG).show();
+                }
+                garden.put(Constants.KEY_NAME, device.getName());
+                garden.put(Constants.KEY_USER, userIdToRegister);
+                db.collection(Constants.KEY_COLLECTION_GARDEN).add(garden);
+                Log.w(TAG, "가족 정원이 등록되었습니다.");
+                Log.w(TAG, "등록 id: " + userIdToRegister);
+                registerDialog.dismiss();
             }
         });
     }
