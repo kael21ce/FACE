@@ -78,16 +78,21 @@ public class GeoService extends Service {
                                                    DocumentSnapshot documentSnapshot1 = task1.getResult();
                                                    Double latitude1 = documentSnapshot1.getDouble(Constants.KEY_LATITUDE);
                                                    Double longitude1 = documentSnapshot1.getDouble(Constants.KEY_LONGITUDE);
+                                                   Log.e("FACEGeo", "위치를 출력합니다-"
+                                                           + documentSnapshot1.getString(Constants.KEY_NAME) +": " + "Latitude: " + latitude1
+                                                           + " & " + "Longitude: " + longitude1);
                                                    if(latitude1 != null && longitude1 !=null){
                                                        double lat1 = latitude1;
                                                        double lon1 = longitude1;
                                                        double dist = distance(latitude,longitude,lat1,lon1,"meter");
                                                        Log.e("This","Is->"+dist);
+                                                       Log.e("FACEGeo", "거리를 출력합니다-" + documentSnapshot1.getString(Constants.KEY_NAME) + ": "
+                                                               + distance(latitude,longitude,lat1,lon1,"meter"));
 
                                                        //계산한 거리로 window 업데이트 하기
                                                        if(dist<50){
                                                            HashMap<String,Object> now = new HashMap<>();
-                                                           now.put(Constants.KEY_TIMESTAMP, System.currentTimeMillis());
+                                                           now.put(Constants.KEY_WINDOW, System.currentTimeMillis());
                                                            db.collection(Constants.KEY_COLLECTION_USERS)
                                                                    .document(myId)
                                                                    .collection(Constants.KEY_COLLECTION_USERS)
