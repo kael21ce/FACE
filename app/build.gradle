@@ -36,6 +36,7 @@ android {
     dataBinding {
         enabled = true
     }
+    namespace 'org.techtown.face'
 }
 
 dependencies {
