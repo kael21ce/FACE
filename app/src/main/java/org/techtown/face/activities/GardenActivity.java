@@ -35,6 +35,7 @@ import org.techtown.face.utilites.PreferenceManager;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
@@ -249,7 +250,12 @@ public class GardenActivity extends AppCompatActivity {
                                                     }
                                                 });
                                     } else {
-                                        //데이터베이스에 가족정원이 등록되지 않은 경우
+                                        //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
+                                        HashMap<String, Object> garden = new HashMap<>();
+                                        garden.put(Constants.KEY_ADDRESS, device.getAddress().toString());
+                                        garden.put(Constants.KEY_NAME, device.getName().toString());
+                                        //등록할 유저 id 불러오기
+
                                     }
                                 }
                             }
