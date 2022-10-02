@@ -69,7 +69,7 @@ public class GeoService extends Service {
                            if(task.isSuccessful()){
                                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
                                    String userId = documentSnapshot.getString(Constants.KEY_USER);
-                                   //상대방의 위도와 경도 데이터 가져오기
+                                   //상대방의 위도와 경도 데이터 가져오기기
                                    db.collection(Constants.KEY_COLLECTION_USERS)
                                            .document(userId)
                                            .get()
