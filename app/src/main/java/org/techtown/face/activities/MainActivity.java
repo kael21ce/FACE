@@ -211,10 +211,10 @@ public class MainActivity extends AppCompatActivity {
                                             for (QueryDocumentSnapshot document1 : task1.getResult()) {
                                                 if (userId.equals(document1.getId())) {
                                                     idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
-                                                            .toString()) * 60000);
+                                                            .toString()) * 86400000);
                                                     preferenceManager.putInt("ideal" + userId, idealContact.get());
                                                     minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
-                                                            .toString()) * 60000);
+                                                            .toString()) * 86400000);
                                                     preferenceManager.putInt("min" + userId, minContact.get());
                                                 }
                                             }

@@ -57,7 +57,12 @@
         <receiver
             android:name=".utilites.ContactReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+            </intent-filter>
+
+        </receiver>
 
         <activity
             android:name=".activities.SearchActivity"
