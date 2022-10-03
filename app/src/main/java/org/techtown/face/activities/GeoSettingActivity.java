@@ -13,9 +13,16 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.techtown.face.databinding.ActivityGeoSettingBinding;
 import org.techtown.face.network.GeoService;
 import org.techtown.face.utilites.Constants;
+import org.techtown.face.utilites.PreferenceManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GeoSettingActivity extends AppCompatActivity {
     ActivityGeoSettingBinding binding;
@@ -26,6 +33,7 @@ public class GeoSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityGeoSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
         binding.onGPS.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -39,6 +47,11 @@ public class GeoSettingActivity extends AppCompatActivity {
         binding.offGPS.setOnClickListener(v -> {
             binding.isGPS.setText("GPS가 꺼져있습니다.");
             stopLocationService();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> updates = new HashMap<>();
+            updates.put(Constants.KEY_LATITUDE, FieldValue.delete());
+            updates.put(Constants.KEY_LONGITUDE, FieldValue.delete());
+            db.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID)).update(updates);
         });
     }
     @Override
