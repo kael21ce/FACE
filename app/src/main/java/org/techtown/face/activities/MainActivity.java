@@ -235,14 +235,25 @@ public class MainActivity extends AppCompatActivity {
                                         db.collection(Constants.KEY_COLLECTION_USERS)
                                                 .document(currentUserId)
                                                 .collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(Objects.requireNonNull(document.get("user")).toString())
-                                                .update("expression", 5);
+                                                .document(document.getId())
+                                                .update(Constants.KEY_EXPRESSION, 5);
                                         //상대방 데이터베이스에 내 expression 업데이트
                                         db.collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(Objects.requireNonNull(document.get("user")).toString())
+                                                .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
                                                 .collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(currentUserId)
-                                                .update("expression", 5);
+                                                .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                                .get()
+                                                .addOnCompleteListener(task1 -> {
+                                                    if (task1.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                    .document(document.get(Constants.KEY_USER).toString())
+                                                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                                                    .document(documentSnapshot.getId())
+                                                                    .update(Constants.KEY_EXPRESSION, 5);
+                                                        }
+                                                    }
+                                                });
                                     }
                                     if (now - lastNow[0] >= idealContact.get()) {
                                         if (now - lastNow[0] < idealContact.get() + term) {
@@ -250,53 +261,98 @@ public class MainActivity extends AppCompatActivity {
                                             db.collection(Constants.KEY_COLLECTION_USERS)
                                                     .document(currentUserId)
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
-                                                    .update("expression", 4);
+                                                    .document(document.getId())
+                                                    .update(Constants.KEY_EXPRESSION, 4);
                                             //상대방 데이터베이스에 내 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .update("expression", 4);
+                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(document.get(Constants.KEY_USER).toString())
+                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(documentSnapshot.getId())
+                                                                        .update(Constants.KEY_EXPRESSION, 4);
+                                                            }
+                                                        }
+                                                    });
                                         } else if (now - lastNow[0] < idealContact.get() + term*2) {
                                             //나의 데이터베이스에 상대방 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
                                                     .document(currentUserId)
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
-                                                    .update("expression", 3);
+                                                    .document(document.getId())
+                                                    .update(Constants.KEY_EXPRESSION, 3);
                                             //상대방 데이터베이스에 내 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .update("expression", 3);
+                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(document.get(Constants.KEY_USER).toString())
+                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(documentSnapshot.getId())
+                                                                        .update(Constants.KEY_EXPRESSION, 3);
+                                                            }
+                                                        }
+                                                    });
                                         } else if (now - lastNow[0] < idealContact.get() + term*3) {
+                                            //나의 데이터베이스에 상대방 expression 업데이트
                                             //나의 데이터베이스에 상대방 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
                                                     .document(currentUserId)
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
-                                                    .update("expression", 2);
+                                                    .document(document.getId())
+                                                    .update(Constants.KEY_EXPRESSION, 2);
                                             //상대방 데이터베이스에 내 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .update("expression", 2);
+                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(document.get(Constants.KEY_USER).toString())
+                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(documentSnapshot.getId())
+                                                                        .update(Constants.KEY_EXPRESSION, 2);
+                                                            }
+                                                        }
+                                                    });
                                         } else {
                                             //나의 데이터베이스에 상대방 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
                                                     .document(currentUserId)
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
-                                                    .update("expression", 1);
+                                                    .document(document.getId())
+                                                    .update(Constants.KEY_EXPRESSION, 1);
                                             //상대방 데이터베이스에 내 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get("user")).toString())
+                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .update("expression", 1);
+                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(document.get(Constants.KEY_USER).toString())
+                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(documentSnapshot.getId())
+                                                                        .update(Constants.KEY_EXPRESSION, 1);
+                                                            }
+                                                        }
+                                                    });
                                             }
                                         }
                                 }
