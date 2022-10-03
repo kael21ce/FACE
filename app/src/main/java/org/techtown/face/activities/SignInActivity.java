@@ -1,11 +1,17 @@
 package org.techtown.face.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
@@ -25,6 +31,7 @@ public class SignInActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
     private FirebaseAuth firebaseAuth;
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,31 @@ public class SignInActivity extends AppCompatActivity {
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
+
+        //위험 권한 묻기
+        ActivityResultLauncher<String> permissionLauncher
+                = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                Log.d("MainActivity", "권한이 허용되었습니다.");
+                Toast.makeText(this, "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d("MainActivity", "앱 사용에 차질이 발생할 수 있습니다.");
+                Toast.makeText(this, "앱 사용에 차질이 발생할 수 있습니다."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        String[] permissionList = {
+                Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
+                Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.READ_PHONE_STATE
+        };
+
+        for (String p : permissionList) {
+            permissionLauncher.launch(p);
+        }
+        //
     }
 
     private void setListeners() {

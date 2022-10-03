@@ -151,41 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        //위험 권한 묻기
-        ActivityResultLauncher<String> permissionLauncher
-                = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if (isGranted) {
-                Log.d("MainActivity", "권한이 허용되었습니다.");
-            } else {
-                Log.d("MainActivity", "앱 사용에 차질이 발생할 수 있습니다.");
-            }
-        });
-
-        String[] permissionListS = {
-                Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
-                Manifest.permission.READ_PHONE_NUMBERS, Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_CONNECT
-        };
-
-        String[] permissionList = {
-                Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
-                Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_CONNECT
-        };
-
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.S) {
-            for (String p : permissionListS) {
-                permissionLauncher.launch(p);
-            }
-        } else {
-            for (String p : permissionList) {
-                permissionLauncher.launch(p);
-            }
-        }
-        //
-
         //표정 계산하기
         final long[] lastNow = {0};
         String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
