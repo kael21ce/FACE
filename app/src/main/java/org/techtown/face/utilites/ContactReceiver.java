@@ -29,6 +29,7 @@ public class ContactReceiver extends BroadcastReceiver {
     @SuppressLint("MissingPermission")
     @Override
     public void onReceive(Context context, Intent intent) {
+        long now = System.currentTimeMillis();
         if (intent.getAction().equals("android.intent.action.PHONE_STATE")) {
             Log.i(RTAG, "onReceive() is called.");
             TelecomManager telephonyManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
@@ -42,7 +43,6 @@ public class ContactReceiver extends BroadcastReceiver {
                 }
                 if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                     String callingMobile = extras.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                    long now = System.currentTimeMillis();
                     Log.i(TAG, "Calling mobile: " + callingMobile);
                     preferenceManager = new PreferenceManager(context);
                     db.collection(Constants.KEY_COLLECTION_USERS)
