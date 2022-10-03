@@ -2,6 +2,7 @@ package org.techtown.face.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +12,11 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
@@ -25,11 +29,29 @@ import org.techtown.face.databinding.ActivitySignInBinding;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
+import java.util.ArrayList;
+
 public class SignInActivity extends AppCompatActivity {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 101:
+                if (grantResults.length > 0 && grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+                    Log.w(TAG, "권한을 사용자가 승인함");
+                } else {
+                    Log.w(TAG, "권한이 거부됨.");
+                }
+
+                return;
+        }
+    }
 
     private ActivitySignInBinding binding;
     private PreferenceManager preferenceManager;
     private FirebaseAuth firebaseAuth;
+    String TAG = "SignInActivity";
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
@@ -53,29 +75,39 @@ public class SignInActivity extends AppCompatActivity {
         setListeners();
 
         //위험 권한 묻기
-        ActivityResultLauncher<String> permissionLauncher
-                = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if (isGranted) {
-                Log.d("MainActivity", "권한이 허용되었습니다.");
-                Toast.makeText(this, "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.d("MainActivity", "앱 사용에 차질이 발생할 수 있습니다.");
-                Toast.makeText(this, "앱 사용에 차질이 발생할 수 있습니다."
-                        , Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        String[] permissionList = {
+        String[] permissions = {
                 Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.READ_PHONE_STATE
+                Manifest.permission.BLUETOOTH_CONNECT
         };
-
-        for (String p : permissionList) {
-            permissionLauncher.launch(p);
-        }
+        checkPermissions(permissions);
         //
+    }
+
+    public void checkPermissions(String[] permissions) {
+        ArrayList<String> targetList = new ArrayList<String>();
+
+        for (int i = 0; i < permissions.length; i++) {
+            String curPermission = permissions[i];
+            int permissionCheck = ContextCompat.checkSelfPermission(SignInActivity.this, curPermission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, curPermission + " 권한 있음");
+            } else {
+                Log.w(TAG, curPermission + " 권한 없음");
+                if (ActivityCompat.shouldShowRequestPermissionRationale(SignInActivity.this, curPermission)) {
+                    Log.w(TAG, curPermission + " 권한 설명 필요함.");
+                } else {
+                    targetList.add(curPermission);
+                }
+            }
+        }
+        String[] targets = new String[targetList.size()];
+        targetList.toArray(targets);
+
+        if (targets.length > 0) {
+            ActivityCompat.requestPermissions(SignInActivity.this, targets, 101);
+        }
     }
 
     private void setListeners() {
