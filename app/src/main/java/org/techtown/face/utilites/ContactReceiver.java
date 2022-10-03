@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -30,6 +31,7 @@ public class ContactReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.PHONE_STATE")) {
             Log.i(RTAG, "onReceive() is called.");
+            TelecomManager telephonyManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 String state = extras.getString(TelephonyManager.EXTRA_STATE);
@@ -52,7 +54,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                         if (Objects.equals(document.get(Constants.KEY_MOBILE), callingMobile)) {
                                             //상대방 데이터베이스에 내 expression 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
+                                                    .document(document.getId())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
                                                     .whereEqualTo(Constants.KEY_USER, currentUserId)
                                                     .get()
@@ -60,7 +62,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                         if (task1.isSuccessful()) {
                                                             for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                                 db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(document.get(Constants.KEY_USER).toString())
+                                                                        .document(document.getId())
                                                                         .collection(Constants.KEY_COLLECTION_USERS)
                                                                         .document(documentSnapshot.getId())
                                                                         .update(Constants.KEY_EXPRESSION, 5);
@@ -69,7 +71,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                     });
                                             //상대방 데이터베이스에 내 window 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
+                                                    .document(document.getId())
                                                     .collection(Constants.KEY_COLLECTION_USERS)
                                                     .whereEqualTo(Constants.KEY_USER, currentUserId)
                                                     .get()
@@ -77,7 +79,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                         if (task1.isSuccessful()) {
                                                             for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                                 db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(document.get(Constants.KEY_USER).toString())
+                                                                        .document(document.getId())
                                                                         .collection(Constants.KEY_COLLECTION_USERS)
                                                                         .document(documentSnapshot.getId())
                                                                         .update(Constants.KEY_WINDOW, now);
@@ -88,14 +90,36 @@ public class ContactReceiver extends BroadcastReceiver {
                                             db.collection(Constants.KEY_COLLECTION_USERS)
                                                     .document(currentUserId)
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(document.getId())
-                                                    .update(Constants.KEY_EXPRESSION, 5);
+                                                    .whereEqualTo(Constants.KEY_USER, document.getId())
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(currentUserId)
+                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(documentSnapshot.getId())
+                                                                        .update(Constants.KEY_EXPRESSION, 5);
+                                                            }
+                                                        }
+                                                    });
                                             //나의 데이터베이스에 상대방 window 업데이트
                                             db.collection(Constants.KEY_COLLECTION_USERS)
                                                     .document(currentUserId)
                                                     .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(document.getId())
-                                                    .update(Constants.KEY_WINDOW, now);
+                                                    .whereEqualTo(Constants.KEY_USER, document.getId())
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(currentUserId)
+                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                        .document(documentSnapshot.getId())
+                                                                        .update(Constants.KEY_WINDOW, now);
+                                                            }
+                                                        }
+                                                    });
                                             Log.i(TAG, "Update expression and window by " + RTAG);
                                         } else {
                                             Log.i(RTAG, "Not update " + TAG);

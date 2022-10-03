@@ -99,6 +99,7 @@ public class SignInActivity extends AppCompatActivity {
                     Log.w(TAG, curPermission + " 권한 설명 필요함.");
                 } else {
                     targetList.add(curPermission);
+                    Log.w(TAG, curPermission + "권한 요청이 추가됨");
                 }
             }
         }
