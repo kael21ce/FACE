@@ -211,10 +211,10 @@ public class MainActivity extends AppCompatActivity {
                                             for (QueryDocumentSnapshot document1 : task1.getResult()) {
                                                 if (userId.equals(document1.getId())) {
                                                     idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
-                                                            .toString()) * 86400000);
+                                                            .toString()) * 60000);
                                                     preferenceManager.putInt("ideal" + userId, idealContact.get());
                                                     minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
-                                                            .toString()) * 86400000);
+                                                            .toString()) * 60000);
                                                     preferenceManager.putInt("min" + userId, minContact.get());
                                                 }
                                             }
@@ -228,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
                                             " | " + "minContact: "
                                             + preferenceManager.getInt("min" + userId));
                                     long term = (minContact.get() - idealContact.get()) / 3;
+                                    long diff = now - lastNow[0];
+                                    Log.e("MainActivity", "연락 간격 차이: " + diff);
                                     if (now - lastNow[0] < idealContact.get()) {
                                         //나의 데이터베이스에 상대방 expression 업데이트
                                         db.collection(Constants.KEY_COLLECTION_USERS)
