@@ -37,28 +37,50 @@ public class ContactReceiver extends BroadcastReceiver {
                                 if (Objects.equals(document.get(Constants.KEY_MOBILE), callingMobile)) {
                                     //상대방 데이터베이스에 내 expression 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.getId())
+                                            .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(currentUserId)
-                                            .update("expression", 5);
+                                            .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                            .get()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                .document(document.get(Constants.KEY_USER).toString())
+                                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                                .document(documentSnapshot.getId())
+                                                                .update(Constants.KEY_EXPRESSION, 5);
+                                                    }
+                                                }
+                                            });
                                     //상대방 데이터베이스에 내 window 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.getId())
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                            .document(currentUserId)
-                                                                    .update("window", now);
+                                            .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .whereEqualTo(Constants.KEY_USER, currentUserId)
+                                            .get()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                .document(document.get(Constants.KEY_USER).toString())
+                                                                .collection(Constants.KEY_COLLECTION_USERS)
+                                                                .document(documentSnapshot.getId())
+                                                                .update(Constants.KEY_WINDOW, now);
+                                                    }
+                                                }
+                                            });
                                     //나의 데이터베이스에 상대방 expression 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .document(document.getId())
-                                            .update("expression", 5);
+                                            .update(Constants.KEY_EXPRESSION, 5);
                                     //나의 데이터베이스에 상대방 window 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(currentUserId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .document(document.getId())
-                                            .update("window", now);
+                                            .update(Constants.KEY_WINDOW, now);
                                     Log.i(TAG, "Update expression and window by " + RTAG);
                                 } else {
                                     Log.i(RTAG, "Not update " + TAG);
