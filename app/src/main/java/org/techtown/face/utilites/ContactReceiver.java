@@ -29,6 +29,7 @@ public class ContactReceiver extends BroadcastReceiver {
     @SuppressLint("MissingPermission")
     @Override
     public void onReceive(Context context, Intent intent) {
+        preferenceManager = new PreferenceManager(context.getApplicationContext());
         long now = System.currentTimeMillis();
         if (intent.getAction().equals("android.intent.action.PHONE_STATE")) {
             Log.i(RTAG, "onReceive() is called.");

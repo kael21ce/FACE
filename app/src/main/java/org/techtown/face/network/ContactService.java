@@ -21,10 +21,12 @@ public class ContactService extends Service {
     PreferenceManager preferenceManager;
     String TAG = "ContactService";
     Handler mHandler = new Handler();
+
     public ContactService() {
     }
 
     public void calculateExpression(long now) {
+        preferenceManager = new PreferenceManager(getApplicationContext());
         if (preferenceManager.getString(Constants.KEY_USER_ID) != null) {
             final long[] lastNow = {0};
             String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
