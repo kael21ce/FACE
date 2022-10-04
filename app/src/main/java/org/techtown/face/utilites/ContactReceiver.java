@@ -66,6 +66,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                                         .collection(Constants.KEY_COLLECTION_USERS)
                                                                         .document(documentSnapshot.getId())
                                                                         .update(Constants.KEY_EXPRESSION, 5);
+                                                                Log.w(RTAG, document.getId() + "내 expression 업데이트 됨");
                                                             }
                                                         }
                                                     });
@@ -83,6 +84,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                                         .collection(Constants.KEY_COLLECTION_USERS)
                                                                         .document(documentSnapshot.getId())
                                                                         .update(Constants.KEY_WINDOW, now);
+                                                                Log.w(RTAG, document.getId() + "내 window 업데이트 됨");
                                                             }
                                                         }
                                                     });
@@ -100,6 +102,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                                         .collection(Constants.KEY_COLLECTION_USERS)
                                                                         .document(documentSnapshot.getId())
                                                                         .update(Constants.KEY_EXPRESSION, 5);
+                                                                Log.w(RTAG, currentUserId + "상대방 expression 업데이트 됨");
                                                             }
                                                         }
                                                     });
@@ -117,6 +120,7 @@ public class ContactReceiver extends BroadcastReceiver {
                                                                         .collection(Constants.KEY_COLLECTION_USERS)
                                                                         .document(documentSnapshot.getId())
                                                                         .update(Constants.KEY_WINDOW, now);
+                                                                Log.w(RTAG, currentUserId + "상대방 window 업데이트 됨");
                                                             }
                                                         }
                                                     });
