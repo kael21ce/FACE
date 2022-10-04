@@ -3,11 +3,15 @@ package org.techtown.face.activities;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +42,7 @@ import org.techtown.face.fragments.AddFragment;
 import org.techtown.face.fragments.FrameFragment;
 import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
+import org.techtown.face.network.ContactService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
@@ -93,6 +98,19 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //ContactService를 위한 Interface
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            Log.d("ContactService", service + "연결됨.");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
 
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -150,181 +168,10 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
         );
-
         //표정 계산하기
-        final long[] lastNow = {0};
-        String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
-        db.collection(Constants.KEY_COLLECTION_USERS)
-                .document(currentUserId)
-                .collection(Constants.KEY_COLLECTION_USERS)
-                .get()
-                .addOnCompleteListener(task -> {
-                    AtomicInteger idealContact = new AtomicInteger();
-                    AtomicInteger minContact = new AtomicInteger();
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            //상대방의 window 가져오기
-                            lastNow[0] = (long) document.get(Constants.KEY_WINDOW);
-                            String userId = document.get(Constants.KEY_USER).toString();
-                            preferenceManager.putInt("ideal" + userId, 0);
-                            preferenceManager.putInt("min" + userId, 0);
-                            //
-                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                    .get()
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document1 : task1.getResult()) {
-                                                if (userId.equals(document1.getId())) {
-                                                    idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
-                                                            .toString()) * 86400000);
-                                                    preferenceManager.putInt("ideal" + userId, idealContact.get());
-                                                    minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
-                                                            .toString()) * 86400000);
-                                                    preferenceManager.putInt("min" + userId, minContact.get());
-                                                }
-                                            }
-                                        }
-                                    });
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.d("MainActivity", userId + "-" + "idealContact: "
-                                            + preferenceManager.getInt("ideal" + userId) +
-                                            " | " + "minContact: "
-                                            + preferenceManager.getInt("min" + userId));
-                                    long term = (minContact.get() - idealContact.get()) / 3;
-                                    long diff = now - lastNow[0];
-                                    Log.e("MainActivity", "연락 간격 차이: " + diff);
-                                    if (now - lastNow[0] < idealContact.get()) {
-                                        //나의 데이터베이스에 상대방 expression 업데이트
-                                        db.collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(currentUserId)
-                                                .collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(document.getId())
-                                                .update(Constants.KEY_EXPRESSION, 5);
-                                        //상대방 데이터베이스에 내 expression 업데이트
-                                        db.collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
-                                                .collection(Constants.KEY_COLLECTION_USERS)
-                                                .whereEqualTo(Constants.KEY_USER, currentUserId)
-                                                .get()
-                                                .addOnCompleteListener(task1 -> {
-                                                    if (task1.isSuccessful()) {
-                                                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                    .document(document.get(Constants.KEY_USER).toString())
-                                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                                    .document(documentSnapshot.getId())
-                                                                    .update(Constants.KEY_EXPRESSION, 5);
-                                                        }
-                                                    }
-                                                });
-                                    }
-                                    if (now - lastNow[0] >= idealContact.get()) {
-                                        if (now - lastNow[0] < idealContact.get() + term) {
-                                            //나의 데이터베이스에 상대방 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(document.getId())
-                                                    .update(Constants.KEY_EXPRESSION, 4);
-                                            //상대방 데이터베이스에 내 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
-                                                    .get()
-                                                    .addOnCompleteListener(task1 -> {
-                                                        if (task1.isSuccessful()) {
-                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(document.get(Constants.KEY_USER).toString())
-                                                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(documentSnapshot.getId())
-                                                                        .update(Constants.KEY_EXPRESSION, 4);
-                                                            }
-                                                        }
-                                                    });
-                                        } else if (now - lastNow[0] < idealContact.get() + term*2) {
-                                            //나의 데이터베이스에 상대방 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(document.getId())
-                                                    .update(Constants.KEY_EXPRESSION, 3);
-                                            //상대방 데이터베이스에 내 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
-                                                    .get()
-                                                    .addOnCompleteListener(task1 -> {
-                                                        if (task1.isSuccessful()) {
-                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(document.get(Constants.KEY_USER).toString())
-                                                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(documentSnapshot.getId())
-                                                                        .update(Constants.KEY_EXPRESSION, 3);
-                                                            }
-                                                        }
-                                                    });
-                                        } else if (now - lastNow[0] < idealContact.get() + term*3) {
-                                            //나의 데이터베이스에 상대방 expression 업데이트
-                                            //나의 데이터베이스에 상대방 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(document.getId())
-                                                    .update(Constants.KEY_EXPRESSION, 2);
-                                            //상대방 데이터베이스에 내 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
-                                                    .get()
-                                                    .addOnCompleteListener(task1 -> {
-                                                        if (task1.isSuccessful()) {
-                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(document.get(Constants.KEY_USER).toString())
-                                                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(documentSnapshot.getId())
-                                                                        .update(Constants.KEY_EXPRESSION, 2);
-                                                            }
-                                                        }
-                                                    });
-                                        } else {
-                                            //나의 데이터베이스에 상대방 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(currentUserId)
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(document.getId())
-                                                    .update(Constants.KEY_EXPRESSION, 1);
-                                            //상대방 데이터베이스에 내 expression 업데이트
-                                            db.collection(Constants.KEY_COLLECTION_USERS)
-                                                    .document(Objects.requireNonNull(document.get(Constants.KEY_USER)).toString())
-                                                    .collection(Constants.KEY_COLLECTION_USERS)
-                                                    .whereEqualTo(Constants.KEY_USER, currentUserId)
-                                                    .get()
-                                                    .addOnCompleteListener(task1 -> {
-                                                        if (task1.isSuccessful()) {
-                                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(document.get(Constants.KEY_USER).toString())
-                                                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                                                        .document(documentSnapshot.getId())
-                                                                        .update(Constants.KEY_EXPRESSION, 1);
-                                                            }
-                                                        }
-                                                    });
-                                            }
-                                        }
-                                }
-                            }, 1000);
-                        }
-                    }
-                });
+        Intent bIntent = new Intent(MainActivity.this, ContactService.class);
+        bIntent.setAction(Constants.ACTION_CALCULATE_EXPRESSION);
+        bindService(bIntent, connection, Context.BIND_AUTO_CREATE);
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(

@@ -9,13 +9,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 연락 저울 퍼미션 -->
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- 의사소통 측정 퍼미션 -->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/><!-- 블루투스 퍼미션 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- 블루투스 퍼미션 -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/> <!--자꾸 오류떠서 로그에서 추가하라고 한 퍼미션-->
-
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 자꾸 오류떠서 로그에서 추가하라고 한 퍼미션 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +27,12 @@
         android:theme="@style/Theme.FACE"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <service
+            android:name=".network.ContactService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".activities.GeoSettingActivity"
             android:exported="false" />
@@ -56,9 +61,8 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
-
         </receiver>
 
         <activity
@@ -117,9 +121,7 @@
             android:name=".network.GeoService"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="location">
-
-        </service>
+            android:foregroundServiceType="location"></service>
     </application>
 
 </manifest>

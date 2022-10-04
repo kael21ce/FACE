@@ -63,6 +63,8 @@ public class Constants {
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
 
+    public static final String ACTION_CALCULATE_EXPRESSION = "calculateExpression";
+
     public static HashMap<String, String> remoteMsgHeaders = null;
     public static HashMap<String,String> getRemoteMsgHeaders(){
         if (remoteMsgHeaders == null){
