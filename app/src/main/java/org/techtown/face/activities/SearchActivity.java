@@ -50,24 +50,11 @@ public class SearchActivity extends AppCompatActivity {
                         String name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                         String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
                         String userId = queryDocumentSnapshot.getId();
-                        db.collection(Constants.KEY_COLLECTION_USERS)
-                                .document(myId)
-                                .collection(Constants.KEY_COLLECTION_USERS)
-                                .get()
-                                .addOnCompleteListener(task1 -> {
-                                    if(task1.isSuccessful()){
-                                        for(QueryDocumentSnapshot documentSnapshot : task1.getResult()){
-                                            String thisId = documentSnapshot.getString(Constants.KEY_USER);
-                                            if(!Objects.equals(userId, thisId)){
-                                                if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)) {
-                                                    String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
-                                                    adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
-                                                    binding.searchRecyclerView.setAdapter(adapter);
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
+                        if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)) {
+                            String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
+                            adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
+                            binding.searchRecyclerView.setAdapter(adapter);
+                        }
                     }
                 }
             });
