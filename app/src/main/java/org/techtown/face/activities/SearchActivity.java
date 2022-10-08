@@ -1,6 +1,10 @@
 package org.techtown.face.activities;
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +27,7 @@ public class SearchActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
     int i=0;
 
+    @SuppressLint({"Range", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +38,33 @@ public class SearchActivity extends AppCompatActivity {
         binding.searchRecyclerView.setLayoutManager(layoutManager);
         preferenceManager = new PreferenceManager(getApplicationContext());
 
+
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI , null ,null, null, null);
+
+        if(cur.getCount()>0){
+            while(cur.moveToNext()){
+                @SuppressLint("Range") int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                @SuppressLint("Range") String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                if(("1").equals(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))) {
+                    @SuppressLint("Recycle") Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{String.valueOf(id)}, null);
+                    int i = 0;
+                    int pCount = pCur.getCount();
+                    String[] phoneNum = new String[pCount];
+                    String[] phoneType = new String[pCount];
+
+                    while (pCur.moveToNext()) {
+                        phoneNum[i] = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        phoneType[i] = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                        Log.e("THis", "is->"+name+phoneNum[i]+"  "+i);
+                        i++;
+                    }
+                }
+            }
+        }
 
         binding.button.setOnClickListener(v -> {
             int c = adapter.getItemCount();
