@@ -18,7 +18,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 //의사소통의 양 측정을 위한 메소드를 포함하고 있는 클래스
 public class ScaleInfo extends ContentProvider {
 
-    String[] callSet;
+    String[] callSet= new String[] { CallLog.Calls.DATE, CallLog.Calls.TYPE, CallLog.Calls.NUMBER,
+            CallLog.Calls.DURATION };
     long now = System.currentTimeMillis();
     //데이터 수집 윈도우: 일주일
     public long weekago = now - 604800000;
@@ -35,10 +36,8 @@ public class ScaleInfo extends ContentProvider {
         return true;
     }
 
-    //getIncomingNum: 입력된 연락처로부터 수신된 횟수 가져오기
+    //입력된 연락처로부터 수신된 횟수 가져오기
     public int getIncomingNum(Context context, String mobile) {
-        callSet = new String[] { CallLog.Calls.DATE, CallLog.Calls.TYPE, CallLog.Calls.NUMBER,
-                CallLog.Calls.DURATION };
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
                 callSet, null, null, null);
         int numIncoming = 0;
@@ -75,8 +74,6 @@ public class ScaleInfo extends ContentProvider {
 
     //입력된 연락처에게 발신한 횟수 가져오기
     public int getOutgoingNum(Context context, String mobile) {
-        callSet = new String[] { CallLog.Calls.DATE, CallLog.Calls.TYPE, CallLog.Calls.NUMBER,
-                CallLog.Calls.DURATION };
         Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
                 callSet, null, null, null);
         int numOutgoing = 0;
@@ -93,7 +90,7 @@ public class ScaleInfo extends ContentProvider {
                 if (cursor.getLong(0)>=weekago) {
                     //통화 시간이 20초 이상인 연락만 인정
                     if (Integer.parseInt(cursor.getString(3))>=20) {
-                        if (cursor.getInt(1) == CallLog.Calls.INCOMING_TYPE) {
+                        if (cursor.getInt(1) == CallLog.Calls.OUTGOING_TYPE) {
                             numOutgoing += 1;
                         }
                         cursor.moveToNext();
