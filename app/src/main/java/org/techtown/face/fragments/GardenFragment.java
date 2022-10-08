@@ -1,4 +1,4 @@
-package org.techtown.face.activities;
+package org.techtown.face.fragments;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -13,14 +13,16 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,10 +44,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class GardenActivity extends AppCompatActivity {
+public class GardenFragment extends Fragment {
 
     TextView connectedExist;
     TextView toConnectExist;
@@ -81,24 +84,24 @@ public class GardenActivity extends AppCompatActivity {
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_garden);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        preferenceManager = new PreferenceManager(GardenActivity.this);
+        View v = inflater.inflate(R.layout.fragment_garden, container, false);
+
+        preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
-        connectedExist = findViewById(R.id.connectedExist);
+        connectedExist = v.findViewById(R.id.connectedExist);
         connectedExist.setVisibility(View.GONE);
-        toConnectExist = findViewById(R.id.toConnectExist);
-        searchButton = findViewById(R.id.searchButton);
-        connectedRecycler = findViewById(R.id.connectedRecycler);
-        toConnectRecycler = findViewById(R.id.toConnectRecycler);
+        toConnectExist = v.findViewById(R.id.toConnectExist);
+        searchButton = v.findViewById(R.id.searchButton);
+        connectedRecycler = v.findViewById(R.id.connectedRecycler);
+        toConnectRecycler = v.findViewById(R.id.toConnectRecycler);
 
-        LinearLayoutManager layoutManagerC = new LinearLayoutManager(GardenActivity.this,
+        LinearLayoutManager layoutManagerC = new LinearLayoutManager(v.getContext(),
                 LinearLayoutManager.VERTICAL, false);
         connectedRecycler.setLayoutManager(layoutManagerC);
-        LinearLayoutManager layoutManagerT = new LinearLayoutManager(GardenActivity.this,
+        LinearLayoutManager layoutManagerT = new LinearLayoutManager(v.getContext(),
                 LinearLayoutManager.VERTICAL, false);
         toConnectRecycler.setLayoutManager(layoutManagerT);
 
@@ -106,10 +109,10 @@ public class GardenActivity extends AppCompatActivity {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!btAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
+            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext()
+                    , Manifest.permission.BLUETOOTH_SCAN)
                     != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
-                return;
+                Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
             }
             startActivityForResult(enableBtIntent, REQUEST_ENABLED_BT);
         }
@@ -142,11 +145,10 @@ public class GardenActivity extends AppCompatActivity {
         deviceLocalArrayList = new ArrayList<>();
         deviceLocalNameList = new ArrayList<>();
         //기기 검색
-        if (ActivityCompat.checkSelfPermission(GardenActivity.this, Manifest.permission.BLUETOOTH_SCAN)
+        if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.BLUETOOTH_SCAN)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다."
+            Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다."
                     , Toast.LENGTH_LONG).show();
-            return;
         }
         if (btAdapter.isDiscovering()) {
             btAdapter.cancelDiscovery();
@@ -154,9 +156,9 @@ public class GardenActivity extends AppCompatActivity {
             if (btAdapter.isEnabled()) {
                 btAdapter.startDiscovery();
                 IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                registerReceiver(receiver, filter);
+                getActivity().registerReceiver(receiver, filter);
             } else {
-                Toast.makeText(GardenActivity.this, "블루투스 어댑터 연결에 실패했습니다."
+                Toast.makeText(v.getContext(), "블루투스 어댑터 연결에 실패했습니다."
                         , Toast.LENGTH_LONG).show();
             }
         }
@@ -167,9 +169,9 @@ public class GardenActivity extends AppCompatActivity {
             deviceLocalArrayList = new ArrayList<>();
             deviceLocalNameList = new ArrayList<>();
             //기기 검색
-            if (ActivityCompat.checkSelfPermission(GardenActivity.this, Manifest.permission.BLUETOOTH_SCAN)
+            if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.BLUETOOTH_SCAN)
                     != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다."
+                Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다."
                         , Toast.LENGTH_LONG).show();
                 return;
             }
@@ -179,9 +181,9 @@ public class GardenActivity extends AppCompatActivity {
                 if (btAdapter.isEnabled()) {
                     btAdapter.startDiscovery();
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                    registerReceiver(receiver, filter);
+                    getActivity().registerReceiver(receiver, filter);
                 } else {
-                    Toast.makeText(GardenActivity.this, "블루투스 어댑터 연결에 실패했습니다."
+                    Toast.makeText(v.getContext(), "블루투스 어댑터 연결에 실패했습니다."
                             , Toast.LENGTH_LONG).show();
                 }
             }
@@ -204,13 +206,13 @@ public class GardenActivity extends AppCompatActivity {
                 } else {
                     flag = false;
                     Log.w(TAG, "Not in location-1: " + device.getName());
-                    Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                    Toast.makeText(v.getContext(), "기기가 주변에 없습니다."
                             , Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 flag = false;
                 Log.e(TAG, "Not in location-2: " + device.getName(), e);
-                Toast.makeText(GardenActivity.this, "기기가 주변에 없습니다."
+                Toast.makeText(v.getContext(), "기기가 주변에 없습니다."
                         , Toast.LENGTH_LONG).show();
             }
 
@@ -221,7 +223,7 @@ public class GardenActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     //데이터베이스에 등록된 가족 정원이 있는 경우
-                                    if (document.get(Constants.KEY_ADDRESS).equals(device.getAddress())) {
+                                    if (Objects.equals(document.get(Constants.KEY_ADDRESS), device.getAddress())) {
                                         db.collection(Constants.KEY_COLLECTION_USERS)
                                                 .document(myId)
                                                 .collection(Constants.KEY_COLLECTION_USERS)
@@ -229,8 +231,7 @@ public class GardenActivity extends AppCompatActivity {
                                                 .addOnCompleteListener(task1 -> {
                                                     if (task1.isSuccessful()) {
                                                         for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                            if (documentSnapshot.get(Constants.KEY_USER)
-                                                                    .equals(document.get(Constants.KEY_USER))) {
+                                                            if (Objects.equals(documentSnapshot.get(Constants.KEY_USER), document.get(Constants.KEY_USER))) {
                                                                 if (btSocket != null) {
                                                                     connectedThread = new ConnectedThread(btSocket);
                                                                     connectedThread.start();
@@ -241,7 +242,7 @@ public class GardenActivity extends AppCompatActivity {
                                                                         .get(Constants.KEY_EXPRESSION).toString()
                                                                         + " is sent to " + device.getName());
                                                             } else {
-                                                                Toast.makeText(GardenActivity.this,
+                                                                Toast.makeText(v.getContext(),
                                                                         "가족 정원이 등록되지 않았습니다.",
                                                                         Toast.LENGTH_SHORT).show();
                                                             }
@@ -251,7 +252,7 @@ public class GardenActivity extends AppCompatActivity {
                                     } else {
                                         //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
                                         //등록할 유저 id 불러오기
-                                        registerDialog = new Dialog(GardenActivity.this);
+                                        registerDialog = new Dialog(v.getContext());
                                         registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                         registerDialog.setContentView(R.layout.dialog_btregister);
                                         showRegisterDialog(device);
@@ -261,6 +262,8 @@ public class GardenActivity extends AppCompatActivity {
                         });
             }
         }));
+
+        return v;
     }
 
     //ACTION_FOUND 인텐트를 위한 브로드캐스트 리시버
@@ -270,7 +273,8 @@ public class GardenActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                        Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 if (device != null) {
@@ -299,9 +303,9 @@ public class GardenActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        getActivity().unregisterReceiver(receiver);
     }
 
     //createBluetoothSocket 메서드
@@ -313,9 +317,9 @@ public class GardenActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "Could not create Insecure RFComm Connection", e);
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
+        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다.",
+            Toast.makeText(getActivity().getApplicationContext(), "블루투스 권한 허용이 필요합니다.",
                     Toast.LENGTH_LONG).show();
         }
         return device.createRfcommSocketToServiceRecord(uuid);
@@ -381,16 +385,16 @@ public class GardenActivity extends AppCompatActivity {
         Button selectButton = registerDialog.findViewById(R.id.selectButton);
         selectButton.setOnClickListener(view -> {
             if (registedId[0] == null) {
-                Toast.makeText(GardenActivity.this, "선택을 하지 않습니다.",
+                Toast.makeText(getActivity().getApplicationContext(), "선택을 하지 않습니다.",
                         Toast.LENGTH_SHORT).show();
                 registerDialog.dismiss();
             } else {
                 userIdToRegister = registedId[0];
                 HashMap<String, Object> garden = new HashMap<>();
                 garden.put(Constants.KEY_ADDRESS, device.getAddress());
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
+                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
                         != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다.",
+                    Toast.makeText(getActivity().getApplicationContext(), "블루투스 권한 허용이 필요합니다.",
                             Toast.LENGTH_LONG).show();
                 }
                 garden.put(Constants.KEY_NAME, device.getName());

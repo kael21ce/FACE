@@ -56,6 +56,12 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".activities.AddActivity"
+            android:exported="true"
+            android:title="가족 추가하기"
+            android:windowSoftInputMode="adjustResize" />
+
         <receiver
             android:name=".utilites.ContactReceiver"
             android:enabled="true"

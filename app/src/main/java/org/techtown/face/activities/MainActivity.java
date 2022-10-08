@@ -2,7 +2,6 @@ package org.techtown.face.activities;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,8 +36,8 @@ import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.R;
 import org.techtown.face.databinding.ActivityMainBinding;
-import org.techtown.face.fragments.AddFragment;
 import org.techtown.face.fragments.FrameFragment;
+import org.techtown.face.fragments.GardenFragment;
 import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
 import org.techtown.face.network.ContactService;
@@ -49,20 +47,17 @@ import org.techtown.face.utilites.PreferenceManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
 
     FrameFragment frameFragment;
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
-    AddFragment addFragment;
+    GardenFragment gardenFragment;
     UploadTask uploadTask;
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
-    long now = System.currentTimeMillis();
 
     ActionBar abar;
 
@@ -83,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         int curId = item.getItemId();
         switch (curId) {
             case R.id.add_family:
+                Intent addIntent = new Intent(this, AddActivity.class);
+                startActivity(addIntent);
                 break;
             case R.id.setting:
                 Intent settingIntent = new Intent(this, SettingActivity.class);
@@ -131,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         frameFragment = new FrameFragment();
         scaleFragment = new ScaleFragment();
         momentFragment = new MomentFragment();
-        addFragment = new AddFragment();
+        gardenFragment = new GardenFragment();
 
         abar = getSupportActionBar();
 
@@ -161,9 +158,9 @@ public class MainActivity extends AppCompatActivity {
 
                             return true;
                         case R.id.gardenTab:
-                            abar.setTitle("FACE: 가족 추가");
+                            abar.setTitle("FACE: 가족 정원");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                                    addFragment).commit();
+                                    gardenFragment).commit();
 
                             return true;
                     }
