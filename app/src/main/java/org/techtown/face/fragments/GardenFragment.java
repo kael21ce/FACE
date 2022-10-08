@@ -51,42 +51,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GardenFragment extends Fragment {
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Log.d("GardenFragment", "onAttach() 호출됨.");
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("GardenFragment", "onCreate() 호출됨.");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("GardenFragment", "onResume() 호출됨.");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("GardenFragment", "onPause() 호출됨.");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("GardenFragment", "onStop() 호출됨.");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("GardenFragment", "onDestroy() 호출됨.");
-    }
-
     TextView connectedExist;
     TextView toConnectExist;
     Button searchButton;
@@ -106,12 +70,12 @@ public class GardenFragment extends Fragment {
     ArrayList<String> devicePairedArrayList;
     ArrayList<String> devicePairedNameList;
     Set<BluetoothDevice> pairedDevices;
-    PairedAdapter pairedAdapter = new PairedAdapter();
+    PairedAdapter pairedAdapter;
 
     //주변 기기 관련
     ArrayList<String> deviceLocalArrayList;
     ArrayList<String> deviceLocalNameList;
-    SurroundAdapter surroundAdapter = new SurroundAdapter();
+    SurroundAdapter surroundAdapter;
 
     //데이터베이스
     PreferenceManager preferenceManager;
@@ -135,6 +99,9 @@ public class GardenFragment extends Fragment {
         searchButton = v.findViewById(R.id.searchButton);
         connectedRecycler = v.findViewById(R.id.connectedRecycler);
         toConnectRecycler = v.findViewById(R.id.toConnectRecycler);
+
+        pairedAdapter = new PairedAdapter();
+        surroundAdapter = new SurroundAdapter();
 
         LinearLayoutManager layoutManagerC = new LinearLayoutManager(v.getContext(),
                 LinearLayoutManager.VERTICAL, false);
