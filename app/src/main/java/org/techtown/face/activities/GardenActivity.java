@@ -122,7 +122,7 @@ public class GardenActivity extends AppCompatActivity {
             for (BluetoothDevice device : pairedDevices) {
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress();
-                if (deviceName.contains(garden)) {
+                if (deviceName!=null && deviceName.contains(garden)) {
                     devicePairedArrayList.add(deviceHardwareAddress);
                     devicePairedNameList.add(deviceName);
                 }
