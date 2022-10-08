@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,6 +51,41 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GardenFragment extends Fragment {
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d("GardenFragment", "onAttach() 호출됨.");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("GardenFragment", "onCreate() 호출됨.");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("GardenFragment", "onResume() 호출됨.");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("GardenFragment", "onPause() 호출됨.");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("GardenFragment", "onStop() 호출됨.");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("GardenFragment", "onDestroy() 호출됨.");
+    }
 
     TextView connectedExist;
     TextView toConnectExist;
@@ -85,6 +122,7 @@ public class GardenFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("GardenFragment", "onCreateView() 호출됨.");
 
         View v = inflater.inflate(R.layout.fragment_garden, container, false);
 
@@ -138,6 +176,7 @@ public class GardenFragment extends Fragment {
         for (int i = 0; i < pairedLength; i++) {
             pairedAdapter.addItem(new Bluetooth(devicePairedNameList.get(i)
                     , devicePairedArrayList.get(i), false));
+            Log.w(TAG, "페어링 아이템 추가됨: " + devicePairedNameList.get(i));
         }
         connectedRecycler.setAdapter(pairedAdapter);
 
@@ -303,9 +342,10 @@ public class GardenFragment extends Fragment {
     };
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getActivity().unregisterReceiver(receiver);
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("GardenFragment", "onDestroyView() 호출됨.");
+        requireActivity().unregisterReceiver(receiver);
     }
 
     //createBluetoothSocket 메서드
