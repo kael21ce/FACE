@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApi;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -35,17 +36,21 @@ public class GeoSettingActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
 
+        if(isServiceRunning(this)){
+            binding.isGPS.setText("GPS가 켜져있습니다");
+        }
+
         binding.onGPS.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(GeoSettingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
             } else {
                 startLocationService();
-                binding.isGPS.setText("GPS가 켜져있습니다.");
+                binding.isGPS.setText("GPS가 켜져있습니다");
             }
         });
 
         binding.offGPS.setOnClickListener(v -> {
-            binding.isGPS.setText("GPS가 꺼져있습니다.");
+            binding.isGPS.setText("GPS가 꺼져있습니다");
             stopLocationService();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String,Object> updates = new HashMap<>();
@@ -53,6 +58,17 @@ public class GeoSettingActivity extends AppCompatActivity {
             updates.put(Constants.KEY_LONGITUDE, FieldValue.delete());
             db.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID)).update(updates);
         });
+    }
+
+    public static boolean isServiceRunning(Context context) {
+        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo rsi : am.getRunningServices(Integer.MAX_VALUE)) {
+            if (GeoService.class.getName().equals(rsi.service.getClassName()))
+            return true;
+        }
+
+        return false;
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
