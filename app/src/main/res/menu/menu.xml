@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/add_family"
+        android:title="가족 추가"
+        android:icon="@drawable/add_member"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/setting"
         android:title="설정"
         android:icon="@drawable/setting"

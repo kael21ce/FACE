@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
         switch (curId) {
+            case R.id.add_family:
+                break;
             case R.id.setting:
                 Intent settingIntent = new Intent(this, SettingActivity.class);
                 startActivity(settingIntent);
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                                     momentFragment).commit();
 
                             return true;
-                        case R.id.addTab:
+                        case R.id.gardenTab:
                             abar.setTitle("FACE: 가족 추가");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     addFragment).commit();
