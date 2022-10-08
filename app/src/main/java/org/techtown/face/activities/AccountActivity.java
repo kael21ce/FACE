@@ -187,8 +187,26 @@ public class AccountActivity extends BaseActivity {
                         Log.e("THis", "IS FUCK");
                     }
                 });
-
-        //유저 관련 문서 삭제
+        //하위 컬렉션 알림 문서들 삭제
+        firestore.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot snapshot : task.getResult()){
+                            String docId = snapshot.getId();
+                            firestore.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                                    .document(docId)
+                                    .delete();
+                        }
+                    } else {
+                        Log.e("THis", "IS FUCK");
+                    }
+                });
+        //유저 관련 이미지 문서 삭제
         firestore.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
                 .collection(Constants.KEY_COLLECTION_IMAGES)
