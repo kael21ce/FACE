@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class GardenFragment extends Fragment {
     Button searchLocation;
     RecyclerView gardenRecycler;
     RecyclerView locationRecycler;
+    LinearLayout containerExist;
     BluetoothAdapter btAdapter;
     BluetoothSocket btSocket;
     BluetoothDevice device;
@@ -116,6 +118,7 @@ public class GardenFragment extends Fragment {
         searchLocation = v.findViewById(R.id.searchLocation);
         gardenRecycler = v.findViewById(R.id.gardenRecycler);
         locationRecycler = v.findViewById(R.id.locationRecycler);
+        containerExist = v.findViewById(R.id.containerExist);
 
         pairedAdapter = new PairedAdapter();
         surroundAdapter = new SurroundAdapter();
@@ -153,7 +156,7 @@ public class GardenFragment extends Fragment {
                 }
             }
         } else {
-            //기기 없을 때 보여주기
+            containerExist.setVisibility(View.VISIBLE);
         }
 
         int pairedLength = devicePairedArrayList.size();
@@ -221,27 +224,23 @@ public class GardenFragment extends Fragment {
                             , Toast.LENGTH_LONG).show();
                 }
             }
+            if (deviceLocalArrayList.size()==0) {
+                locationExist.setVisibility(View.VISIBLE);
+            }
         });
 
         //터치 이벤트 추가 - 기기 연결 상태 바꾸는 것 필요
-        pairedAdapter.setOnItemClickListener(((position, address, flag) -> {
+        surroundAdapter.setOnItemClickListener((position, address) -> {
             device = btAdapter.getRemoteDevice(address);
-            flag = true;
+            boolean flag = true;
             Log.d(TAG, "Clicked device: " + device.getName() + " / " + address);
             try {
-                if (deviceLocalArrayList.contains(device.getAddress())) {
-                    btSocket = createBluetoothSocket(device);
-                    try {
-                        btSocket.connect();
-                    } catch (IOException closeException) {
-                        flag = false;
-                        Log.e(TAG, "Could not close the client socket", closeException);
-                    }
-                } else {
+                btSocket = createBluetoothSocket(device);
+                try {
+                    btSocket.connect();
+                } catch (IOException closeException) {
                     flag = false;
-                    Log.w(TAG, "Not in location-1: " + device.getName());
-                    Toast.makeText(v.getContext(), "기기가 주변에 없습니다."
-                            , Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Could not close the client socket", closeException);
                 }
             } catch (IOException e) {
                 flag = false;
@@ -251,51 +250,15 @@ public class GardenFragment extends Fragment {
             }
 
             if (flag) {
-                db.collection(Constants.KEY_COLLECTION_GARDEN)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    //데이터베이스에 등록된 가족 정원이 있는 경우
-                                    if (Objects.equals(document.get(Constants.KEY_ADDRESS), device.getAddress())) {
-                                        db.collection(Constants.KEY_COLLECTION_USERS)
-                                                .document(myId)
-                                                .collection(Constants.KEY_COLLECTION_USERS)
-                                                .get()
-                                                .addOnCompleteListener(task1 -> {
-                                                    if (task1.isSuccessful()) {
-                                                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                            if (Objects.equals(documentSnapshot.get(Constants.KEY_USER), document.get(Constants.KEY_REGISTERED))) {
-                                                                if (btSocket != null) {
-                                                                    connectedThread = new ConnectedThread(btSocket);
-                                                                    connectedThread.start();
-                                                                }
-                                                                connectedThread.write(documentSnapshot
-                                                                        .get(Constants.KEY_EXPRESSION).toString());
-                                                                Log.w(TAG, "Expression " + documentSnapshot
-                                                                        .get(Constants.KEY_EXPRESSION).toString()
-                                                                        + " is sent to " + device.getName());
-                                                            } else {
-                                                                Toast.makeText(v.getContext(),
-                                                                        "가족 정원이 등록되지 않았습니다.",
-                                                                        Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                    } else {
-                                        //데이터베이스에 가족정원이 등록되지 않은 경우: 등록하기
-                                        //등록할 유저 id 불러오기
-                                        registerDialog = new Dialog(v.getContext());
-                                        registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        registerDialog.setContentView(R.layout.dialog_btregister);
-                                        showRegisterDialog(device);
-                                    }
-                                }
-                            }
-                        });
+                connectedThread = new ConnectedThread(btSocket);
+                connectedThread.start();
+                // 데이터베이스에 등록하기
+                registerDialog = new Dialog(v.getContext());
+                registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                registerDialog.setContentView(R.layout.dialog_btregister);
+                showRegisterDialog(device);
             }
-        }));
+        });
 
         return v;
     }
