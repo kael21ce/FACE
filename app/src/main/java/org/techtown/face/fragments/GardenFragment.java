@@ -100,9 +100,9 @@ public class GardenFragment extends Fragment {
         pairedAdapter = new PairedAdapter();
         surroundAdapter = new SurroundAdapter();
 
-        LinearLayoutManager layoutManagerC = new LinearLayoutManager(v.getContext(),
-                LinearLayoutManager.VERTICAL, false);
-        gardenRecycler.setLayoutManager(layoutManagerC);
+        LinearLayoutManager layoutManagerG = new LinearLayoutManager(v.getContext());
+        layoutManagerG.setOrientation(LinearLayoutManager.HORIZONTAL);
+        gardenRecycler.setLayoutManager(layoutManagerG);
         LinearLayoutManager layoutManagerT = new LinearLayoutManager(v.getContext(),
                 LinearLayoutManager.VERTICAL, false);
         locationRecycler.setLayoutManager(layoutManagerT);
@@ -138,9 +138,20 @@ public class GardenFragment extends Fragment {
 
         int pairedLength = devicePairedArrayList.size();
         for (int i = 0; i < pairedLength; i++) {
-            pairedAdapter.addItem(new Bluetooth(devicePairedNameList.get(i)
-                    , devicePairedArrayList.get(i), false));
-            Log.w(TAG, "페어링 아이템 추가됨: " + devicePairedNameList.get(i));
+            //데이터베이스에서 user와 myId가 일치하는 것만 가져오기
+            int finalI = i;
+            db.collection(Constants.KEY_COLLECTION_GARDEN).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (devicePairedNameList.get(finalI).equals(document.getString(Constants.KEY_ADDRESS))
+                                && document.getString(Constants.KEY_USER).equals(myId)) {
+                            pairedAdapter.addItem(new Bluetooth(document.getString(Constants.KEY_NAME),
+                                    document.getString(Constants.KEY_ADDRESS), false));
+                            Log.w(TAG, "페어링 아이템 추가됨: " + document.getString(Constants.KEY_NAME));
+                        }
+                    }
+                }
+            });
         }
         gardenRecycler.setAdapter(pairedAdapter);
 

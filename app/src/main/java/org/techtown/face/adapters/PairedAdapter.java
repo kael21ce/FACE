@@ -1,17 +1,21 @@
 package org.techtown.face.adapters;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import org.techtown.face.R;
 import org.techtown.face.models.Bluetooth;
+import org.techtown.face.utilites.Constants;
+
 import java.util.ArrayList;
 
 public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder> {
@@ -31,7 +35,7 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
     @Override
     public PairedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.paired_item, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.garden_item, viewGroup, false);
 
         PairedAdapter.ViewHolder viewHolder = new PairedAdapter.ViewHolder(itemView);
 
@@ -62,22 +66,46 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView pairedName;
-        TextView statusText;
+        TextView gardenName;
+        TextView deviceText;
+        TextView gardenStatus;
+        Button setGarden;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
         public ViewHolder(View itemVIew) {
             super(itemVIew);
-
-            pairedName = itemVIew.findViewById(R.id.pairedName);
-            statusText = itemVIew.findViewById(R.id.statusText);
+            gardenName =itemVIew.findViewById(R.id.gardenName);
+            deviceText = itemVIew.findViewById(R.id.deviceText);
+            gardenStatus = itemVIew.findViewById(R.id.gardenStatus);
+            setGarden = itemVIew.findViewById(R.id.setGarden);
         }
 
         public void setItem(Bluetooth item) {
-            pairedName.setText(item.getDevice());
-            statusText.setText("페어링됨.");
+            db.collection(Constants.KEY_COLLECTION_GARDEN).get()
+                    .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.getString(Constants.KEY_ADDRESS).equals(item.getAddress())) {
+                            db.collection(Constants.KEY_COLLECTION_USERS).get()
+                                    .addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                        if (documentSnapshot.getId()
+                                                .equals(document.getString("registered"))) {
+                                            gardenName.setText(documentSnapshot.getString(Constants.KEY_NAME) + "의 가족정원");
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+            deviceText.setText(item.getDevice());
+            gardenStatus.setText("페어링됨.");
             if (item.isFlag() == true) {
-                statusText.setText("연결됨.");
+                gardenStatus.setText("연결됨.");
             }
         }
     }
