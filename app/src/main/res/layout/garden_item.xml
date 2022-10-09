@@ -23,14 +23,30 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/gardenStatus"
+        <LinearLayout
+            android:id="@+id/txtContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="190dp"
-            android:text="주변에 있지 않습니다"
-            android:textSize="20sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/deviceText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="170dp"
+                android:text="GARDEN0"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/gardenStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:text="주변에 있지 않습니다"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/flowerImg"
