@@ -160,13 +160,12 @@ public class GardenFragment extends Fragment {
         }
 
         int pairedLength = devicePairedArrayList.size();
-        for (int i = 0; i < pairedLength; i++) {
-            //데이터베이스에서 user와 myId가 일치하는 것만 가져오기
-            int finalI = i;
-            db.collection(Constants.KEY_COLLECTION_GARDEN).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if (devicePairedNameList.get(finalI).equals(document.getString(Constants.KEY_ADDRESS))
+        //데이터베이스에서 user와 myId가 일치하는 것만 가져오기
+        db.collection(Constants.KEY_COLLECTION_GARDEN).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (int i = 0; i < pairedLength; i++) {
+                        if (devicePairedArrayList.get(i).equals(document.getString(Constants.KEY_ADDRESS))
                                 && document.getString(Constants.KEY_USER).equals(myId)) {
                             pairedAdapter.addItem(new Bluetooth(document.getString(Constants.KEY_NAME),
                                     document.getString(Constants.KEY_ADDRESS), false));
@@ -174,9 +173,10 @@ public class GardenFragment extends Fragment {
                         }
                     }
                 }
-            });
-        }
-        gardenRecycler.setAdapter(pairedAdapter);
+            }
+            gardenRecycler.setAdapter(pairedAdapter);
+            Log.w(TAG, "Adapter is set");
+        });
 
         //주변 기기 목록
         deviceLocalArrayList = new ArrayList<>();

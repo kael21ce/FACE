@@ -103,9 +103,9 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
                 }
             });
             deviceText.setText(item.getDevice());
-            gardenStatus.setText("페어링됨.");
+            gardenStatus.setText("페어링되었습니다.");
             if (item.isFlag() == true) {
-                gardenStatus.setText("연결됨.");
+                gardenStatus.setText("연결되었습니다.");
             }
         }
     }
