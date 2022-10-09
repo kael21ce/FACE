@@ -6,12 +6,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +41,7 @@ import org.techtown.face.adapters.SurroundAdapter;
 import org.techtown.face.models.Bluetooth;
 import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
+import org.techtown.face.network.BluetoothService;
 import org.techtown.face.utilites.ConnectedThread;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
@@ -83,11 +87,27 @@ public class GardenFragment extends Fragment {
 
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.w(TAG, iBinder + "호출됨.");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.w(TAG, componentName + "끊어짐.");
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("GardenFragment", "onCreateView() 호출됨.");
 
         View v = inflater.inflate(R.layout.fragment_garden, container, false);
+
+        //BluetoothService
+        Intent btIntent = new Intent(v.getContext(), BluetoothService.class);
+        getActivity().bindService(btIntent, connection, Context.BIND_AUTO_CREATE);
 
         preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
@@ -245,7 +265,7 @@ public class GardenFragment extends Fragment {
                                                 .addOnCompleteListener(task1 -> {
                                                     if (task1.isSuccessful()) {
                                                         for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                            if (Objects.equals(documentSnapshot.get(Constants.KEY_USER), document.get(Constants.KEY_USER))) {
+                                                            if (Objects.equals(documentSnapshot.get(Constants.KEY_USER), document.get(Constants.KEY_REGISTERED))) {
                                                                 if (btSocket != null) {
                                                                     connectedThread = new ConnectedThread(btSocket);
                                                                     connectedThread.start();
@@ -321,6 +341,13 @@ public class GardenFragment extends Fragment {
         super.onDestroyView();
         Log.d("GardenFragment", "onDestroyView() 호출됨.");
         requireActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("GardenFragment", "onDestroy() 호출됨.");
+        getActivity().unbindService(connection);
     }
 
     //createBluetoothSocket 메서드

@@ -27,11 +27,14 @@
         android:theme="@style/Theme.FACE"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <service
+            android:name=".BluetoothService"
+            android:enabled="true"
+            android:exported="true"></service>
         <service
             android:name=".network.ContactService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".activities.GeoSettingActivity"
@@ -119,7 +122,7 @@
             android:name=".network.GeoService"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="location"></service>
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>

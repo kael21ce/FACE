@@ -49,6 +49,7 @@ public class Constants {
 
     public static final String KEY_COLLECTION_GARDEN = "garden";
     public static final String KEY_ADDRESS = "address";
+    public static final String KEY_REGISTERED = "registered";
 
     public static final String KEY_PATH = "path";
     public static final String KEY_COLLECTION_NOTIFICATION = "notifications";
