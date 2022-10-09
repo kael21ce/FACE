@@ -30,11 +30,5 @@ public class SettingActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //가족 정원 설정
-        binding.setGarden.setOnClickListener(view -> {
-            Intent intent = new Intent(SettingActivity.this, GardenActivity.class);
-            startActivity(intent);
-        });
-
     }
 }

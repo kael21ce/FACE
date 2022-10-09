@@ -119,32 +119,4 @@
             android:textSize="24sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/setGarden"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border_layout"
-        android:clickable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:focusable="true">
-
-        <ImageView
-            android:id="@+id/gardenImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/plant_pot" />
-
-        <TextView
-            android:id="@+id/gardenTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="가족 정원"
-            android:textColor="#000000"
-            android:textSize="24sp" />
-    </LinearLayout>
-
 </LinearLayout>

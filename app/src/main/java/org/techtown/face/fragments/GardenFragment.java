@@ -51,11 +51,10 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GardenFragment extends Fragment {
-    TextView connectedExist;
-    TextView toConnectExist;
-    Button searchButton;
-    RecyclerView connectedRecycler;
-    RecyclerView toConnectRecycler;
+    TextView locationExist;
+    Button searchLocation;
+    RecyclerView gardenRecycler;
+    RecyclerView locationRecycler;
     BluetoothAdapter btAdapter;
     BluetoothSocket btSocket;
     BluetoothDevice device;
@@ -93,22 +92,20 @@ public class GardenFragment extends Fragment {
         preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
-        connectedExist = v.findViewById(R.id.connectedExist);
-        connectedExist.setVisibility(View.GONE);
-        toConnectExist = v.findViewById(R.id.toConnectExist);
-        searchButton = v.findViewById(R.id.searchButton);
-        connectedRecycler = v.findViewById(R.id.connectedRecycler);
-        toConnectRecycler = v.findViewById(R.id.toConnectRecycler);
+        locationExist = v.findViewById(R.id.locationExist);
+        searchLocation = v.findViewById(R.id.searchLocation);
+        gardenRecycler = v.findViewById(R.id.gardenRecycler);
+        locationRecycler = v.findViewById(R.id.locationRecycler);
 
         pairedAdapter = new PairedAdapter();
         surroundAdapter = new SurroundAdapter();
 
         LinearLayoutManager layoutManagerC = new LinearLayoutManager(v.getContext(),
                 LinearLayoutManager.VERTICAL, false);
-        connectedRecycler.setLayoutManager(layoutManagerC);
+        gardenRecycler.setLayoutManager(layoutManagerC);
         LinearLayoutManager layoutManagerT = new LinearLayoutManager(v.getContext(),
                 LinearLayoutManager.VERTICAL, false);
-        toConnectRecycler.setLayoutManager(layoutManagerT);
+        locationRecycler.setLayoutManager(layoutManagerT);
 
         //블루투스 연결 상태 확인
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -136,7 +133,7 @@ public class GardenFragment extends Fragment {
                 }
             }
         } else {
-            connectedExist.setVisibility(View.VISIBLE);
+            //기기 없을 때 보여주기
         }
 
         int pairedLength = devicePairedArrayList.size();
@@ -145,7 +142,7 @@ public class GardenFragment extends Fragment {
                     , devicePairedArrayList.get(i), false));
             Log.w(TAG, "페어링 아이템 추가됨: " + devicePairedNameList.get(i));
         }
-        connectedRecycler.setAdapter(pairedAdapter);
+        gardenRecycler.setAdapter(pairedAdapter);
 
         //주변 기기 목록
         deviceLocalArrayList = new ArrayList<>();
@@ -170,8 +167,8 @@ public class GardenFragment extends Fragment {
         }
 
         //검색 버튼 클릭 시
-        searchButton.setOnClickListener(view -> {
-            toConnectExist.setVisibility(View.GONE);
+        searchLocation.setOnClickListener(view -> {
+            locationExist.setVisibility(View.GONE);
             deviceLocalArrayList = new ArrayList<>();
             deviceLocalNameList = new ArrayList<>();
             //기기 검색
@@ -298,9 +295,9 @@ public class GardenFragment extends Fragment {
                                     deviceLocalArrayList.get(i), false));
                             Log.w(TAG, "Item is added: " + deviceLocalNameList.get(i));
                         }
-                        toConnectRecycler.setAdapter(surroundAdapter);
+                        locationRecycler.setAdapter(surroundAdapter);
                         if (localLength == 0) {
-                            toConnectExist.setVisibility(View.VISIBLE);
+                            locationExist.setVisibility(View.VISIBLE);
                         }
                     }
                 }
