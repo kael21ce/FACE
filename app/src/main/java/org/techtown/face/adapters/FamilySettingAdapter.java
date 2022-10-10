@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
+import org.techtown.face.activities.FamilyViewActivity;
 import org.techtown.face.activities.MainActivity;
 import org.techtown.face.models.Family;
 import org.techtown.face.models.SearchItem;
@@ -74,11 +75,11 @@ public class FamilySettingAdapter extends RecyclerView.Adapter<FamilySettingAdap
                 imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> Glide.with(itemView)
                         .load(downloadUrl.toString())
                         .into(image));
-                FirebaseFirestore database = FirebaseFirestore.getInstance();
 
+                add.setText("보기");
                 add.setOnClickListener(v -> {
                     add.setVisibility(View.INVISIBLE);
-                    Intent intent = new Intent(itemView.getContext(), MainActivity.class);//여기 새로 만들어서 채워
+                    Intent intent = new Intent(itemView.getContext(), FamilyViewActivity.class);//여기 새로 만들어서 채워
                     intent.putExtra(Constants.KEY_USER, item.getUserContact());
                     itemView.getContext().startActivity(intent);
                 });
@@ -105,5 +106,5 @@ public class FamilySettingAdapter extends RecyclerView.Adapter<FamilySettingAdap
         public void deleteItem(int position){
             this.items.remove(position);
         }
-    
+
 }
