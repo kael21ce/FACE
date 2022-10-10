@@ -69,7 +69,9 @@ public class SearchActivity extends AppCompatActivity {
                         Log.e("THis", "is->"+name+phoneNum[i]+"  "+i);
                         i++;
                     }
-                    list2.add(phoneNum[0]);
+                    String str = phoneNum[0];
+                    str = str.replaceAll("-","");
+                    list2.add(str);
                 }
             }
         }
