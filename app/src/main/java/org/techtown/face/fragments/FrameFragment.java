@@ -64,6 +64,7 @@ public class FrameFragment extends Fragment {
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
                             user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
                             user.id = document.getString(Constants.KEY_USER);
+                            int expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                             firestore.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
@@ -72,7 +73,7 @@ public class FrameFragment extends Fragment {
                                     user.image= snapshot.get(Constants.KEY_IMAGE).toString();
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
-                                    int expression = Integer.parseInt(snapshot.get(Constants.KEY_EXPRESSION).toString());
+
 
                                     if (expression==5) {
                                         adapter.addItem(new Family(user));

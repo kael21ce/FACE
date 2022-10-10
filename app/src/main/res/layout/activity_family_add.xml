@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="이상적인 연락 횟수" />
+            android:text="이상적인 연락 기간" />
 
         <EditText
             android:id="@+id/idealContact"
@@ -51,7 +51,7 @@
             android:id="@+id/textView12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="최소 연락횟수" />
+            android:text="최소 연락 기간" />
 
         <EditText
             android:id="@+id/minContact"

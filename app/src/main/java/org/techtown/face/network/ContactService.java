@@ -45,22 +45,12 @@ public class ContactService extends Service {
                                 preferenceManager.putInt("ideal" + userId, 0);
                                 preferenceManager.putInt("min" + userId, 0);
                                 //
-                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                        .get()
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document1 : task1.getResult()) {
-                                                    if (userId.equals(document1.getId())) {
-                                                        idealContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("ideal_contact"))
-                                                                .toString()) * 86400000);
-                                                        preferenceManager.putInt("ideal" + userId, idealContact.get());
-                                                        minContact.set(Integer.parseInt(Objects.requireNonNull(document1.get("min_contact"))
-                                                                .toString()) * 86400000);
-                                                        preferenceManager.putInt("min" + userId, minContact.get());
-                                                    }
-                                                }
-                                            }
-                                        });
+                                idealContact.set(Integer.parseInt(Objects.requireNonNull(document.get("ideal_contact"))
+                                        .toString()) * 86400000);
+                                preferenceManager.putInt("ideal" + userId, idealContact.get());
+                                minContact.set(Integer.parseInt(Objects.requireNonNull(document.get("min_contact"))
+                                        .toString()) * 86400000);
+                                preferenceManager.putInt("min" + userId, minContact.get());
                                 mHandler.postDelayed(() -> {
                                     Log.d(TAG, userId + "-" + "idealContact: "
                                             + preferenceManager.getInt("ideal" + userId) +
