@@ -23,6 +23,7 @@ import org.techtown.face.models.SearchItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     ArrayList<SearchItem> items = new ArrayList<>();
@@ -51,7 +52,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         TextView nameTxt;
         TextView mobileTxt;
         ImageView image;
-        Button delete;
         Button add;
 
         public ViewHolder(View itemView) {
@@ -77,7 +77,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                if(task.isSuccessful()){
                    for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
                        String userId = documentSnapshot.getId();
-                       if(item.getUserId()==userId){
+                       if(Objects.equals(item.getUserId(), userId)){
                            add.setVisibility(View.INVISIBLE);
                        }
                    }
@@ -85,6 +85,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             });
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
+
                 HashMap<String, String> notification = new HashMap<>();
                 notification.put(Constants.KEY_TYPE, Constants.KEY_FAMILY_REQUEST);
                 notification.put(Constants.KEY_NOTIFICATION, item.getMyId());
