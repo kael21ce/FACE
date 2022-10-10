@@ -50,8 +50,8 @@ public class FamilyAddActivity extends AppCompatActivity {
             user.put(Constants.KEY_USER, userId);
             user.put(Constants.KEY_WINDOW, now);
             user.put(Constants.KEY_EXPRESSION, 5);
-            user.put(Constants.KEY_IDEAL_CONTACT, "");
-            user.put(Constants.KEY_MIN_CONTACT, "");
+            user.put(Constants.KEY_IDEAL_CONTACT, "0");
+            user.put(Constants.KEY_MIN_CONTACT, "0");
             user.put(Constants.KEY_THEME_LIKE, "");
             user.put(Constants.KEY_THEME_DISLIKE, "");
 
