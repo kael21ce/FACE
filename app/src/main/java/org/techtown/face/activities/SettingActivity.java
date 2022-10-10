@@ -30,5 +30,12 @@ public class SettingActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        binding.setFamily.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingActivity.this, FamilySettingActivity.class);
+            startActivity(intent);
+        });
+
+
+
     }
 }
