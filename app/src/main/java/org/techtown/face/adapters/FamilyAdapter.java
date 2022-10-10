@@ -81,7 +81,6 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
             nameTxt.setText(item.getUserContact().name);
             StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(item.getUserContact().path);
             imageRef.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(itemView).load(uri.toString()).into(familyImg));
-
         }
     }
     public void addItem(Family item) {

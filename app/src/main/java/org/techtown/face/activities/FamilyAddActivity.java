@@ -50,8 +50,6 @@ public class FamilyAddActivity extends AppCompatActivity {
             user.put(Constants.KEY_USER, userId);
             user.put(Constants.KEY_WINDOW, now);
             user.put(Constants.KEY_EXPRESSION, 5);
-            user.put(Constants.KEY_NAME, name);
-            user.put(Constants.KEY_MOBILE, mobile);
             user.put(Constants.KEY_IDEAL_CONTACT, "");
             user.put(Constants.KEY_MIN_CONTACT, "");
             user.put(Constants.KEY_THEME_LIKE, "");
@@ -62,8 +60,6 @@ public class FamilyAddActivity extends AppCompatActivity {
             myUser.put(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID));
             myUser.put(Constants.KEY_WINDOW, now);
             myUser.put(Constants.KEY_EXPRESSION, 5);
-            myUser.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
-            myUser.put(Constants.KEY_MOBILE, preferenceManager.getString(Constants.KEY_MOBILE));
             myUser.put(Constants.KEY_IDEAL_CONTACT, idealContact);
             myUser.put(Constants.KEY_MIN_CONTACT, minContact);
             myUser.put(Constants.KEY_THEME_LIKE, like);

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -46,39 +47,9 @@ public class FrameFragment extends Fragment {
             contactIntent.putExtra(Constants.KEY_USER,user);
             startActivity(contactIntent);
         });
-        //db에서 데이터 가져오기
 
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
-
-        //나에 대한 정보 추가
-        db.collection(Constants.KEY_COLLECTION_USERS)
-                .get()
-                .addOnCompleteListener(task -> {
-                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (currentUserId.equals(document.getId())){
-                                User user = new User();
-                                user.name = "나";
-                                user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
-                                user.id = document.getId();
-                                user.mobile = document.get(Constants.KEY_MOBILE).toString();
-                                user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
-                                user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
-                                user.like = document.get(Constants.KEY_THEME_LIKE).toString();
-                                user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
-                                user.path = document.get(Constants.KEY_PATH).toString();
-                                adapter.addItem(new Family(user));
-                                recyclerView.setAdapter(adapter);
-                            }
-                            Log.w(TAG, "Successfully loaded");
-                        }
-                        recyclerView.setAdapter(adapter);
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                });
-
+        //db에서 데이터 가져오기
         //다른 사람 정보 추가
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(myId)
@@ -87,47 +58,41 @@ public class FrameFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String userId = document.getString(Constants.KEY_USER);
+                            User user = new User();
+                            user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
+                            user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
+                            user.like = document.get(Constants.KEY_THEME_LIKE).toString();
+                            user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                            user.id = document.getString(Constants.KEY_USER);
                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                            firestore.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task1 -> {
+                            firestore.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
-                                    for(QueryDocumentSnapshot queryDocumentSnapshot : task1.getResult()){
-                                        String thisId = queryDocumentSnapshot.getId();
-                                        if(userId.equals(thisId)){
-                                            User user = new User();
-                                            user.name = queryDocumentSnapshot.get(Constants.KEY_NAME).toString();
-                                            user.image= queryDocumentSnapshot.get(Constants.KEY_IMAGE).toString();
-                                            user.id = queryDocumentSnapshot.getId();
-                                            user.mobile = queryDocumentSnapshot.get(Constants.KEY_MOBILE).toString();
-                                            user.min_contact = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_MIN_CONTACT).toString());
-                                            user.ideal_contact = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_IDEAL_CONTACT).toString());
-                                            user.like = queryDocumentSnapshot.get(Constants.KEY_THEME_LIKE).toString();
-                                            user.dislike = queryDocumentSnapshot.get(Constants.KEY_THEME_DISLIKE).toString();
-                                            user.path = queryDocumentSnapshot.get(Constants.KEY_PATH).toString();
-                                            int expression = Integer.parseInt(queryDocumentSnapshot.get(Constants.KEY_EXPRESSION).toString());
+                                    DocumentSnapshot snapshot = task1.getResult();
+                                    user.name = snapshot.get(Constants.KEY_NAME).toString();
+                                    user.image= snapshot.get(Constants.KEY_IMAGE).toString();
+                                    user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
+                                    user.path = snapshot.get(Constants.KEY_PATH).toString();
+                                    int expression = Integer.parseInt(snapshot.get(Constants.KEY_EXPRESSION).toString());
 
-                                            if (expression==5) {
-                                                adapter.addItem(new Family(user));
-                                            } else if (expression==4) {
-                                                adapter.addItem(new Family(user));
-                                            } else if (expression==3) {
-                                                adapter.addItem(new Family(user));
-                                            } else if (expression==2) {
-                                                adapter.addItem(new Family(user));
-                                            } else if (expression==1) {
-                                                adapter.addItem(new Family(user));
-                                            } else {
-                                                adapter.addItem(new Family(user));
-                                            }
-
-                                            recyclerView.setAdapter(adapter);
-                                        }
+                                    if (expression==5) {
+                                        adapter.addItem(new Family(user));
+                                    } else if (expression==4) {
+                                        adapter.addItem(new Family(user));
+                                    } else if (expression==3) {
+                                        adapter.addItem(new Family(user));
+                                    } else if (expression==2) {
+                                        adapter.addItem(new Family(user));
+                                    } else if (expression==1) {
+                                        adapter.addItem(new Family(user));
+                                    } else {
+                                        adapter.addItem(new Family(user));
                                     }
+
+                                    recyclerView.setAdapter(adapter);
+
+
                                 }
                             });
-
-                            //대면 만남 여부, 표정 변화 단계에 따라 이미지 달리하여 추가하기
-
                         }
                         Log.w(TAG, "Successfully loaded");}
                 });
