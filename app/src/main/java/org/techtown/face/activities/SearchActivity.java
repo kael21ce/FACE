@@ -73,6 +73,8 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+
+
         binding.button.setOnClickListener(v -> {
             int c = adapter.getItemCount();
             for(i=0;i<c;i++){
@@ -89,7 +91,7 @@ public class SearchActivity extends AppCompatActivity {
                         String userId = queryDocumentSnapshot.getId();
                         if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)) {
                             String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
-                            adapter.addItem(new SearchItem(path, name, mobile, userId, myId, list1, list2));
+                            adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
                             binding.searchRecyclerView.setAdapter(adapter);
                         }
                     }

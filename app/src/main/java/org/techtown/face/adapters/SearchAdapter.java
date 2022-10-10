@@ -86,8 +86,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
                 long now = System.currentTimeMillis();
-                int position = getAdapterPosition();
-
                 //문서 id와 추가되는 시간 데이터베이스에 입력
                 HashMap<String, Object> user = new HashMap<>();
                 user.put(Constants.KEY_USER, item.getUserId());
