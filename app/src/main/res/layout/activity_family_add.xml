@@ -16,21 +16,6 @@
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <EditText
-            android:id="@+id/nameTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:text="Name" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="전화번호" />
-
         <TextView
             android:id="@+id/textView13"
             android:layout_width="match_parent"

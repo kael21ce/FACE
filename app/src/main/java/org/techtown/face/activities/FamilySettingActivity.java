@@ -4,11 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class FamilySettingActivity extends AppCompatActivity {
+import org.techtown.face.databinding.ActivityFamilyAddBinding;
+import org.techtown.face.databinding.ActivitySettingBinding;
 
+public class FamilySettingActivity extends AppCompatActivity {
+    ActivityFamilyAddBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_family_setting);
+        binding = ActivityFamilyAddBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+
     }
 }
