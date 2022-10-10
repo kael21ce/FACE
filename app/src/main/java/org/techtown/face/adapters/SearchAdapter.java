@@ -1,5 +1,6 @@
 package org.techtown.face.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
+import org.techtown.face.activities.FamilyAddActivity;
+import org.techtown.face.activities.SearchActivity;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.models.SearchItem;
 
@@ -85,29 +88,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                            }
                        }
                     });
+
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
-                long now = System.currentTimeMillis();
-                //문서 id와 추가되는 시간 데이터베이스에 입력
-                HashMap<String, Object> user = new HashMap<>();
-                user.put(Constants.KEY_USER, item.getUserId());
-                user.put(Constants.KEY_WINDOW, now);
-                user.put(Constants.KEY_EXPRESSION, 5);
-                HashMap<String, Object> myUser = new HashMap<>();
-                myUser.put(Constants.KEY_USER, item.getMyId());
-                myUser.put(Constants.KEY_WINDOW, now);
-                myUser.put(Constants.KEY_EXPRESSION, 5);
-
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection(Constants.KEY_COLLECTION_USERS)
-                        .document(item.getMyId())
-                        .collection(Constants.KEY_COLLECTION_USERS)
-                        .add(user);
-                db.collection(Constants.KEY_COLLECTION_USERS)
-                        .document(item.getUserId())
-                        .collection(Constants.KEY_COLLECTION_USERS)
-                        .add(myUser);
-                add.setVisibility(View.INVISIBLE);
+                Intent intent = new Intent(itemView.getContext(), FamilyAddActivity.class);
+                intent.putExtra(Constants.KEY_PATH, item.getPath());
+                intent.putExtra(Constants.KEY_MOBILE, item.getMobile());
+                intent.putExtra(Constants.KEY_USER_ID, item.getUserId());
+                itemView.getContext().startActivity(intent);
             });
         }
     }

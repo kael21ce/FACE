@@ -45,6 +45,7 @@ public class FamilyAddActivity extends AppCompatActivity {
 
         binding.add.setOnClickListener(v -> {
             long now = System.currentTimeMillis();
+            //나의 상대방에게 추가할 내용
             HashMap<String,Object> user = new HashMap<>();
             user.put(Constants.KEY_USER, userId);
             user.put(Constants.KEY_WINDOW, now);
@@ -56,6 +57,7 @@ public class FamilyAddActivity extends AppCompatActivity {
             user.put(Constants.KEY_THEME_LIKE, "");
             user.put(Constants.KEY_THEME_DISLIKE, "");
 
+            //상대방의 나에게 추가할 내용
             HashMap<String, Object> myUser = new HashMap<>();
             myUser.put(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID));
             myUser.put(Constants.KEY_WINDOW, now);

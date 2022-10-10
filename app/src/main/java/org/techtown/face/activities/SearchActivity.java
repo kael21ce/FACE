@@ -46,16 +46,13 @@ public class SearchActivity extends AppCompatActivity {
 
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI , null ,null, null, null);
-        ArrayList<String> list1 = new ArrayList<>();
-        ArrayList<String> list2 = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
 
         if(cur.getCount()>0){
             while(cur.moveToNext()){
                 StringBuilder line = new StringBuilder();
                 @SuppressLint("Range") int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 @SuppressLint("Range") String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                list1.add(name);
-
                 if(("1").equals(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))) {
                     @SuppressLint("Recycle") Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{String.valueOf(id)}, null);
                     int i = 0;
@@ -71,7 +68,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     String str = phoneNum[0];
                     str = str.replaceAll("-","");
-                    list2.add(str);
+                    list.add(str);
                 }
             }
         }
@@ -83,7 +80,7 @@ public class SearchActivity extends AppCompatActivity {
                     String name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                     String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
                     String userId = queryDocumentSnapshot.getId();
-                    if(list2.contains(mobile)){
+                    if(list.contains(mobile)){
                             String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
                             adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
                             binding.searchRecyclerView.setAdapter(adapter);
