@@ -20,9 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.databinding.ActivitySignUpBinding;
 import org.techtown.face.utilites.Constants;
@@ -79,13 +76,6 @@ public class SignUpActivity extends AppCompatActivity {
         user.put(Constants.KEY_IMAGE,encodedImage);
         user.put(Constants.KEY_BIRTHDAY,binding.inputBirth.getText().toString());
         user.put(Constants.KEY_MOBILE,binding.inputPhoneNumber.getText().toString());
-        user.put(Constants.KEY_IDEAL_CONTACT,binding.inputIdealContact.getText().toString());
-        user.put(Constants.KEY_MIN_CONTACT,binding.inputMinContact.getText().toString());
-        user.put(Constants.KEY_THEME_LIKE,binding.inputThemeLike.getText().toString());
-        user.put(Constants.KEY_THEME_DISLIKE,binding.inputThemeDislike.getText().toString());
-        user.put(Constants.KEY_EXPRESSION,5);
-        user.put(Constants.KEY_ANGLE,0);
-
 
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .add(user)
@@ -97,10 +87,6 @@ public class SignUpActivity extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_IMAGE,encodedImage);
                     preferenceManager.putString(Constants.KEY_BIRTHDAY,binding.inputBirth.getText().toString());
                     preferenceManager.putString(Constants.KEY_MOBILE,binding.inputPhoneNumber.getText().toString());
-                    preferenceManager.putString(Constants.KEY_IDEAL_CONTACT,binding.inputIdealContact.getText().toString());
-                    preferenceManager.putString(Constants.KEY_MIN_CONTACT,binding.inputMinContact.getText().toString());
-                    preferenceManager.putString(Constants.KEY_THEME_LIKE,binding.inputThemeLike.getText().toString());
-                    preferenceManager.putString(Constants.KEY_THEME_DISLIKE,binding.inputThemeDislike.getText().toString());
                     Intent intent = new Intent(getApplicationContext(),CameraActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
