@@ -85,18 +85,29 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             });
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
+                long now = System.currentTimeMillis();
+                int position = getAdapterPosition();
 
-                HashMap<String, String> notification = new HashMap<>();
-                notification.put(Constants.KEY_TYPE, Constants.KEY_FAMILY_REQUEST);
-                notification.put(Constants.KEY_NOTIFICATION, item.getMyId());
+                //문서 id와 추가되는 시간 데이터베이스에 입력
+                HashMap<String, Object> user = new HashMap<>();
+                user.put(Constants.KEY_USER, item.getUserId());
+                user.put(Constants.KEY_WINDOW, now);
+                user.put(Constants.KEY_EXPRESSION, 5);
+                HashMap<String, Object> myUser = new HashMap<>();
+                myUser.put(Constants.KEY_USER, item.getMyId());
+                myUser.put(Constants.KEY_WINDOW, now);
+                myUser.put(Constants.KEY_EXPRESSION, 5);
+
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(item.getMyId())
+                        .collection(Constants.KEY_COLLECTION_USERS)
+                        .add(user);
+                db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getUserId())
-                        .collection(Constants.KEY_COLLECTION_NOTIFICATION)
-                        .add(notification)
-                        .addOnCompleteListener(task -> {
-                           Toast.makeText(itemView.getContext(),"요청 성공했습니다.",Toast.LENGTH_SHORT).show();
-                        });
+                        .collection(Constants.KEY_COLLECTION_USERS)
+                        .add(myUser);
+                add.setVisibility(View.INVISIBLE);
             });
         }
     }

@@ -13,14 +13,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.R;
-import org.techtown.face.adapters.AddAdapter;
 import org.techtown.face.adapters.MeetAdapter;
-import org.techtown.face.models.AddItem;
 import org.techtown.face.models.MeetItem;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
-
-import java.util.Objects;
 
 public class AddActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
@@ -35,7 +31,6 @@ public class AddActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(AddActivity.this,
                 LinearLayoutManager.VERTICAL, false);
         addRecyclerView.setLayoutManager(layoutManager);
-        AddAdapter addAdapter = new AddAdapter();
         MeetAdapter meetAdapter = new MeetAdapter();
 
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
@@ -48,24 +43,10 @@ public class AddActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult().size() > 0) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                            String type = queryDocumentSnapshot.getString(Constants.KEY_TYPE);
                             String userId = queryDocumentSnapshot.getString(Constants.KEY_NOTIFICATION);
                             String docId = queryDocumentSnapshot.getId();
-                            if (Objects.equals(queryDocumentSnapshot.getString(Constants.KEY_TYPE), Constants.KEY_FAMILY_REQUEST)) {
-                                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                                firestore.collection(Constants.KEY_COLLECTION_USERS).document(userId).get().addOnCompleteListener(task1 -> {
-                                    DocumentSnapshot documentSnapshot = task1.getResult();
-                                    if (task1.isSuccessful()) {
-                                        String path = documentSnapshot.getString(Constants.KEY_PATH);
-                                        String name = documentSnapshot.getString(Constants.KEY_NAME);
-                                        String mobile = documentSnapshot.getString(Constants.KEY_MOBILE);
-                                        addAdapter.addItem(new AddItem(path, name, mobile, userId, myId, docId));
-                                        addRecyclerView.setAdapter(addAdapter);
-                                    }
-                                });
-                            } else {
-                                FirebaseFirestore firestore1 = FirebaseFirestore.getInstance();
-                                firestore1.collection(Constants.KEY_COLLECTION_USERS).document(userId).get().addOnCompleteListener(task1 -> {
+                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                            firestore.collection(Constants.KEY_COLLECTION_USERS).document(userId).get().addOnCompleteListener(task1 -> {
                                     DocumentSnapshot documentSnapshot = task1.getResult();
                                     if (task1.isSuccessful()) {
                                         String path = documentSnapshot.getString(Constants.KEY_PATH);
@@ -77,8 +58,7 @@ public class AddActivity extends AppCompatActivity {
                                 });
                             }
                         }
-                    }
-                });
+                     });
         addButton.setOnClickListener(v1 -> {
             Intent intent = new Intent(AddActivity.this, SearchActivity.class);
             startActivity(intent);

@@ -19,6 +19,8 @@ import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 import org.techtown.face.models.SearchItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class SearchActivity extends AppCompatActivity {
@@ -27,7 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
     int i=0;
 
-    @SuppressLint({"Range", "DefaultLocale"})
+    @SuppressLint({"Range", "DefaultLocale", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +45,15 @@ public class SearchActivity extends AppCompatActivity {
 
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI , null ,null, null, null);
+        ArrayList<String> list1 = new ArrayList<>();
+        ArrayList<String> list2 = new ArrayList<>();
 
         if(cur.getCount()>0){
             while(cur.moveToNext()){
+                StringBuilder line = new StringBuilder();
                 @SuppressLint("Range") int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 @SuppressLint("Range") String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                list1.add(name);
 
                 if(("1").equals(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)))) {
                     @SuppressLint("Recycle") Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{String.valueOf(id)}, null);
@@ -62,6 +68,7 @@ public class SearchActivity extends AppCompatActivity {
                         Log.e("THis", "is->"+name+phoneNum[i]+"  "+i);
                         i++;
                     }
+                    list2.add(phoneNum[0]);
                 }
             }
         }
@@ -82,7 +89,7 @@ public class SearchActivity extends AppCompatActivity {
                         String userId = queryDocumentSnapshot.getId();
                         if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)) {
                             String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
-                            adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
+                            adapter.addItem(new SearchItem(path, name, mobile, userId, myId, list1, list2));
                             binding.searchRecyclerView.setAdapter(adapter);
                         }
                     }
