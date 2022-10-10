@@ -16,6 +16,6 @@ public class FamilyViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityFamilyViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        
+
     }
 }
