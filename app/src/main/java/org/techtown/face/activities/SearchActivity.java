@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -73,31 +74,21 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
-
-
-        binding.button.setOnClickListener(v -> {
-            int c = adapter.getItemCount();
-            for(i=0;i<c;i++){
-                adapter.deleteItem(0);
-            }
-            adapter.notifyDataSetChanged();
-            String searchNameOrMobile = binding.searchEditText.getText().toString();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
-                        String name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
-                        String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
-                        String userId = queryDocumentSnapshot.getId();
-                        if(searchNameOrMobile.equals(name) || searchNameOrMobile.equals(mobile)) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                    String name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
+                    String mobile = queryDocumentSnapshot.getString(Constants.KEY_MOBILE);
+                    String userId = queryDocumentSnapshot.getId();
+                    if(list2.contains(mobile)){
                             String path = queryDocumentSnapshot.getString(Constants.KEY_PATH);
                             adapter.addItem(new SearchItem(path, name, mobile, userId, myId));
                             binding.searchRecyclerView.setAdapter(adapter);
-                        }
                     }
                 }
-            });
-
+            }
         });
+
     }
 }

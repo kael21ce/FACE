@@ -72,17 +72,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             imageRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> Glide.with(itemView)
                     .load(downloadUrl.toString())
                     .into(image));
-            FirebaseFirestore database = FirebaseFirestore.getInstance();
-            database.collection(Constants.KEY_COLLECTION_USERS).document(item.getMyId()).collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task -> {
-               if(task.isSuccessful()){
-                   for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                       String userId = documentSnapshot.getId();
-                       if(Objects.equals(item.getUserId(), userId)){
-                           add.setVisibility(View.INVISIBLE);
-                       }
-                   }
-               }
-            });
+
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
                 long now = System.currentTimeMillis();
