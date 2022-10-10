@@ -140,63 +140,6 @@
             android:textSize="13sp" />
 
 
-        <EditText
-            android:id="@+id/inputIdealContact"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:hint="@string/ideal_contact"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp" />
-
-        <EditText
-            android:id="@+id/inputMinContact"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:hint="최소한의 연락 간격(예: 10일이면 10입력)"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp" />
-
-        <EditText
-            android:id="@+id/inputThemeLike"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:hint="@string/theme_like"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp" />
-
-        <EditText
-            android:id="@+id/inputThemeDislike"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:hint="@string/theme_dislike"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp" />
-
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
