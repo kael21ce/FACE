@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
+import org.techtown.face.activities.MainActivity;
 import org.techtown.face.models.Family;
 import org.techtown.face.models.SearchItem;
 import org.techtown.face.utilites.Constants;
@@ -74,24 +75,11 @@ public class FamilySettingAdapter extends RecyclerView.Adapter<FamilySettingAdap
                         .load(downloadUrl.toString())
                         .into(image));
                 FirebaseFirestore database = FirebaseFirestore.getInstance();
-                database.collection(Constants.KEY_COLLECTION_USERS)
-                        .document(item.getUserContact()//여기 잘 처리해라)
-                        .collection(Constants.KEY_COLLECTION_USERS)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if(task.isSuccessful()){
-                                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                                    add.setVisibility(View.INVISIBLE);
-                                }
-                            }
-                        });
 
                 add.setOnClickListener(v -> {
                     add.setVisibility(View.INVISIBLE);
-                    Intent intent = new Intent(itemView.getContext(), //여기 새로 만들어서 채워);
-                    intent.putExtra(Constants.KEY_PATH, item.getPath());
-                    intent.putExtra(Constants.KEY_MOBILE, item.getMobile());
-                    intent.putExtra(Constants.KEY_USER_ID, item.getUserId());
+                    Intent intent = new Intent(itemView.getContext(), MainActivity.class);//여기 새로 만들어서 채워
+                    intent.putExtra(Constants.KEY_USER, item.getUserContact());
                     itemView.getContext().startActivity(intent);
                 });
             }
@@ -117,5 +105,5 @@ public class FamilySettingAdapter extends RecyclerView.Adapter<FamilySettingAdap
         public void deleteItem(int position){
             this.items.remove(position);
         }
-    }
+    
 }

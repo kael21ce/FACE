@@ -1,22 +1,19 @@
 package org.techtown.face.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import static android.content.ContentValues.TAG;
 
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import org.techtown.face.R;
 import org.techtown.face.adapters.FamilySettingAdapter;
-import org.techtown.face.databinding.ActivityFamilyAddBinding;
 import org.techtown.face.databinding.ActivityFamilySettingBinding;
-import org.techtown.face.databinding.ActivitySettingBinding;
 import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.Constants;

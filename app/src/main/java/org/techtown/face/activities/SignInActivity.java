@@ -24,6 +24,7 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.databinding.ActivitySignInBinding;
 import org.techtown.face.utilites.Constants;
@@ -155,9 +156,21 @@ public class SignInActivity extends AppCompatActivity {
                         preferenceManager.putString(Constants.KEY_IMAGE,documentSnapshot.getString(Constants.KEY_IMAGE));
                         preferenceManager.putString(Constants.KEY_MOBILE,documentSnapshot.getString(Constants.KEY_MOBILE));
                         preferenceManager.putString(Constants.KEY_BIRTHDAY,documentSnapshot.getString(Constants.KEY_BIRTHDAY));
-                        preferenceManager.putString(Constants.KEY_THEME_LIKE,documentSnapshot.getString(Constants.KEY_THEME_LIKE));
-                        preferenceManager.putString(Constants.KEY_THEME_DISLIKE,documentSnapshot.getString(Constants.KEY_THEME_DISLIKE));
                         preferenceManager.putString(Constants.KEY_PATH,documentSnapshot.getString(Constants.KEY_PATH));
+                        database.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(documentSnapshot.getId())
+                                .collection(Constants.KEY_COLLECTION_USERS)
+                                .get()
+                                .addOnCompleteListener(task1 -> {
+                                    if(task1.isSuccessful()){
+                                        int i=0;
+                                        for(QueryDocumentSnapshot snapshot : task1.getResult()){
+                                            preferenceManager.putString(Constants.KEY_USER_ID+i,snapshot.getId());
+                                            i++;
+                                        }
+                                        preferenceManager.putInt(Constants.KEY_COUNT, i-1);
+                                    }
+                                });
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
