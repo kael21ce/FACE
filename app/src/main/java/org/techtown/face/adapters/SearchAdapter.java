@@ -92,6 +92,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             add.setOnClickListener(v -> {
                 add.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(itemView.getContext(), FamilyAddActivity.class);
+                intent.putExtra(Constants.KEY_NAME, item.getName());
                 intent.putExtra(Constants.KEY_PATH, item.getPath());
                 intent.putExtra(Constants.KEY_MOBILE, item.getMobile());
                 intent.putExtra(Constants.KEY_USER_ID, item.getUserId());

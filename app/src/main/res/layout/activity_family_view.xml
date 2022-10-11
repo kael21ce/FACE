@@ -16,6 +16,20 @@
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <EditText
+            android:id="@+id/nameTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
         <TextView
             android:id="@+id/textView13"
             android:layout_width="match_parent"
@@ -28,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="예시 3"
+            android:text="예시 3"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -43,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="예시 10"
+            android:text="예시 10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             tools:ignore="TouchTargetSizeCheck" />
@@ -59,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="대화하고 싶은 주제를 적어주세요"
+            android:text="대화하고 싶은 주제를 적어주세요"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -74,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="대화하고 싶지 않은 주제를 적어주세요"
+            android:text="대화하고 싶지 않은 주제를 적어주세요"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -82,7 +96,7 @@
             android:id="@+id/add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="추가하기" />
+            android:text="변경하기" />
     </LinearLayout>
 
 </ScrollView>

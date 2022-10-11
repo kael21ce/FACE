@@ -29,21 +29,26 @@ public class FamilyAddActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         Intent intent = getIntent();
 
+        String name = intent.getStringExtra(Constants.KEY_NAME);
+        String mobile = intent.getStringExtra(Constants.KEY_MOBILE);
         String userId = intent.getStringExtra(Constants.KEY_USER_ID);
         String path = intent.getStringExtra(Constants.KEY_PATH);
 
         StorageReference reference = FirebaseStorage.getInstance().getReference().child(path);
         reference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(this).load(uri).into(binding.image));
+        binding.mobile.setText(mobile);
 
         binding.add.setOnClickListener(v -> {
             String idealContact = binding.idealContact.getText().toString();
             String minContact = binding.minContact.getText().toString();
             String like = binding.themeLike.getText().toString();
             String dislike = binding.themeDislike.getText().toString();
+            String familyName = binding.nameTxt.getText().toString();
 
             long now = System.currentTimeMillis();
             //나의 상대방에게 추가할 내용
             HashMap<String,Object> user = new HashMap<>();
+            user.put(Constants.KEY_NAME, familyName);
             user.put(Constants.KEY_USER, userId);
             user.put(Constants.KEY_WINDOW, now);
             user.put(Constants.KEY_EXPRESSION, 5);

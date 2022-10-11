@@ -49,7 +49,6 @@ public class FamilySettingActivity extends AppCompatActivity {
                                 if(task1.isSuccessful()){
                                     DocumentSnapshot snapshot = task1.getResult();
                                     user.name = snapshot.get(Constants.KEY_NAME).toString();
-                                    user.image= snapshot.get(Constants.KEY_IMAGE).toString();
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
 
@@ -65,7 +64,7 @@ public class FamilySettingActivity extends AppCompatActivity {
                                                         user.min_contact = Integer.parseInt(documentSnapshot.getString(Constants.KEY_MIN_CONTACT));
                                                         user.like = documentSnapshot.getString(Constants.KEY_THEME_LIKE);
                                                         user.dislike = documentSnapshot.getString(Constants.KEY_THEME_DISLIKE);
-                                                        user.docid = documentSnapshot.getId();
+                                                        user.docId = documentSnapshot.getId();
                                                         adapter.addItem(new Family(user));
                                                         binding.recyclerView.setAdapter(adapter);
                                                     }
