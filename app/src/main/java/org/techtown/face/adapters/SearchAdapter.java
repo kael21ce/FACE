@@ -84,7 +84,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     .addOnCompleteListener(task -> {
                        if(task.isSuccessful()){
                            for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                               add.setVisibility(View.INVISIBLE);
+                               if(Objects.equals(item.getUserId(), documentSnapshot.getString(Constants.KEY_USER))){
+                                   add.setVisibility(View.INVISIBLE);
+                               }
                            }
                        }
                     });

@@ -34,8 +34,8 @@ public class FamilyViewActivity extends AppCompatActivity {
 
         binding.nameTxt.setText(user.name);
         binding.mobile.setText(user.mobile);
-        binding.idealContact.setText(user.ideal_contact);
-        binding.minContact.setText(user.min_contact);
+        binding.idealContact.setText(String.valueOf(user.ideal_contact));
+        binding.minContact.setText(String.valueOf(user.min_contact));
         binding.themeLike.setText(user.like);
         binding.themeDislike.setText(user.dislike);
 
@@ -80,6 +80,10 @@ public class FamilyViewActivity extends AppCompatActivity {
                     .collection(Constants.KEY_COLLECTION_USERS)
                     .document(user.docId)
                     .update(contents);
+
+            Intent intent1 = new Intent(FamilyViewActivity.this, MainActivity.class);
+            startActivity(intent1);
+            finish();
         });
     }
 }
