@@ -65,6 +65,7 @@ public class FamilySettingActivity extends AppCompatActivity {
                                                         user.min_contact = Integer.parseInt(documentSnapshot.getString(Constants.KEY_MIN_CONTACT));
                                                         user.like = documentSnapshot.getString(Constants.KEY_THEME_LIKE);
                                                         user.dislike = documentSnapshot.getString(Constants.KEY_THEME_DISLIKE);
+                                                        user.docid = documentSnapshot.getId();
                                                         adapter.addItem(new Family(user));
                                                         binding.recyclerView.setAdapter(adapter);
                                                     }
@@ -73,7 +74,7 @@ public class FamilySettingActivity extends AppCompatActivity {
                                 }
                             });
                         }
-                        Log.w(TAG, "Successfully loaded");}
+                    }
                 });
 
     }
