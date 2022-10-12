@@ -94,4 +94,10 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
     public void setItem(int position, Bluetooth item) {
         items.set(position, item);
     }
+
+    public void clear() {
+        int size = items.size();
+        items.clear();
+        notifyItemRangeRemoved(0, size);
+    }
 }

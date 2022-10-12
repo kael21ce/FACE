@@ -1,5 +1,6 @@
 package org.techtown.face.utilites;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothSocket;
 import android.os.SystemClock;
 import android.util.Log;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+@SuppressLint("MissingPermission")
 public class ConnectedThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final InputStream mmInstream;

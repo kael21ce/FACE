@@ -1,6 +1,7 @@
 package org.techtown.face.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -214,52 +215,34 @@ public class GardenFragment extends Fragment {
                         , Toast.LENGTH_LONG).show();
                 return;
             }
-            if (btAdapter.isDiscovering()) {
-                btAdapter.cancelDiscovery();
-            } else {
-                if (btAdapter.isEnabled()) {
+            if (btAdapter.isEnabled()) {
+                if (btAdapter.isDiscovering()) {
+                    btAdapter.cancelDiscovery();
+                    Toast.makeText(v.getContext(), "기기 검색이 중단되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    surroundAdapter.clear();
                     btAdapter.startDiscovery();
+                    Toast.makeText(v.getContext(), "기기 검색을 시작합니다.", Toast.LENGTH_SHORT).show();
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
                     getActivity().registerReceiver(receiver, filter);
-                } else {
-                    Toast.makeText(v.getContext(), "블루투스 어댑터 연결에 실패했습니다."
-                            , Toast.LENGTH_LONG).show();
                 }
-            }
-            if (deviceLocalArrayList.size()==0) {
-                locationExist.setVisibility(View.VISIBLE);
+                if (deviceLocalArrayList.size()==0) {
+                    locationExist.setVisibility(View.VISIBLE);
+                }
+            } else {
+                Toast.makeText(v.getContext(), "블루투스가 비활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
         //터치 이벤트 추가 - 기기 연결 상태 바꾸는 것 필요
         surroundAdapter.setOnItemClickListener((position, address) -> {
             device = btAdapter.getRemoteDevice(address);
-            boolean flag = true;
-            Log.d(TAG, "Clicked device: " + device.getName() + " / " + address);
-            try {
-                btSocket = createBluetoothSocket(device);
-                try {
-                    btSocket.connect();
-                } catch (IOException closeException) {
-                    flag = false;
-                    Log.e(TAG, "Could not close the client socket", closeException);
-                }
-            } catch (IOException e) {
-                flag = false;
-                Log.e(TAG, "Not in location-2: " + device.getName(), e);
-                Toast.makeText(v.getContext(), "기기가 주변에 없습니다."
-                        , Toast.LENGTH_LONG).show();
-            }
-
-            if (flag) {
-                connectedThread = new ConnectedThread(btSocket);
-                connectedThread.start();
-                // 데이터베이스에 등록하기
-                registerDialog = new Dialog(v.getContext());
-                registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                registerDialog.setContentView(R.layout.dialog_btregister);
-                showRegisterDialog(device);
-            }
+            connectDevice(address);
+            // 데이터베이스에 등록하기
+            registerDialog = new Dialog(v.getContext());
+            registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            registerDialog.setContentView(R.layout.dialog_btregister);
+            showRegisterDialog(device);
         });
 
         return v;
@@ -280,8 +263,7 @@ public class GardenFragment extends Fragment {
                     String deviceName = device.getName();
                     String deviceHardwareAddress = device.getAddress();
                     Log.w(TAG, "Address of " + deviceName + ": " + deviceHardwareAddress);
-                    if (deviceName != null && deviceName.contains(garden)
-                            && !deviceLocalNameList.contains(deviceName)) {
+                    if (deviceName != null && deviceName.contains(garden)) {
                         deviceLocalArrayList.add(deviceHardwareAddress);
                         deviceLocalNameList.add(deviceName);
                         //리사이클러뷰에 보여주기
@@ -289,7 +271,7 @@ public class GardenFragment extends Fragment {
                         for (int i = 0; i < localLength; i++) {
                             surroundAdapter.addItem(new Bluetooth(deviceLocalNameList.get(i),
                                     deviceLocalArrayList.get(i), false));
-                            Log.w(TAG, "Item is added: " + deviceLocalNameList.get(i));
+                            Log.w(TAG, "Item is added in locationRecycler: " + deviceLocalNameList.get(i));
                         }
                         locationRecycler.setAdapter(surroundAdapter);
                         if (localLength == 0) {
@@ -413,5 +395,19 @@ public class GardenFragment extends Fragment {
                 registerDialog.dismiss();
             }
         });
+    }
+    @SuppressLint("MissingPermission")
+    private void connectDevice(String deviceAddress) {
+        if (btAdapter.isDiscovering()) {
+            btAdapter.cancelDiscovery();
+        }
+        device = btAdapter.getRemoteDevice(deviceAddress);
+        try {
+            btSocket = createBluetoothSocket(device);
+            ConnectedThread connectedThread = new ConnectedThread(btSocket);
+            connectedThread.start();
+        } catch (IOException e) {
+            Toast.makeText(getContext(), "기기의 전원을 확인해주세요.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
