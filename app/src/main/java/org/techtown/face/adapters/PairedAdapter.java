@@ -21,16 +21,6 @@ import java.util.ArrayList;
 public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder> {
     ArrayList<Bluetooth> items = new ArrayList<>();
 
-    public interface OnItemClickListener {
-        void onItemClicked(int position, String address, boolean flag);
-    }
-
-    private PairedAdapter.OnItemClickListener itemClickListener;
-
-    public void setOnItemClickListener (PairedAdapter.OnItemClickListener listener) {
-        itemClickListener=listener;
-    }
-
     @NonNull
     @Override
     public PairedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -38,18 +28,6 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
         View itemView = inflater.inflate(R.layout.garden_item, viewGroup, false);
 
         PairedAdapter.ViewHolder viewHolder = new PairedAdapter.ViewHolder(itemView);
-
-        itemView.setOnClickListener(view -> {
-            int position = viewHolder.getAdapterPosition();
-            boolean flag = false;
-            String address = null;
-            if (position != RecyclerView.NO_POSITION) {
-                address = items.get(position).getAddress();
-                flag = true;
-            }
-            itemClickListener.onItemClicked(position, address, flag);
-        });
-
 
         return viewHolder;
     }
