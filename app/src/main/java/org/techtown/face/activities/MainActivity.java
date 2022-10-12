@@ -50,6 +50,16 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //ContactService 바인딩
+        Log.w(TAG, "onResume() 호출됨.");
+        Intent bIntent = new Intent(MainActivity.this, ContactService.class);
+        bIntent.setAction(Constants.ACTION_CALCULATE_EXPRESSION);
+        bindService(bIntent, connection, Context.BIND_AUTO_CREATE);
+    }
+
     FrameFragment frameFragment;
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
@@ -167,10 +177,6 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
         );
-        //표정 계산하기
-        Intent bIntent = new Intent(MainActivity.this, ContactService.class);
-        bIntent.setAction(Constants.ACTION_CALCULATE_EXPRESSION);
-        bindService(bIntent, connection, Context.BIND_AUTO_CREATE);
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
