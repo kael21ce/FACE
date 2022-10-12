@@ -2,9 +2,12 @@ package org.techtown.face.adapters;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.graphics.Color;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,15 +36,30 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.surround_item, viewGroup, false);
+        Handler mHandler = new Handler();
 
         SurroundAdapter.ViewHolder viewHolder = new SurroundAdapter.ViewHolder(itemView);
 
         itemView.setOnClickListener(view -> {
+            LinearLayout textContainer = itemView.findViewById(R.id.textContainer);
+            TextView surroundName = itemView.findViewById(R.id.surroundName);
+            TextView surroundAddress = itemView.findViewById(R.id.surroundAddress);
             int position = viewHolder.getAdapterPosition();
             String address = null;
             if (position != RecyclerView.NO_POSITION) {
                 address = items.get(position).getAddress();
             }
+            textContainer.setBackgroundColor(Color.parseColor("#3F51B5"));
+            surroundName.setTextColor(Color.WHITE);
+            surroundAddress.setTextColor(Color.WHITE);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    textContainer.setBackgroundColor(Color.parseColor("#FFF"));
+                    surroundName.setTextColor(Color.parseColor("#3F51B5"));
+                    surroundAddress.setTextColor(Color.parseColor("#919191"));
+                }
+            },300);
             itemClickListener.onItemClicked(position, address);
         });
 
