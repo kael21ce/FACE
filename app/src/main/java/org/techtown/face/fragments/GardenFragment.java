@@ -140,6 +140,8 @@ public class GardenFragment extends Fragment {
                 Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
             }
             startActivityForResult(enableBtIntent, REQUEST_ENABLED_BT);
+        } else {
+            Toast.makeText(v.getContext(), "블루투스가 활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
         }
 
         //페어링된 기기 목록
@@ -403,7 +405,8 @@ public class GardenFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                 }
                 garden.put(Constants.KEY_NAME, device.getName());
-                garden.put(Constants.KEY_USER, userIdToRegister);
+                garden.put(Constants.KEY_REGISTERED, userIdToRegister);
+                garden.put(Constants.KEY_USER, myId);
                 db.collection(Constants.KEY_COLLECTION_GARDEN).add(garden);
                 Log.w(TAG, "가족 정원이 등록되었습니다.");
                 Log.w(TAG, "등록 id: " + userIdToRegister);
