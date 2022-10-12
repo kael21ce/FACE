@@ -293,13 +293,6 @@ public class GardenFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("GardenFragment", "onDestroy() 호출됨.");
-        getActivity().unbindService(connection);
-    }
-
     //createBluetoothSocket 메서드
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         try {

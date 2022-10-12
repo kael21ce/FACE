@@ -40,6 +40,7 @@ import org.techtown.face.fragments.FrameFragment;
 import org.techtown.face.fragments.GardenFragment;
 import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
+import org.techtown.face.network.BluetoothService;
 import org.techtown.face.network.ContactService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         Intent bIntent = new Intent(MainActivity.this, ContactService.class);
         bIntent.setAction(Constants.ACTION_CALCULATE_EXPRESSION);
         bindService(bIntent, connection, Context.BIND_AUTO_CREATE);
+        //BluetoothService
+        Intent btIntent = new Intent(MainActivity.this, BluetoothService.class);
+        bindService(btIntent, connection, Context.BIND_AUTO_CREATE);
     }
 
     FrameFragment frameFragment;
