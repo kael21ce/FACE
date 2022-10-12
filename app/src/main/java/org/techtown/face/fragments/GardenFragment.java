@@ -184,24 +184,6 @@ public class GardenFragment extends Fragment {
         //주변 기기 목록
         deviceLocalArrayList = new ArrayList<>();
         deviceLocalNameList = new ArrayList<>();
-        //기기 검색
-        if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.BLUETOOTH_SCAN)
-                != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다."
-                    , Toast.LENGTH_LONG).show();
-        }
-        if (btAdapter.isDiscovering()) {
-            btAdapter.cancelDiscovery();
-        } else {
-            if (btAdapter.isEnabled()) {
-                btAdapter.startDiscovery();
-                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                getActivity().registerReceiver(receiver, filter);
-            } else {
-                Toast.makeText(v.getContext(), "블루투스 어댑터 연결에 실패했습니다."
-                        , Toast.LENGTH_LONG).show();
-            }
-        }
 
         //검색 버튼 클릭 시
         searchLocation.setOnClickListener(view -> {
@@ -223,6 +205,7 @@ public class GardenFragment extends Fragment {
                     surroundAdapter.clear();
                     btAdapter.startDiscovery();
                     Toast.makeText(v.getContext(), "기기 검색을 시작합니다.", Toast.LENGTH_SHORT).show();
+                    locationExist.setVisibility(View.VISIBLE);
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
                     getActivity().registerReceiver(receiver, filter);
                 }
@@ -238,8 +221,28 @@ public class GardenFragment extends Fragment {
         surroundAdapter.setOnItemClickListener((position, address) -> {
             BluetoothDevice device = btAdapter.getRemoteDevice(address);
             Log.d(TAG, "Clicked device: " + device.getName() + " / " + address);
-            registerDevice(v.getContext(), address);
+            final String[] userId = new String[1];
+            db.collection(Constants.KEY_COLLECTION_GARDEN).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (address.equals(document.getString(Constants.KEY_ADDRESS))) {
+                            userId[0] = document.getString(Constants.KEY_USER);
+                        }
+                    }
+                }
+            });
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (userId[0].equals(myId)) {
+                        Toast.makeText(v.getContext(), "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
+                    } else {
+                        registerDevice(v.getContext(), address);
+                    }
+                }
+            }, 2000);
         });
+
 
         return v;
     }
@@ -283,7 +286,11 @@ public class GardenFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.d("GardenFragment", "onDestroyView() 호출됨.");
-        requireActivity().unregisterReceiver(receiver);
+        try {
+            getActivity().unregisterReceiver(receiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -388,6 +395,7 @@ public class GardenFragment extends Fragment {
                 db.collection(Constants.KEY_COLLECTION_GARDEN).add(garden);
                 Log.w(TAG, "가족 정원이 등록되었습니다.");
                 Log.w(TAG, "등록 id: " + userIdToRegister);
+                Toast.makeText(getContext(), "등록되었습니다!", Toast.LENGTH_SHORT).show();
                 registerDialog.dismiss();
             }
         });

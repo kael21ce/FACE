@@ -1,6 +1,7 @@
 package org.techtown.face.network;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,6 +9,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,9 +25,6 @@ import org.techtown.face.utilites.PreferenceManager;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public class BluetoothService extends Service {
@@ -35,6 +34,7 @@ public class BluetoothService extends Service {
     ConnectedThread connectedThread;
     BluetoothSocket btSocket;
     final static String TAG = "FACEBluetooth";
+    Handler mHandler = new Handler();
 
     private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
@@ -43,88 +43,39 @@ public class BluetoothService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.w(TAG, "onBind() 호출됨.");
         preferenceManager = new PreferenceManager(getApplicationContext());
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
                 != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getApplicationContext(), "블루투스 권한 확인 필요", Toast.LENGTH_SHORT).show();
         }
-        Set<BluetoothDevice> bluetoothDevices = btAdapter.getBondedDevices();
-        for (BluetoothDevice btDevice : bluetoothDevices) {
-            db.collection(Constants.KEY_COLLECTION_GARDEN)
-                    .get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getString(Constants.KEY_USER).equals(myId)) {
-                                    String address = document.getString(Constants.KEY_ADDRESS);
-                                    if (address.equals(btDevice.getAddress())) {
-                                        boolean flag = true;
-                                        if (isConnected(btDevice)) {
-                                            try {
-                                                btSocket = createBluetoothSocket(btDevice);
-                                                btSocket.connect();
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                                flag = false;
+        db.collection(Constants.KEY_COLLECTION_GARDEN).whereEqualTo(Constants.KEY_USER, myId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String registeredId = document.getString(Constants.KEY_REGISTERED);
+                            final String[] expresison = new String[1];
+                            //표정 가져오기
+                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(myId)
+                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                    .whereEqualTo(Constants.KEY_USER, registeredId)
+                                    .get().addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                expresison[0] = documentSnapshot.get(Constants.KEY_EXPRESSION).toString();
                                             }
-                                            if (flag) {
-                                                //expression 가져오기
-                                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                                        .document(myId)
-                                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                                        .get()
-                                                        .addOnCompleteListener(task1 -> {
-                                                            if (task1.isSuccessful()) {
-                                                                for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                                                    if (Objects.equals(documentSnapshot.get(Constants.KEY_USER), document.get(Constants.KEY_REGISTERED))) {
-                                                                        if (btSocket != null) {
-                                                                            connectedThread = new ConnectedThread(btSocket);
-                                                                            connectedThread.start();
-                                                                        }
-                                                                        connectedThread.write(documentSnapshot
-                                                                                .get(Constants.KEY_EXPRESSION).toString());
-                                                                        Log.w(TAG, "Expression " + documentSnapshot
-                                                                                .get(Constants.KEY_EXPRESSION).toString()
-                                                                                + " is sent to " + btDevice.getName());
-                                                                    } else {
-                                                                        Toast.makeText(getApplicationContext(),
-                                                                                "가족 정원이 등록되지 않았습니다.",
-                                                                                Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                }
-                                                            }
-                                                        });
-                                            } else {
-                                                Toast.makeText(getApplicationContext(),
-                                                        "가족 정원이 주변에 있지 않습니다.",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            try {
-                                                btSocket = createBluetoothSocket(btDevice);
-                                                btSocket.connect();
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                                flag = false;
-                                            }
-                                            if (flag) {
-                                                connectedThread = new ConnectedThread(btSocket);
-                                                connectedThread.start();
-                                            } else {
-                                                Toast.makeText(getApplicationContext(),
-                                                        "가족 정원이 주변에 있지 않습니다.",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-
-
                                         }
-                                        }
-                                    }
-
-                                }
-                            }
-                    });
-        }
+                                    });
+                            mHandler.postDelayed(() -> {
+                                writeToDevice(document.getString(Constants.KEY_ADDRESS), expresison[0]);
+                                Log.w(TAG,  document.getString(Constants.KEY_NAME) + "에 전해진 표정: " + expresison[0]);
+                            },1000);
+                        }
+                    }
+                });
         return new BtBinder();
     }
 
@@ -163,6 +114,35 @@ public class BluetoothService extends Service {
             return connected;
         } catch (Exception e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void writeToDevice(String deviceAddress, String input) {
+        if (btAdapter.isDiscovering()) {
+            btAdapter.cancelDiscovery();
+        }
+        BluetoothDevice device = btAdapter.getRemoteDevice(deviceAddress);
+        boolean flag = true;
+        try {
+            btSocket = createBluetoothSocket(device);
+            try {
+                btSocket.connect();
+            } catch (IOException closeException) {
+                flag = false;
+                Log.e(TAG, "Could not close the client socket", closeException);
+            }
+        } catch (IOException e) {
+            flag = false;
+            Log.e(TAG, "Not in location: " + device.getName(), e);
+            Toast.makeText(getApplicationContext(), "기기가 주변에 없습니다."
+                    , Toast.LENGTH_LONG).show();
+        }
+
+        if (flag) {
+            connectedThread = new ConnectedThread(btSocket);
+            connectedThread.start();
+            connectedThread.write(input);
         }
     }
 }
