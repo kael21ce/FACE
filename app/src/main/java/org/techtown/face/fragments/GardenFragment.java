@@ -205,7 +205,6 @@ public class GardenFragment extends Fragment {
                     surroundAdapter.clear();
                     btAdapter.startDiscovery();
                     Toast.makeText(v.getContext(), "기기 검색을 시작합니다.", Toast.LENGTH_SHORT).show();
-                    locationExist.setVisibility(View.VISIBLE);
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
                     getActivity().registerReceiver(receiver, filter);
                 }
