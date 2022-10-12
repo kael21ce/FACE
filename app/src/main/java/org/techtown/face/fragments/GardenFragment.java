@@ -236,13 +236,9 @@ public class GardenFragment extends Fragment {
 
         //터치 이벤트 추가 - 기기 연결 상태 바꾸는 것 필요
         surroundAdapter.setOnItemClickListener((position, address) -> {
-            device = btAdapter.getRemoteDevice(address);
-            connectDevice(address);
-            // 데이터베이스에 등록하기
-            registerDialog = new Dialog(v.getContext());
-            registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            registerDialog.setContentView(R.layout.dialog_btregister);
-            showRegisterDialog(device);
+            BluetoothDevice device = btAdapter.getRemoteDevice(address);
+            Log.d(TAG, "Clicked device: " + device.getName() + " / " + address);
+            registerDevice(v.getContext(), address);
         });
 
         return v;
@@ -397,17 +393,35 @@ public class GardenFragment extends Fragment {
         });
     }
     @SuppressLint("MissingPermission")
-    private void connectDevice(String deviceAddress) {
+    private void registerDevice(Context context, String deviceAddress) {
         if (btAdapter.isDiscovering()) {
             btAdapter.cancelDiscovery();
         }
         device = btAdapter.getRemoteDevice(deviceAddress);
+        boolean flag = true;
         try {
             btSocket = createBluetoothSocket(device);
-            ConnectedThread connectedThread = new ConnectedThread(btSocket);
-            connectedThread.start();
+            try {
+                btSocket.connect();
+            } catch (IOException closeException) {
+                flag = false;
+                Log.e(TAG, "Could not close the client socket", closeException);
+            }
         } catch (IOException e) {
-            Toast.makeText(getContext(), "기기의 전원을 확인해주세요.", Toast.LENGTH_SHORT).show();
+            flag = false;
+            Log.e(TAG, "Not in location-2: " + device.getName(), e);
+            Toast.makeText(getContext(), "기기가 주변에 없습니다."
+                    , Toast.LENGTH_LONG).show();
+        }
+
+        if (flag) {
+            connectedThread = new ConnectedThread(btSocket);
+            connectedThread.start();
+            //등록하기
+            registerDialog = new Dialog(context);
+            registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            registerDialog.setContentView(R.layout.dialog_btregister);
+            showRegisterDialog(device);
         }
     }
 }

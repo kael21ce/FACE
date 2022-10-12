@@ -55,11 +55,12 @@ public class SurroundAdapter extends RecyclerView.Adapter<SurroundAdapter.ViewHo
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    textContainer.setBackgroundColor(Color.parseColor("#FFF"));
+                    textContainer.setBackgroundColor(Color.WHITE);
+                    textContainer.setBackgroundResource(R.drawable.border_layout);
                     surroundName.setTextColor(Color.parseColor("#3F51B5"));
                     surroundAddress.setTextColor(Color.parseColor("#919191"));
                 }
-            },300);
+            },500);
             itemClickListener.onItemClicked(position, address);
         });
 
