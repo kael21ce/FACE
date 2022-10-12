@@ -209,9 +209,6 @@ public class GardenFragment extends Fragment {
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
                     getActivity().registerReceiver(receiver, filter);
                 }
-                if (deviceLocalArrayList.size()==0) {
-                    locationExist.setVisibility(View.VISIBLE);
-                }
             } else {
                 Toast.makeText(v.getContext(), "블루투스가 비활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
             }
