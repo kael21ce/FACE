@@ -130,9 +130,9 @@
         android:focusable="true">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/family" />
+            android:layout_width="62dp"
+            android:layout_height="63dp"
+            app:srcCompat="@drawable/group" />
 
         <TextView
             android:layout_width="0dp"
