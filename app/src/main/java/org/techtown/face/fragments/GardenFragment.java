@@ -54,49 +54,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GardenFragment extends Fragment {
-    @Override
-    public void onResume() {
-        super.onResume();
-        //페어링된 기기 목록
-        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
-        devicePairedArrayList = new ArrayList<>();
-        devicePairedNameList = new ArrayList<>();
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getActivity().getApplicationContext(), "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
-        }
-        pairedDevices = btAdapter.getBondedDevices();
-        if (pairedDevices.size() > 0) {
-            for (BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress();
-                if (deviceName!=null && deviceName.contains(garden)) {
-                    devicePairedArrayList.add(deviceHardwareAddress);
-                    devicePairedNameList.add(deviceName);
-                }
-            }
-        } else {
-            containerExist.setVisibility(View.VISIBLE);
-        }
-
-        int pairedLength = devicePairedArrayList.size();
-        //데이터베이스에서 user와 myId가 일치하는 것만 가져오기
-        db.collection(Constants.KEY_COLLECTION_GARDEN).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    for (int i = 0; i < pairedLength; i++) {
-                        if (devicePairedArrayList.get(i).equals(document.getString(Constants.KEY_ADDRESS))
-                                && document.getString(Constants.KEY_USER).equals(myId)) {
-                            pairedAdapter.addItem(new Bluetooth(document.getString(Constants.KEY_NAME),
-                                    document.getString(Constants.KEY_ADDRESS), false));
-                            Log.w(TAG, "페어링 아이템 추가됨: " + document.getString(Constants.KEY_NAME));
-                        }
-                    }
-                }
-            }
-            gardenRecycler.setAdapter(pairedAdapter);
-            Log.w(TAG, "Adapter is set");
-        });
-    }
 
     TextView locationExist;
     Button searchLocation;
