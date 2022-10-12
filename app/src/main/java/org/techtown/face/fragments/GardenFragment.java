@@ -26,8 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,7 +50,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -217,26 +214,24 @@ public class GardenFragment extends Fragment {
         surroundAdapter.setOnItemClickListener((position, address) -> {
             BluetoothDevice device = btAdapter.getRemoteDevice(address);
             Log.d(TAG, "Clicked device: " + device.getName() + " / " + address);
-            final String[] userId = new String[1];
+            final String[] userId = {""};
             db.collection(Constants.KEY_COLLECTION_GARDEN).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (address.equals(document.getString(Constants.KEY_ADDRESS))) {
                             userId[0] = document.getString(Constants.KEY_USER);
+                            Log.w(TAG, "내가 등록함: " + userId[0]);
                         }
                     }
                 }
             });
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (userId[0].equals(myId)) {
-                        Toast.makeText(v.getContext(), "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
-                    } else {
-                        registerDevice(v.getContext(), address);
-                    }
+            mHandler.postDelayed(() -> {
+                if (userId[0].equals(myId)) {
+                    Toast.makeText(v.getContext(), "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
+                } else {
+                    registerDevice(v.getContext(), address);
                 }
-            }, 2000);
+            }, 1000);
         });
 
 
