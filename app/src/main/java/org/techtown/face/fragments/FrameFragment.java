@@ -59,6 +59,7 @@ public class FrameFragment extends Fragment {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             User user = new User();
+                            user.name = document.getString(Constants.KEY_NAME);
                             user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                             user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
@@ -69,7 +70,6 @@ public class FrameFragment extends Fragment {
                             firestore.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
                                     DocumentSnapshot snapshot = task1.getResult();
-                                    user.name = snapshot.get(Constants.KEY_NAME).toString();
                                     user.image= snapshot.get(Constants.KEY_IMAGE).toString();
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
