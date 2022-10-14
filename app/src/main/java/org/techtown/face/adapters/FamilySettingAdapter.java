@@ -78,7 +78,6 @@ public class FamilySettingAdapter extends RecyclerView.Adapter<FamilySettingAdap
 
                 add.setText("보기");
                 add.setOnClickListener(v -> {
-                    add.setVisibility(View.INVISIBLE);
                     Intent intent = new Intent(itemView.getContext(), FamilyViewActivity.class);//여기 새로 만들어서 채워
                     intent.putExtra(Constants.KEY_USER, item.getUserContact());
                     itemView.getContext().startActivity(intent);
