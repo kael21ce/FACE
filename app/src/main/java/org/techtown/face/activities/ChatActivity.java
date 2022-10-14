@@ -83,6 +83,23 @@ public class ChatActivity extends BaseActivity {
         message.put(Constants.KEY_MESSAGE,binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP,new Date());
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+        long date = System.currentTimeMillis();
+        HashMap<String,Object> window = new HashMap<>();
+        window.put(Constants.KEY_WINDOW, date);
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(receiverUser.id)
+                .collection(Constants.KEY_COLLECTION_USERS)
+                .whereEqualTo(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID))
+                .addSnapshotListener((value, error) -> {
+                    for(DocumentChange change : value.getDocumentChanges()){
+                        String docId = change.getDocument().getId();
+                        database.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(receiverUser.id)
+                                .collection(Constants.KEY_COLLECTION_USERS)
+                                .document(docId)
+                                .update(window);
+                    }
+                });
         if (conversionId != null){
             updateConversion(binding.inputMessage.getText().toString());
         }else {
