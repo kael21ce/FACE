@@ -63,12 +63,14 @@ public class AccountActivity extends BaseActivity {
                 database.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID));
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
+
         documentReference.update(updates).addOnSuccessListener(unused -> {
                     preferenceManager.clear();
+
                     startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                     finish();
                 })
-                .addOnFailureListener(e -> showToast("Unable to sign out"));
+                .addOnFailureListener(e -> {Log.e("This", "IS problem"); showToast("Unable to sign out");});
     }
 
     private void deleteUser(){

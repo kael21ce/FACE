@@ -39,6 +39,12 @@ public class FamilyViewActivity extends AppCompatActivity {
         binding.themeLike.setText(user.like);
         binding.themeDislike.setText(user.dislike);
 
+        binding.deleteFamily.setOnClickListener(v -> {
+            Intent intent1 = new Intent(FamilyViewActivity.this, FamilyDeleteActivity.class);
+            intent1.putExtra(Constants.KEY_USER, user);
+            startActivity(intent1);
+        });
+
         binding.add.setOnClickListener(v -> {
             String name = binding.nameTxt.getText().toString();
             String idealContact = binding.idealContact.getText().toString();
@@ -61,7 +67,8 @@ public class FamilyViewActivity extends AppCompatActivity {
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
                     .collection(Constants.KEY_COLLECTION_USERS)
                     .whereEqualTo(Constants.KEY_USER, user.id)
-                    .get().addOnCompleteListener(task -> {
+                    .get()
+                    .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot snapshot : task.getResult()){
                                 String thisId = snapshot.getId();

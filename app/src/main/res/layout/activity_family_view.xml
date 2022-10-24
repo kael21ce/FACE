@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:minHeight="48dp"
             android:text="Name" />
 
         <TextView
@@ -97,6 +98,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="변경하기" />
+
+        <Button
+            android:id="@+id/deleteFamily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="삭제하기" />
     </LinearLayout>
 
 </ScrollView>
