@@ -80,7 +80,7 @@ public class SignInActivity extends AppCompatActivity {
                 Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_CONNECT
+                Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.POST_NOTIFICATIONS
         };
         checkPermissions(permissions);
         //
