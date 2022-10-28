@@ -1,7 +1,5 @@
 package org.techtown.face.activities;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +24,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
+    String TAG = "MainActivity";
 
     ActionBar abar;
 
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         db = FirebaseFirestore.getInstance();
         getToken();
-        Handler mHandler = new Handler();
 
         preferenceManager = new PreferenceManager(MainActivity.this);
 
@@ -181,6 +181,22 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
         );
+
+        //Get Token for Test Message
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.w(TAG, token);
+                    }
+                });
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
