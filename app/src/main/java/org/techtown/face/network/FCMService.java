@@ -1,16 +1,30 @@
 package org.techtown.face.network;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
+import android.util.Log;
 
-public class FCMService extends Service {
+import androidx.annotation.NonNull;
+
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+public class FCMService extends FirebaseMessagingService {
     public FCMService() {
+        super();
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+    }
+
+    String TAG = "FCMService";
+
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage message) {
+        super.onMessageReceived(message);
+        Log.d(TAG, "From: " + message.getFrom());
+        if (message.getData().size() > 0) {
+            Log.w(TAG, "Message data payload: " + message.getData());
+        }
     }
 }
