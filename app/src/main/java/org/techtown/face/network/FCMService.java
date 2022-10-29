@@ -37,6 +37,10 @@ public class FCMService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
+        if (!message.getData().isEmpty()) {
+            showNotification(message.getData().get("title"), message.getData().get("body"));
+            Log.w(TAG, message.getData().get("title") + "-" + message.getData().get("body"));
+        }
         if (message.getNotification() != null) {
             showNotification(message.getNotification().getTitle(), message.getNotification().getBody());
             Log.w(TAG, message.getNotification().getTitle() + "-" + message.getNotification().getBody());
