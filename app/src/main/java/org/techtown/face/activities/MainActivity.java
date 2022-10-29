@@ -110,16 +110,16 @@ public class MainActivity extends AppCompatActivity {
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.drawable.user_icon)
                         .setContentTitle("FACE")
-                        .setContentText("설정 창이 열렸습니다.").setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setContentText("설정 창이 열렸습니다.")
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
                         .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
                 notificationManager.notify(101, mBuilder.build());
+                startActivity(nIntent);
 
-                Intent settingIntent = new Intent(this, SettingActivity.class);
-                startActivity(settingIntent);
                 break;
             case R.id.add_moment:
                 Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

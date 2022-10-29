@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 위치 접근 권한 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 정확한 위치 권한 -->
@@ -27,15 +27,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FACE"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31" >
+        tools:targetApi="31">
         <service
-            android:name=".network.FCMService"
+            android:name=".network.NotificationService"
             android:enabled="true"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
+            android:exported="true">
         </service>
+
 
         <activity
             android:name=".activities.FamilyDeleteActivity"
@@ -84,7 +82,7 @@
         <receiver
             android:name=".utilites.ContactReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -125,7 +123,7 @@
         <activity
             android:name=".activities.SignInActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
