@@ -1,6 +1,5 @@
 package org.techtown.face.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import org.techtown.face.R;
 import org.techtown.face.models.MeetItem;
 import org.techtown.face.utilites.Constants;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;

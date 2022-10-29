@@ -24,6 +24,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
@@ -218,6 +219,23 @@ public class ChatActivity extends BaseActivity {
         });
     }
     private void listenMessages(){
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .whereEqualTo(Constants.KEY_NOTIFICATION, Constants.KEY_COLLECTION_CHAT)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot snapshot: task.getResult()){
+                            String id = snapshot.getId();
+                            database.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                                    .document(id)
+                                    .delete();
+                        }
+                    }
+                });
         database.collection(Constants.KEY_COLLECTION_CHAT)
                 .whereEqualTo(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID))
                 .whereEqualTo(Constants.KEY_RECEIVER_ID,receiverUser.id)

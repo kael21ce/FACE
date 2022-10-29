@@ -31,6 +31,25 @@ public class FamilyViewActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra(Constants.KEY_USER);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .whereEqualTo(Constants.KEY_NOTIFICATION, Constants.KEY_FAMILY_REQUEST)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot snapshot : task.getResult()){
+                            String id = snapshot.getId();
+                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                                    .document(id)
+                                    .delete();
+                        }
+                    }
+                });
 
         binding.nameTxt.setText(user.name);
         binding.mobile.setText(user.mobile);
@@ -62,7 +81,7 @@ public class FamilyViewActivity extends AppCompatActivity {
             contents.put(Constants.KEY_THEME_DISLIKE, dislike);
 
             //나의 상대방에게 이름 변경하기
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
                     .collection(Constants.KEY_COLLECTION_USERS)

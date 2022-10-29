@@ -37,6 +37,24 @@ public class AddActivity extends AppCompatActivity {
         String myName = preferenceManager.getString(Constants.KEY_NAME);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .whereEqualTo(Constants.KEY_NOTIFICATION, Constants.KEY_MEET)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot snapshot : task.getResult()){
+                            String id = snapshot.getId();
+                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                                    .document(id)
+                                    .delete();
+                        }
+                    }
+                });
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(myId)
                 .collection(Constants.KEY_COLLECTION_CLOUD)
