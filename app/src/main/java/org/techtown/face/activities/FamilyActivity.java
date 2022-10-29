@@ -3,6 +3,7 @@ package org.techtown.face.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,11 +57,22 @@ public class FamilyActivity extends BaseActivity {
         HashMap<String, Object> meetRequest = new HashMap<>();
         meetRequest.put(Constants.KEY_TYPE,Constants.KEY_MEET_REQUEST);
         meetRequest.put(Constants.KEY_NOTIFICATION, preferenceManager.getString(Constants.KEY_USER_ID));
+
+        HashMap<String, Object> notification = new HashMap<>();
+        notification.put(Constants.KEY_NOTIFICATION, Constants.KEY_MEET);
+        notification.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(user.id)
                 .collection(Constants.KEY_COLLECTION_NOTIFICATION)
                 .add(meetRequest)
                 .addOnCompleteListener(task -> Toast.makeText(this, "요청이 성공하였습니다.",Toast.LENGTH_SHORT).show());
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(user.id)
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .add(notification)
+                .addOnCompleteListener(task -> Log.e("su","ccess"));
     }
 }

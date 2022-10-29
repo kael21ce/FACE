@@ -67,16 +67,10 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
             meet.put(Constants.KEY_WINDOW, now);
             meet.put(Constants.KEY_EXPRESSION, 5);
 
-            HashMap<String, Object> notification = new HashMap<>();
-            notification.put(Constants.KEY_NOTIFICATION, Constants.KEY_MEET);
-            notification.put(Constants.KEY_NAME, item.getMyName());
+
 
             //대면 만남 수락 버튼을 누르면 나의 users 데이터베이스와 상대방의 users의 데이터 베이스의 대면 만남 정보가 업데이트 된다.
             addMeet.setOnClickListener(v -> {
-                db.collection(Constants.KEY_COLLECTION_USERS)
-                        .document(item.getUserId())
-                        .collection(Constants.KEY_COLLECTION_NOTIFICATION)
-                        .add(notification);
 
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())

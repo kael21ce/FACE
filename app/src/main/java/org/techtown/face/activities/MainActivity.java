@@ -45,6 +45,7 @@ import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
 import org.techtown.face.network.BluetoothService;
 import org.techtown.face.network.ContactService;
+import org.techtown.face.network.NotificationService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
@@ -159,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
         getToken();
 
         createNotificationChannel();
+        Intent notiIntent = new Intent(this, NotificationService.class);
+        startService(notiIntent);
 
         preferenceManager = new PreferenceManager(MainActivity.this);
 

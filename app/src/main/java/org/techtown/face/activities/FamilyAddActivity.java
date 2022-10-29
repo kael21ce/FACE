@@ -77,7 +77,7 @@ public class FamilyAddActivity extends AppCompatActivity {
                     .document(userId)
                     .collection(Constants.KEY_COLLECTION_NOTIFICATION)
                     .add(notification);
-            
+
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
                     .collection(Constants.KEY_COLLECTION_USERS)
