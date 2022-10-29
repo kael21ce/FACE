@@ -32,6 +32,7 @@ public class FCMService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
+        Log.w(TAG, "onNewToken 호출됨: " + token);
     }
 
     @Override
