@@ -1,5 +1,9 @@
 package org.techtown.face.activities;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +11,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -23,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
     String TAG = "MainActivity";
+    String CHANNEL_ID = "test";
+    String DESCRIPTION = "For the test push notification";
 
     ActionBar abar;
 
@@ -101,6 +108,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(addIntent);
                 break;
             case R.id.setting:
+                Intent nIntent = new Intent(this, SettingActivity.class);
+                nIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, nIntent,
+                        PendingIntent.FLAG_IMMUTABLE);
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.user_icon)
+                        .setContentTitle("FACE")
+                        .setContentText("설정 창이 열렸습니다.").setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.notify(101, mBuilder.build());
+
                 Intent settingIntent = new Intent(this, SettingActivity.class);
                 startActivity(settingIntent);
                 break;
@@ -201,6 +224,18 @@ public class MainActivity extends AppCompatActivity {
                         Log.w(TAG, token);
                     }
                 });
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = CHANNEL_ID;
+            String description = DESCRIPTION;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
