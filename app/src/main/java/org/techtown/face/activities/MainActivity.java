@@ -29,8 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,7 +45,6 @@ import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
 import org.techtown.face.network.BluetoothService;
 import org.techtown.face.network.ContactService;
-import org.techtown.face.network.FCMService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
@@ -68,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
         //BluetoothService
         Intent btIntent = new Intent(MainActivity.this, BluetoothService.class);
         bindService(btIntent, connection, Context.BIND_AUTO_CREATE);
-        //FCMService
-        Intent fcm = new Intent(getApplicationContext(), FCMService.class);
-        startService(fcm);
     }
 
     FrameFragment frameFragment;
@@ -210,22 +204,6 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
         );
-
-        //Get Token for Test Message
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-                        Log.w(TAG, token);
-                    }
-                });
     }
 
     private void createNotificationChannel() {
