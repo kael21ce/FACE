@@ -34,6 +34,7 @@ public class AddActivity extends AppCompatActivity {
         MeetAdapter meetAdapter = new MeetAdapter();
 
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+        String myName = preferenceManager.getString(Constants.KEY_NAME);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Constants.KEY_COLLECTION_USERS)
@@ -52,7 +53,7 @@ public class AddActivity extends AppCompatActivity {
                                         String path = documentSnapshot.getString(Constants.KEY_PATH);
                                         String name = documentSnapshot.getString(Constants.KEY_NAME);
                                         String mobile = documentSnapshot.getString(Constants.KEY_MOBILE);
-                                        meetAdapter.addItem(new MeetItem(path, name, mobile, myId, userId, docId));
+                                        meetAdapter.addItem(new MeetItem(path, name, mobile, myId, myName, userId, docId));
                                         addRecyclerView.setAdapter(meetAdapter);
                                     }
                                 });

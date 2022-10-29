@@ -82,10 +82,13 @@ public class ChatActivity extends BaseActivity {
         message.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
         message.put(Constants.KEY_MESSAGE,binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP,new Date());
+
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+
         long date = System.currentTimeMillis();
         HashMap<String,Object> window = new HashMap<>();
         window.put(Constants.KEY_WINDOW, date);
+
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .document(receiverUser.id)
                 .collection(Constants.KEY_COLLECTION_USERS)
@@ -100,6 +103,18 @@ public class ChatActivity extends BaseActivity {
                                 .update(window);
                     }
                 });
+
+
+        HashMap<String,Object> notification = new HashMap<>();
+        notification.put(Constants.KEY_NOTIFICATION, Constants.KEY_COLLECTION_CHAT);
+        notification.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+        notification.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
+
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(receiverUser.id)
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .add(notification);
+
         if (conversionId != null){
             updateConversion(binding.inputMessage.getText().toString());
         }else {

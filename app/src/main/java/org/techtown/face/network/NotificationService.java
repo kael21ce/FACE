@@ -32,12 +32,17 @@ public class NotificationService extends Service {
         if(intent==null){
             return NotificationService.START_STICKY;
         }else{
-            notificationRead(intent);
+            notificationRead();
         }
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public void notificationRead(Intent intent){
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    public void notificationRead(){
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Constants.KEY_COLLECTION_USERS)
@@ -90,12 +95,5 @@ public class NotificationService extends Service {
                        }
                    }
                 });
-    }
-
-
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 }

@@ -5,14 +5,16 @@ public class MeetItem {
     String name;
     String mobile;
     String myId;
+    String myName;
     String userId;
     String docId;
 
-    public MeetItem(String path, String name, String mobile, String myId, String userId, String docId){
+    public MeetItem(String path, String name, String mobile, String myId, String myName, String userId, String docId){
         this.path = path;
         this.name = name;
         this.mobile = mobile;
         this.myId = myId;
+        this.myName = myName;
         this.userId = userId;
         this.docId =docId;
     }
@@ -55,6 +57,14 @@ public class MeetItem {
 
     public void setMyId(String myId) {
         this.myId = myId;
+    }
+
+    public String getMyName() {
+        return myName;
+    }
+
+    public void setMyName(String myName) {
+        this.myName = myName;
     }
 
     public String getDocId() {

@@ -67,7 +67,17 @@ public class FamilyAddActivity extends AppCompatActivity {
             myUser.put(Constants.KEY_THEME_LIKE, like);
             myUser.put(Constants.KEY_THEME_DISLIKE, dislike);
 
+            HashMap<String,Object> notification = new HashMap<>();
+            notification.put(Constants.KEY_NOTIFICATION, Constants.KEY_FAMILY_REQUEST);
+            notification.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+
+
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(userId)
+                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                    .add(notification);
+            
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
                     .collection(Constants.KEY_COLLECTION_USERS)
