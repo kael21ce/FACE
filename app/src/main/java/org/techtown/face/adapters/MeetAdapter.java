@@ -113,7 +113,7 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
                 addMeet.setVisibility(View.INVISIBLE);
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(item.getMyId())
-                        .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                        .collection(Constants.KEY_COLLECTION_CLOUD)
                         .document(item.getDocId())
                         .delete()
                         .addOnCompleteListener(task -> Toast.makeText(itemView.getContext(), "요청이 수락되었습니다.",Toast.LENGTH_SHORT).show());

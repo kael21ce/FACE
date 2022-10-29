@@ -63,7 +63,6 @@ public class SearchActivity extends AppCompatActivity {
                     while (pCur.moveToNext()) {
                         phoneNum[i] = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         phoneType[i] = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                        Log.e("THis", "is->"+name+phoneNum[i]+"  "+i);
                         i++;
                     }
                     String str = phoneNum[0];

@@ -63,11 +63,12 @@ public class FamilyActivity extends BaseActivity {
         notification.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(user.id)
-                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .collection(Constants.KEY_COLLECTION_CLOUD)
                 .add(meetRequest)
-                .addOnCompleteListener(task -> Toast.makeText(this, "요청이 성공하였습니다.",Toast.LENGTH_SHORT).show());
+                .addOnCompleteListener(task -> {if(task.isSuccessful()){Toast.makeText(this, "요청이 성공하였습니다.",Toast.LENGTH_SHORT).show();}});
 
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(user.id)

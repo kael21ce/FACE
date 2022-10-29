@@ -39,7 +39,7 @@ public class AddActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(myId)
-                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .collection(Constants.KEY_COLLECTION_CLOUD)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult().size() > 0) {

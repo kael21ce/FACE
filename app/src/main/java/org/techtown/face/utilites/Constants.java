@@ -53,6 +53,7 @@ public class Constants {
 
     public static final String KEY_PATH = "path";
     public static final String KEY_COLLECTION_NOTIFICATION = "notifications";
+    public static final String KEY_COLLECTION_CLOUD = "cloud";
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_TYPE = "type";
     public static final String KEY_FAMILY_REQUEST = "family_request";
