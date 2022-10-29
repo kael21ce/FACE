@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.checkerframework.checker.units.qual.C;
 import org.techtown.face.databinding.ActivityFamilyAddBinding;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
@@ -68,9 +67,6 @@ public class FamilyAddActivity extends AppCompatActivity {
             myUser.put(Constants.KEY_THEME_LIKE, like);
             myUser.put(Constants.KEY_THEME_DISLIKE, dislike);
 
-            HashMap<String,Object> notification = new HashMap<>();
-            notification.put(Constants.KEY_NAME, name);
-
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
@@ -81,11 +77,6 @@ public class FamilyAddActivity extends AppCompatActivity {
                     .document(userId)
                     .collection(Constants.KEY_COLLECTION_USERS)
                     .add(myUser);
-
-            db.collection(Constants.KEY_COLLECTION_USERS)
-                    .document(userId)
-                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
-                    .add(notification);
 
             Intent intent1 = new Intent(FamilyAddActivity.this, MainActivity.class);
             startActivity(intent1);
