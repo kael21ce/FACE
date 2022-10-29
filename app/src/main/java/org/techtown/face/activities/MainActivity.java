@@ -164,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         getToken();
 
+        createNotificationChannel();
+
         preferenceManager = new PreferenceManager(MainActivity.this);
 
         frameFragment = new FrameFragment();
