@@ -2,6 +2,7 @@ package org.techtown.face.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +28,7 @@ public class AddActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(AddActivity.this);
         setContentView(R.layout.activity_add);
         RecyclerView addRecyclerView = findViewById(R.id.addRecyclerView);
-        FloatingActionButton addButton = findViewById(R.id.addFloatingActionButton);
+        Button addButton = findViewById(R.id.familyAdd);
         LinearLayoutManager layoutManager = new LinearLayoutManager(AddActivity.this,
                 LinearLayoutManager.VERTICAL, false);
         addRecyclerView.setLayoutManager(layoutManager);
