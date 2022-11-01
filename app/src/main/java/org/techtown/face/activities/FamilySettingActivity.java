@@ -41,15 +41,14 @@ public class FamilySettingActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             User user = new User();
                             user.id = document.getString(Constants.KEY_USER);
-                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                            firestore.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
+                            db.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
                                     DocumentSnapshot snapshot = task1.getResult();
                                     user.name = snapshot.get(Constants.KEY_NAME).toString();
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
 
-                                    firestore.collection(Constants.KEY_COLLECTION_USERS)
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
                                             .document(user.id)
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .whereEqualTo(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID))

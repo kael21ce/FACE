@@ -17,6 +17,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -28,12 +30,12 @@
         android:theme="@style/Theme.FACE"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <service
             android:name=".network.NotificationService"
             android:enabled="true"
             android:exported="true">
         </service>
-
 
         <activity
             android:name=".activities.FamilyDeleteActivity"
