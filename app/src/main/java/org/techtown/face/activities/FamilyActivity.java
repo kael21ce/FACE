@@ -39,7 +39,7 @@ public class FamilyActivity extends BaseActivity {
         binding.exit.setOnClickListener(v -> finish());
         binding.familyName.setText(user.name);
         binding.hope.setText(user.name + "의 마음을 전합니다");
-        binding.minContact.setText("아무리 적어도 " + user.min_contact + "에 1번씩은 연락하면 좋겠어...");
+        binding.minContact.setText("아무리 적어도 " + user.min_contact + "일에 1번씩은 연락하면 좋겠어...");
         binding.idealContact.setText(user.ideal_contact + "일에 1번씩 연락하면 정말 좋을 것 같아!");
         binding.callButton.setOnClickListener(v -> {
             Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + user.mobile));
