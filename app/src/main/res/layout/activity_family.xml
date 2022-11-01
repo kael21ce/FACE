@@ -172,12 +172,15 @@
         android:id="@+id/dividerBottom"
         android:layout_width="match_parent"
         android:layout_height="5dp"
+        android:layout_marginBottom="11dp"
         android:background="@color/FACE_color"
         android:backgroundTint="#3F51B5"
+        app:layout_constraintBottom_toTopOf="@+id/momentButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="384dp" />
+        app:layout_constraintTop_toBottomOf="@+id/hope"
+        app:layout_constraintVertical_bias="0.972" />
 
     <Button
         android:id="@+id/momentButton"
@@ -202,8 +205,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/dividerBottom"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hope">
+        app:layout_constraintTop_toBottomOf="@+id/hope"
+        app:layout_constraintVertical_bias="0.282">
 
         <TextView
             android:id="@+id/idealContact"
