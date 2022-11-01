@@ -16,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -74,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "MainActivity";
     String CHANNEL_ID = "test";
     String DESCRIPTION = "For the test push notification";
+    DrawerLayout drawerLayout;
+    View drawerView;
 
     ActionBar abar;
 
@@ -102,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(addIntent);
                 break;
             case R.id.setting:
-                Intent nIntent = new Intent(this, SettingActivity.class);
-                startActivity(nIntent);
+                drawerLayout.openDrawer(drawerView);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -129,6 +134,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerView = findViewById(R.id.drawer_setting);
+        ImageButton close_button = findViewById(R.id.close_button);
+        close_button.setOnClickListener(v -> drawerLayout.closeDrawers());
+        //설정창 기능
+        LinearLayout setLocation = findViewById(R.id.setLocation);
+        setLocation.setOnClickListener(v -> {
+            Intent intent = new Intent(this, GeoSettingActivity.class);
+            startActivity(intent);
+        });
+        LinearLayout setAccount = findViewById(R.id.setAccount);
+        setAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AccountActivity.class);
+            startActivity(intent);
+        });
+        LinearLayout setFamily = findViewById(R.id.setFamily);
+        setFamily.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FamilySettingActivity.class);
+            startActivity(intent);
+        });
+        //
+
         preferenceManager = new PreferenceManager(getApplicationContext());
         db = FirebaseFirestore.getInstance();
         getToken();
@@ -257,6 +285,4 @@ public class MainActivity extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
-
 }

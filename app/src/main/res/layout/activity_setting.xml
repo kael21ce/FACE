@@ -2,11 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:id="@+id/drawer_setting"
+    android:layout_width="250dp"
     android:layout_height="match_parent"
+    android:layout_gravity="right"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
     android:elevation="2dp"
     android:orientation="vertical"
     tools:context=".activities.SettingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/settingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:paddingStart="10dp"
+            android:text="설정"
+            android:textColor="#3F51B5"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="150dp"
+            android:layout_marginBottom="3dp"
+            android:backgroundTint="#FFFFFF"
+            app:srcCompat="@drawable/close" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/setRuler"
@@ -14,8 +46,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
         android:clickable="true"
-        android:orientation="horizontal"
-        android:focusable="true">
+        android:focusable="true"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/rulerImg"
@@ -41,9 +73,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
         android:clickable="true"
+        android:focusable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:focusable="true">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/alarmImg"
@@ -69,9 +101,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
         android:clickable="true"
+        android:focusable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:focusable="true">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/locationImg"
@@ -97,9 +129,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
         android:clickable="true"
+        android:focusable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:focusable="true">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/accountImg"
@@ -125,9 +157,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border_layout"
         android:clickable="true"
+        android:focusable="true"
         android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:focusable="true">
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="62dp"
