@@ -1,10 +1,12 @@
 package org.techtown.face.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.techtown.face.R;
+import org.techtown.face.activities.MomentCheckActivity;
 import org.techtown.face.adapters.MomentAdapter;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.models.Moment;
@@ -23,12 +26,19 @@ import org.techtown.face.utilites.PreferenceManager;
 public class MomentFragment extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String TAG = "FACEdatabase";
     PreferenceManager preferenceManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_moment, container, false);
+        //나의 순간 삭제
+        Button deleteMoment = v.findViewById(R.id.deleteMoment);
+        deleteMoment.setOnClickListener(view -> {
+            Intent deleteIntent = new Intent(v.getContext(), MomentCheckActivity.class);
+            startActivity(deleteIntent);
+        });
+        //
+
         //리사이클러뷰에 순간 아이템 배열
         RecyclerView momentRecyclerView = v.findViewById(R.id.momentRecyclerView);
 
@@ -121,9 +131,6 @@ public class MomentFragment extends Fragment {
                     }
 
         });
-
-        //db에서 데이터 가져오기
-
         return v;
     }
 }

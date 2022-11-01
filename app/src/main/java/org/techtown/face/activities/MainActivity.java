@@ -105,10 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent nIntent = new Intent(this, SettingActivity.class);
                 startActivity(nIntent);
                 break;
-            case R.id.delete_moment:
-                Intent deleteIntent = new Intent(this, MomentCheckActivity.class);
-                startActivity(deleteIntent);
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

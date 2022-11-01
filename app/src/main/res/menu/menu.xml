@@ -23,11 +23,4 @@
         app:showAsAction="always"
         />
 
-    <item
-        android:id="@+id/delete_moment"
-        android:title="순간 삭제"
-        android:icon="@drawable/trash"
-        app:showAsAction="always"
-        />
-
 </menu>
