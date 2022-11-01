@@ -35,6 +35,7 @@
                 android:id="@+id/imageProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:background="@drawable/background_image"
                 android:scaleType="centerCrop"/>
 
@@ -45,7 +46,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/secondary_text"
                 android:textSize="15sp"
-                android:text="이미지 추가"/>
+                android:text="채팅 프로필"/>
         </FrameLayout>
 
         <EditText
@@ -55,7 +56,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/background_input"
             android:inputType="textPersonName"
-            android:hint="이름"
+            android:hint="필수: 이름"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:paddingStart="16dp"
@@ -70,7 +71,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
             android:inputType="textEmailAddress"
-            android:hint="@string/email"
+            android:hint="필수: 이메일 (abcde1234@naver.com)"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:paddingStart="16dp"
@@ -86,7 +87,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
             android:inputType="textPassword"
-            android:hint="비밀번호"
+            android:hint="필수: 비밀번호"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:paddingStart="16dp"
@@ -102,7 +103,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
             android:inputType="textPassword"
-            android:hint="비밀번호 확인"
+            android:hint="필수: 비밀번호 확인"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:paddingStart="16dp"
@@ -116,7 +117,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/background_input"
-            android:hint="@string/birthday"
+            android:hint="필수: 생년월일 (YYYYMMDD)"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="textPersonName"
@@ -131,7 +132,7 @@
             android:layout_height="45dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
-            android:hint="@string/phone_number"
+            android:hint="필수: 휴대폰 번호 (01012345678)"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:paddingStart="16dp"

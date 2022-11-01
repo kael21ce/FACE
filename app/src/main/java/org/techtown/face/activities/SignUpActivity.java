@@ -142,26 +142,32 @@ public class SignUpActivity extends AppCompatActivity {
 
     private Boolean isValidSignUpDetails(){
         if (encodedImage == null){
-            showToast("Select Profile image");
+            showToast("채팅에 사용할 프로필 이미지를 선택해주세요");
             return false;
         }else if (binding.inputName.getText().toString().trim().isEmpty()){
-            showToast("Enter Name");
+            showToast("이름을 입력해주세요");
             return false;
         }
         else if (binding.inputEmail.getText().toString().trim().isEmpty()){
-            showToast("Enter Email");
+            showToast("이메일을 입력해주세요");
             return false;
         }else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            showToast("Enter valid email");
+            showToast("제대로 된 이메일을 입력해주세요");
             return false;
         }else if (binding.inputPassword.getText().toString().trim().isEmpty()){
-            showToast("Enter password");
+            showToast("비밀번호를 입력해주세요");
             return false;
         }else if (binding.inputConfirmPassword.getText().toString().trim().isEmpty()){
-            showToast("Confirm your  Password");
+            showToast("비밀번호 확인을 확인해주세요");
             return false;
         }else if (!binding.inputPassword.getText().toString().equals(binding.inputConfirmPassword.getText().toString())){
-            showToast("Password & Confirm Password must be same ");
+            showToast("비밀번호와 비밀번호 확인은 같아야 합니다");
+            return false;
+        }else if (binding.inputBirth.getText().toString().trim().isEmpty()){
+            showToast("생년월일을 입력해주세요");
+            return false;
+        }else if (binding.inputPhoneNumber.getText().toString().trim().isEmpty()){
+            showToast("휴대폰 번호를 입력해주세요");
             return false;
         }else {
             return true;
