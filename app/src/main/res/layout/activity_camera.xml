@@ -11,8 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity = "center"
-        android:layout_marginTop = "100dp"
-        >
+        android:layout_marginTop = "100dp">
 
         <ImageView
             android:id="@+id/cameraImage"
@@ -43,9 +42,33 @@
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity = "center"
-        android:layout_marginTop = "30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
         android:text="다음" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="*자신의 얼굴이 화면 가운데로 오게 '찍으세요"
+        android:textSize="20sp" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="*이렇게 찍은 사진은 여러분의 얼굴 사진이 가족들에게 연락 빈도에 따라 어떻게 보여지는지에 사용됩니다."
+        android:textSize="20sp" />
 
 
 </LinearLayout>
