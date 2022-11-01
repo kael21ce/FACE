@@ -180,25 +180,21 @@ public class MainActivity extends AppCompatActivity {
                 item -> {
                     switch (item.getItemId()) {
                         case R.id.frameTab:
-                            abar.setTitle("FACE: 가족");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     frameFragment).commit();
 
                             return true;
                         case R.id.scaleTab:
-                            abar.setTitle("FACE: 연락저울");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     scaleFragment).commit();
 
                             return true;
                         case R.id.momentTab:
-                            abar.setTitle("FACE: 순간");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     momentFragment).commit();
 
                             return true;
                         case R.id.gardenTab:
-                            abar.setTitle("FACE: 가족 정원");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     gardenFragment).commit();
 
