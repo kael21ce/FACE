@@ -138,6 +138,11 @@
             android:title="설정"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".activities.GardenActivity"
+            android:exported="true"
+            android:title="가족 정원"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activities.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />

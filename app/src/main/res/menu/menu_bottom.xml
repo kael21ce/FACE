@@ -26,12 +26,4 @@
         android:icon="@drawable/gallery"
         />
 
-    <item
-        android:id="@+id/gardenTab"
-        app:showAsAction="ifRoom"
-        android:enabled="true"
-        android:title="가족 정원"
-        android:icon="@drawable/plant_pot"
-        />
-
 </menu>

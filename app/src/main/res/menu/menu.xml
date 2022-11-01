@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/family_garden"
+        android:title="가족 정원"
+        android:icon="@drawable/plant_pot"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/add_family"
         android:title="가족 추가"
         android:icon="@drawable/add_member"

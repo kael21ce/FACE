@@ -1,9 +1,7 @@
 package org.techtown.face.activities;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -26,8 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -40,7 +36,6 @@ import com.google.firebase.storage.UploadTask;
 import org.techtown.face.R;
 import org.techtown.face.databinding.ActivityMainBinding;
 import org.techtown.face.fragments.FrameFragment;
-import org.techtown.face.fragments.GardenFragment;
 import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
 import org.techtown.face.network.BluetoothService;
@@ -71,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     FrameFragment frameFragment;
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
-    GardenFragment gardenFragment;
+    GardenActivity gardenFragment;
     UploadTask uploadTask;
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
@@ -98,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
         switch (curId) {
+            case R.id.family_garden:
+                Intent gardenIntent = new Intent(this, GardenActivity.class);
+                startActivity(gardenIntent);
+                break;
             case R.id.add_family:
                 Intent addIntent = new Intent(this, AddActivity.class);
                 startActivity(addIntent);
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         frameFragment = new FrameFragment();
         scaleFragment = new ScaleFragment();
         momentFragment = new MomentFragment();
-        gardenFragment = new GardenFragment();
+        gardenFragment = new GardenActivity();
 
         abar = getSupportActionBar();
 
@@ -178,11 +177,6 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.momentTab:
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     momentFragment).commit();
-
-                            return true;
-                        case R.id.gardenTab:
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                                    gardenFragment).commit();
 
                             return true;
                     }

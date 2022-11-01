@@ -1,4 +1,4 @@
-package org.techtown.face.fragments;
+package org.techtown.face.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,17 +17,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,7 +51,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
-public class GardenFragment extends Fragment {
+public class GardenActivity extends AppCompatActivity {
 
     TextView locationExist;
     Button searchLocation;
@@ -101,31 +99,31 @@ public class GardenFragment extends Fragment {
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("GardenFragment", "onCreateView() 호출됨.");
-
-        View v = inflater.inflate(R.layout.fragment_garden, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_garden);
+        Log.d("GardenActivity", "onCreateView() 호출됨.");
 
         //BluetoothService
-        Intent btIntent = new Intent(v.getContext(), BluetoothService.class);
-        getActivity().bindService(btIntent, connection, Context.BIND_AUTO_CREATE);
+        Intent btIntent = new Intent(GardenActivity.this, BluetoothService.class);
+        bindService(btIntent, connection, Context.BIND_AUTO_CREATE);
 
-        preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
+        preferenceManager = new PreferenceManager(GardenActivity.this);
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
 
-        locationExist = v.findViewById(R.id.locationExist);
-        searchLocation = v.findViewById(R.id.searchLocation);
-        gardenRecycler = v.findViewById(R.id.gardenRecycler);
-        locationRecycler = v.findViewById(R.id.locationRecycler);
-        containerExist = v.findViewById(R.id.containerExist);
+        locationExist = findViewById(R.id.locationExist);
+        searchLocation = findViewById(R.id.searchLocation);
+        gardenRecycler = findViewById(R.id.gardenRecycler);
+        locationRecycler = findViewById(R.id.locationRecycler);
+        containerExist = findViewById(R.id.containerExist);
 
         pairedAdapter = new PairedAdapter();
         surroundAdapter = new SurroundAdapter();
 
-        LinearLayoutManager layoutManagerG = new LinearLayoutManager(v.getContext());
+        LinearLayoutManager layoutManagerG = new LinearLayoutManager(GardenActivity.this);
         layoutManagerG.setOrientation(LinearLayoutManager.HORIZONTAL);
         gardenRecycler.setLayoutManager(layoutManagerG);
-        LinearLayoutManager layoutManagerT = new LinearLayoutManager(v.getContext(),
+        LinearLayoutManager layoutManagerT = new LinearLayoutManager(GardenActivity.this,
                 LinearLayoutManager.VERTICAL, false);
         locationRecycler.setLayoutManager(layoutManagerT);
 
@@ -133,14 +131,14 @@ public class GardenFragment extends Fragment {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!btAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext()
+            if (ActivityCompat.checkSelfPermission(GardenActivity.this
                     , Manifest.permission.BLUETOOTH_SCAN)
                     != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다.", Toast.LENGTH_LONG).show();
             }
             startActivityForResult(enableBtIntent, REQUEST_ENABLED_BT);
         } else {
-            Toast.makeText(v.getContext(), "블루투스가 활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GardenActivity.this, "블루투스가 활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
         }
 
         //페어링된 기기 목록
@@ -189,25 +187,25 @@ public class GardenFragment extends Fragment {
             deviceLocalArrayList = new ArrayList<>();
             deviceLocalNameList = new ArrayList<>();
             //기기 검색
-            if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.BLUETOOTH_SCAN)
+            if (ActivityCompat.checkSelfPermission(GardenActivity.this, Manifest.permission.BLUETOOTH_SCAN)
                     != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(v.getContext(), "블루투스 권한 허용이 필요합니다."
+                Toast.makeText(GardenActivity.this, "블루투스 권한 허용이 필요합니다."
                         , Toast.LENGTH_LONG).show();
                 return;
             }
             if (btAdapter.isEnabled()) {
                 if (btAdapter.isDiscovering()) {
                     btAdapter.cancelDiscovery();
-                    Toast.makeText(v.getContext(), "기기 검색이 중단되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GardenActivity.this, "기기 검색이 중단되었습니다.", Toast.LENGTH_SHORT).show();
                 } else {
                     surroundAdapter.clear();
                     btAdapter.startDiscovery();
-                    Toast.makeText(v.getContext(), "기기 검색을 시작합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GardenActivity.this, "기기 검색을 시작합니다.", Toast.LENGTH_SHORT).show();
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                    getActivity().registerReceiver(receiver, filter);
+                    registerReceiver(receiver, filter);
                 }
             } else {
-                Toast.makeText(v.getContext(), "블루투스가 비활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GardenActivity.this, "블루투스가 비활성화되어 있습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -228,15 +226,12 @@ public class GardenFragment extends Fragment {
             });
             mHandler.postDelayed(() -> {
                 if (userId[0].equals(myId)) {
-                    Toast.makeText(v.getContext(), "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
+                    Toast.makeText(GardenActivity.this, "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
                 } else {
-                    registerDevice(v.getContext(), address);
+                    registerDevice(GardenActivity.this, address);
                 }
             }, 1000);
         });
-
-
-        return v;
     }
 
     //ACTION_FOUND 인텐트를 위한 브로드캐스트 리시버
@@ -246,7 +241,7 @@ public class GardenFragment extends Fragment {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
@@ -275,11 +270,11 @@ public class GardenFragment extends Fragment {
     };
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         Log.d("GardenFragment", "onDestroyView() 호출됨.");
         try {
-            getActivity().unregisterReceiver(receiver);
+            unregisterReceiver(receiver);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -294,9 +289,9 @@ public class GardenFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Could not create Insecure RFComm Connection", e);
         }
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getActivity().getApplicationContext(), "블루투스 권한 허용이 필요합니다.",
+            Toast.makeText(getApplicationContext(), "블루투스 권한 허용이 필요합니다.",
                     Toast.LENGTH_LONG).show();
         }
         return device.createRfcommSocketToServiceRecord(uuid);
@@ -362,16 +357,16 @@ public class GardenFragment extends Fragment {
         Button selectButton = registerDialog.findViewById(R.id.selectButton);
         selectButton.setOnClickListener(view -> {
             if (registedId[0] == null) {
-                Toast.makeText(getActivity().getApplicationContext(), "선택을 하지 않습니다.",
+                Toast.makeText(getApplicationContext(), "선택을 하지 않습니다.",
                         Toast.LENGTH_SHORT).show();
                 registerDialog.dismiss();
             } else {
                 userIdToRegister = registedId[0];
                 HashMap<String, Object> garden = new HashMap<>();
                 garden.put(Constants.KEY_ADDRESS, device.getAddress());
-                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_SCAN)
                         != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getActivity().getApplicationContext(), "블루투스 권한 허용이 필요합니다.",
+                    Toast.makeText(getApplicationContext(), "블루투스 권한 허용이 필요합니다.",
                             Toast.LENGTH_LONG).show();
                 }
                 garden.put(Constants.KEY_NAME, device.getName());
@@ -380,7 +375,7 @@ public class GardenFragment extends Fragment {
                 db.collection(Constants.KEY_COLLECTION_GARDEN).add(garden);
                 Log.w(TAG, "가족 정원이 등록되었습니다.");
                 Log.w(TAG, "등록 id: " + userIdToRegister);
-                Toast.makeText(getContext(), "등록되었습니다!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "등록되었습니다!", Toast.LENGTH_SHORT).show();
                 registerDialog.dismiss();
             }
         });
@@ -403,7 +398,7 @@ public class GardenFragment extends Fragment {
         } catch (IOException e) {
             flag = false;
             Log.e(TAG, "Not in location-2: " + device.getName(), e);
-            Toast.makeText(getContext(), "기기가 주변에 없습니다."
+            Toast.makeText(context, "기기가 주변에 없습니다."
                     , Toast.LENGTH_LONG).show();
         }
 
