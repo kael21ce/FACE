@@ -122,11 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(nIntent);
 
                 break;
-            case R.id.add_moment:
-                Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                pickImage.launch(momentIntent);
-                break;
             case R.id.delete_moment:
                 Intent deleteIntent = new Intent(this, MomentCheckActivity.class);
                 startActivity(deleteIntent);
@@ -172,10 +167,17 @@ public class MainActivity extends AppCompatActivity {
 
         abar = getSupportActionBar();
 
+        //순간 추가
+        binding.addFloating.setOnClickListener(view -> {
+            Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            pickImage.launch(momentIntent);
+        });
+
         getToken();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
