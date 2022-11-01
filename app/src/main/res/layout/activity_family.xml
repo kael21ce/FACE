@@ -168,68 +168,6 @@
         app:layout_constraintEnd_toEndOf="@+id/hope"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
-    <TextView
-        android:id="@+id/idealContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OO일에 1번 연락하면 좋을 것 같아!"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.427"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.258" />
-
-    <TextView
-        android:id="@+id/minContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
-        android:text="아무리 적어도 OO일에 1번은 연락을 했으면 좋겠어..."
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.331" />
-
-    <TextView
-        android:id="@+id/themeLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        android:text="선호 이야기를 함께 하면 즐거울 것 같아!"
-        android:textColor="@color/green"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.562"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.424" />
-
-    <TextView
-        android:id="@+id/themeDislike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        android:text="불호 이야기는 조금 줄여줬으면 좋겠어..."
-        android:textColor="@color/error"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48" />
-
     <View
         android:id="@+id/dividerBottom"
         android:layout_width="match_parent"
@@ -256,5 +194,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.596" />
+
+    <LinearLayout
+        android:id="@+id/fbsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/dividerBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hope">
+
+        <TextView
+            android:id="@+id/idealContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="OO일에 1번 연락하면 좋을 것 같아!"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/minContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="아무리 적어도 OO일에 1번은 연락을 했으면 좋겠어..."
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/themeLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="선호 이야기를 함께 하면 즐거울 것 같아!"
+            android:textColor="@color/green"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/themeDislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="불호 이야기는 조금 줄여줬으면 좋겠어..."
+            android:textColor="@color/error"
+            android:textSize="20sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
