@@ -104,23 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.setting:
                 Intent nIntent = new Intent(this, SettingActivity.class);
-                nIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, nIntent,
-                        PendingIntent.FLAG_IMMUTABLE);
-
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.user_icon)
-                        .setContentTitle("FACE")
-                        .setContentText("설정 창이 열렸습니다.")
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                notificationManager.notify(101, mBuilder.build());
                 startActivity(nIntent);
-
                 break;
             case R.id.delete_moment:
                 Intent deleteIntent = new Intent(this, MomentCheckActivity.class);

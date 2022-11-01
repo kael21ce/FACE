@@ -39,6 +39,39 @@ public class MomentFragment extends Fragment {
 
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_IMAGES)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()&&task.getResult().size()>0){
+                        int j=0;
+                        for(QueryDocumentSnapshot document : task.getResult()){
+                            if(document.exists()){
+                                j++;
+                            } else{
+                                Log.e("oh","hell");
+                            }
+                        }
+                        String name="";
+                        String[] image = new String[j];
+                        String[] date = new String[j];
+                        int i=0;
+                        for(QueryDocumentSnapshot document : task.getResult()){
+                            if(document.exists()){
+                                name = document.get(Constants.KEY_NAME).toString();
+                                image[i] = document.get(Constants.KEY_IMAGE).toString();
+                                date[i] = document.get(Constants.KEY_TIMESTAMP).toString();
+                                i++;
+                            } else{
+                                Log.e("oh","hell");
+                            }
+                        }
+                        momentAdapter.addItem(new Moment(name, image, date));
+                        momentRecyclerView.setAdapter(momentAdapter);
+                    }
+                });
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
                 .collection(Constants.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
