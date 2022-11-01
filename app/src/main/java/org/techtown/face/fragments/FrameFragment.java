@@ -65,7 +65,7 @@ public class FrameFragment extends Fragment {
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
                             user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
                             user.id = document.getString(Constants.KEY_USER);
-                            int expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
+                            user.expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                             firestore.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
@@ -74,6 +74,8 @@ public class FrameFragment extends Fragment {
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
 
+                                    adapter.addItem((new Family(user)));
+                                    /*
 
                                     if (expression==5) {
                                         adapter.addItem(new Family(user));
@@ -89,6 +91,7 @@ public class FrameFragment extends Fragment {
                                         adapter.addItem(new Family(user));
                                     }
 
+                                     */
                                     recyclerView.setAdapter(adapter);
 
 

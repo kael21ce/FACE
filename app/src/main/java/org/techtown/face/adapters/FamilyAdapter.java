@@ -1,5 +1,7 @@
 package org.techtown.face.adapters;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 
 public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder> {
     ArrayList<Family> items = new ArrayList<>();
+    int expression;
 
     public interface OnItemClickListener {
         void onItemClicked(int position, User user);
@@ -57,7 +60,6 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Family item = items.get(position);
         viewHolder.setItem(item);
-
     }
 
     @Override
@@ -72,15 +74,41 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
 
         public ViewHolder(View itemVIew) {
             super(itemVIew);
-
             nameTxt = itemVIew.findViewById(R.id.nameTxt);
             familyImg = itemVIew.findViewById(R.id.familyImg);
         }
 
         public void setItem(Family item) {
+            int expression=item.getUserContact().expression;
             nameTxt.setText(item.getUserContact().name);
             StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(item.getUserContact().path);
             imageRef.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(itemView).load(uri.toString()).into(familyImg));
+            familyImg.setColorFilter(Color.parseColor(change_filter(expression)), PorterDuff.Mode.MULTIPLY);
+        }
+
+        String change_filter(int expression){
+            String color;
+            switch(expression){
+                case 1:
+                    color = "#222222";
+                    break;
+                case 2:
+                    color = "#333333";
+                    break;
+                case 3:
+                    color = "#444444";
+                    break;
+                case 4:
+                    color = "#555555";
+                    break;
+                case 5:
+                    color = "#666666";
+                    break;
+                default:
+                    color = "3000000";
+                    break;
+            }
+            return color;
         }
     }
     public void addItem(Family item) {
