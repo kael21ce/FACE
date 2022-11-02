@@ -75,26 +75,7 @@ public class FrameFragment extends Fragment {
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
 
                                     adapter.addItem((new Family(user)));
-                                    /*
-
-                                    if (expression==5) {
-                                        adapter.addItem(new Family(user));
-                                    } else if (expression==4) {
-                                        adapter.addItem(new Family(user));
-                                    } else if (expression==3) {
-                                        adapter.addItem(new Family(user));
-                                    } else if (expression==2) {
-                                        adapter.addItem(new Family(user));
-                                    } else if (expression==1) {
-                                        adapter.addItem(new Family(user));
-                                    } else {
-                                        adapter.addItem(new Family(user));
-                                    }
-
-                                     */
                                     recyclerView.setAdapter(adapter);
-
-
                                 }
                             });
                         }

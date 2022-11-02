@@ -1,5 +1,7 @@
 package org.techtown.face.adapters;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
@@ -79,33 +81,44 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
         }
 
         public void setItem(Family item) {
+            ValueAnimator anim = new ValueAnimator();
             int expression=item.getUserContact().expression;
+            anim.setIntValues(Color.parseColor("#FFFFFF"), Color.parseColor(change_filter(expression)));
+            anim.setEvaluator(new ArgbEvaluator());
+            anim.setDuration(3000);
             nameTxt.setText(item.getUserContact().name);
             StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(item.getUserContact().path);
             imageRef.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(itemView).load(uri.toString()).into(familyImg));
+            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    familyImg.setColorFilter(((Integer)valueAnimator.getAnimatedValue()).intValue(), PorterDuff.Mode.MULTIPLY);
+                }
+            });
             familyImg.setColorFilter(Color.parseColor(change_filter(expression)), PorterDuff.Mode.MULTIPLY);
+            anim.start();
         }
 
         String change_filter(int expression){
             String color;
             switch(expression){
                 case 1:
-                    color = "#222222";
+                    color = "#111111";
                     break;
                 case 2:
                     color = "#333333";
                     break;
                 case 3:
-                    color = "#444444";
-                    break;
-                case 4:
-                    color = "#555555";
-                    break;
-                case 5:
                     color = "#666666";
                     break;
+                case 4:
+                    color = "#AAAAAA";
+                    break;
+                case 5:
+                    color = "#FFFFFF";
+                    break;
                 default:
-                    color = "3000000";
+                    color = "0000000";
                     break;
             }
             return color;
