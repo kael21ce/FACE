@@ -1,11 +1,8 @@
 package org.techtown.face.activities;
 
-<<<<<<< HEAD
-=======
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Notification;
->>>>>>> main
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -57,6 +54,8 @@ import org.techtown.face.utilites.PreferenceManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+
+import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -190,12 +189,8 @@ public class MainActivity extends AppCompatActivity {
         getToken();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
 
-<<<<<<< HEAD
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-=======
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         Animator anim = new ValueAnimator();
->>>>>>> main
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
