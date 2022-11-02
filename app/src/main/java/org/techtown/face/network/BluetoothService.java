@@ -57,6 +57,8 @@ public class BluetoothService extends Service {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String registeredId = document.getString(Constants.KEY_REGISTERED);
                             final String[] expresison = new String[1];
+                            final String[] userName = new String[1];
+                            final String[] inString = new String[1];
                             //표정 가져오기
                             db.collection(Constants.KEY_COLLECTION_USERS)
                                     .document(myId)
@@ -66,11 +68,13 @@ public class BluetoothService extends Service {
                                         if (task1.isSuccessful()) {
                                             for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                 expresison[0] = documentSnapshot.get(Constants.KEY_EXPRESSION).toString();
+                                                userName[0] = documentSnapshot.get(Constants.KEY_NAME).toString();
+                                                inString[0] = expresison[0] + "," + userName[0];
                                             }
                                         }
                                     });
                             mHandler.postDelayed(() -> {
-                                writeToDevice(document.getString(Constants.KEY_ADDRESS), expresison[0]);
+                                writeToDevice(document.getString(Constants.KEY_ADDRESS), inString[0]);
                                 Log.w(TAG,  document.getString(Constants.KEY_NAME) + "에 전해진 표정: " + expresison[0]);
                             },1000);
                         }
