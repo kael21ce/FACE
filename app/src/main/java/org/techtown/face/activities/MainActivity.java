@@ -1,5 +1,7 @@
 package org.techtown.face.activities;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -176,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        Animator anim = new ValueAnimator();
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
@@ -183,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
                             abar.setTitle("FACE: 가족");
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     frameFragment).commit();
+                            anim.setDuration(3000);
+                            //anim.start();
 
                             return true;
                         case R.id.scaleTab:
