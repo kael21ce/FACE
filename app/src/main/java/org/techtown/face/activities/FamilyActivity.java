@@ -1,28 +1,44 @@
 package org.techtown.face.activities;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.techtown.face.R;
+import org.techtown.face.adapters.ImageSliderAdapter;
+import org.techtown.face.adapters.MomentAdapter;
 import org.techtown.face.databinding.ActivityFamilyBinding;
 import org.techtown.face.fragments.MomentFragment;
+import org.techtown.face.models.Moment;
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.HashMap;
 
+import me.relex.circleindicator.CircleIndicator3;
+
 public class FamilyActivity extends BaseActivity {
 
     PreferenceManager preferenceManager;
     ActivityFamilyBinding binding;
     User user;
+    Dialog momentDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +63,7 @@ public class FamilyActivity extends BaseActivity {
         });
         binding.momentButton.setText(user.name + "의 순간 보러 가기");
         //순간으로 이동하는 것 추가하기
+        binding.momentButton.setOnClickListener(v -> showMomentDialog(FamilyActivity.this, user));
         binding.chatButton.setOnClickListener(view -> {
             Intent intent1 = new Intent(getApplicationContext(), ChatActivity.class);
             intent1.putExtra(Constants.KEY_USER, user);
@@ -80,5 +97,84 @@ public class FamilyActivity extends BaseActivity {
                 .collection(Constants.KEY_COLLECTION_NOTIFICATION)
                 .add(notification)
                 .addOnCompleteListener(task -> Log.e("su","ccess"));
+    }
+
+    private void showMomentDialog(Context context, User user) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        preferenceManager = new PreferenceManager(context);
+
+        momentDialog = new Dialog(context);
+        momentDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        momentDialog.setContentView(R.layout.user_moment);
+        ImageButton user_closeMoment = momentDialog.findViewById(R.id.user_closeMoment);
+        user_closeMoment.setOnClickListener(v -> momentDialog.dismiss());
+        TextView user_nameTxt = momentDialog.findViewById(R.id.user_momentName);
+        ViewPager2 user_imageViewPager = momentDialog.findViewById(R.id.user_imageViewPager);
+        TextView user_momentDate = momentDialog.findViewById(R.id.user_momentDate);
+        CircleIndicator3 user_imgIndicator = momentDialog.findViewById(R.id.user_imgIndicator);
+
+        user_nameTxt.setText(user.name);
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_USERS)
+                .whereEqualTo(Constants.KEY_NAME, user.name)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                            String userId = queryDocumentSnapshot.getString(Constants.KEY_USER);
+                            FirebaseFirestore database = FirebaseFirestore.getInstance();
+                            database.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(userId)
+                                    .collection(Constants.KEY_COLLECTION_IMAGES)
+                                    .orderBy(Constants.KEY_TIMESTAMP, Query.Direction.DESCENDING)
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if(task1.isSuccessful()&&task1.getResult().size()>0){
+                                            int j=0;
+                                            for(QueryDocumentSnapshot document : task1.getResult()){
+                                                if(document.exists()){
+                                                    j++;
+                                                } else{
+                                                    Log.e("oh","hell");
+                                                }
+                                            }
+                                            String[] image = new String[j];
+                                            String[] date = new String[j];
+                                            int i=0;
+                                            for(QueryDocumentSnapshot document : task1.getResult()) {
+                                                if(document.exists()){
+                                                    image[i] = document.get(Constants.KEY_IMAGE).toString();
+                                                    date[i] = document.get(Constants.KEY_TIMESTAMP).toString();
+                                                    i++;
+                                                } else{
+                                                    Log.e("oh","hell");
+                                                }
+                                            }
+                                            user_imageViewPager.setOffscreenPageLimit(1);
+                                            user_imageViewPager
+                                                    .setAdapter(new ImageSliderAdapter(momentDialog.getContext(), image));
+                                            user_imgIndicator.setViewPager(user_imageViewPager);
+
+                                            user_imageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                                                @Override
+                                                public void onPageSelected(int position) {
+                                                    super.onPageSelected(position);
+                                                    user_momentDate.setText("| " + date[position] + " |");
+                                                }
+                                            });
+                                        } else {
+                                            Log.e("what", "the hell inside here?");
+                                        }
+                                    });
+                        }
+                    } else {
+                        Log.e("what", "the fuck");
+                    }
+
+                });
+        momentDialog.show();
     }
 }
