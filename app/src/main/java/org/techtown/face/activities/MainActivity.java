@@ -3,13 +3,6 @@ package org.techtown.face.activities;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.Notification;
-
-
-import android.animation.Animator;
-import android.animation.ValueAnimator;
-import android.app.Notification;
-
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
