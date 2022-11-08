@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="예시 3"
+            android:text="(0에서 99사이의 숫자를 입력해 주세요) 예시 3"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="예시 10"
+            android:text="(0에서 99사이의 숫자를 입력해 주세요) 예시 10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             tools:ignore="TouchTargetSizeCheck" />

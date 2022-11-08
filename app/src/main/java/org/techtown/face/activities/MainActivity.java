@@ -3,7 +3,6 @@ package org.techtown.face.activities;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -20,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -55,8 +53,6 @@ import org.techtown.face.utilites.PreferenceManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-
-import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity {
 
