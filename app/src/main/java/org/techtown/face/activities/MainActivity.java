@@ -1,6 +1,7 @@
 package org.techtown.face.activities;
 
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.NotificationChannel;
@@ -9,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -51,6 +55,7 @@ import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -176,6 +181,16 @@ public class MainActivity extends AppCompatActivity {
 
         abar = getSupportActionBar();
 
+        //위험 권한 묻기
+        String[] permissions = {
+                Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS,
+                Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.POST_NOTIFICATIONS
+        };
+        checkPermissions(permissions);
+        //
+
         //순간 추가
         binding.addFloating.setOnClickListener(view -> {
             Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -290,5 +305,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void checkPermissions(String[] permissions) {
+        ArrayList<String> targetList = new ArrayList<String>();
+
+        for (int i = 0; i < permissions.length; i++) {
+            String curPermission = permissions[i];
+            int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, curPermission);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, curPermission + " 권한 있음");
+            } else {
+                Log.w(TAG, curPermission + " 권한 없음");
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, curPermission)) {
+                    Log.w(TAG, curPermission + " 권한 설명 필요함.");
+                } else {
+                    targetList.add(curPermission);
+                    Log.w(TAG, curPermission + "권한 요청이 추가됨");
+                }
+            }
+        }
+        String[] targets = new String[targetList.size()];
+        targetList.toArray(targets);
+
+        if (targets.length > 0) {
+            ActivityCompat.requestPermissions(MainActivity.this, targets, 101);
+        }
     }
 }

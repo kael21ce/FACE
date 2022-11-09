@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,8 @@ public class FamilyActivity extends BaseActivity {
     ActivityFamilyBinding binding;
     User user;
     Dialog momentDialog;
+    Handler mHandler;
+    private String TAG = "FamilyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,7 @@ public class FamilyActivity extends BaseActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         preferenceManager = new PreferenceManager(context);
+        mHandler = new Handler();
 
         momentDialog = new Dialog(context);
         momentDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -125,8 +129,7 @@ public class FamilyActivity extends BaseActivity {
                     if(task.isSuccessful()){
                         for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
                             String userId = queryDocumentSnapshot.getString(Constants.KEY_USER);
-                            FirebaseFirestore database = FirebaseFirestore.getInstance();
-                            database.collection(Constants.KEY_COLLECTION_USERS)
+                            db.collection(Constants.KEY_COLLECTION_USERS)
                                     .document(userId)
                                     .collection(Constants.KEY_COLLECTION_IMAGES)
                                     .orderBy(Constants.KEY_TIMESTAMP, Query.Direction.DESCENDING)
@@ -138,7 +141,7 @@ public class FamilyActivity extends BaseActivity {
                                                 if(document.exists()){
                                                     j++;
                                                 } else{
-                                                    Log.e("oh","hell");
+                                                    Log.e(TAG,"No document exists");
                                                 }
                                             }
                                             String[] image = new String[j];
@@ -150,7 +153,7 @@ public class FamilyActivity extends BaseActivity {
                                                     date[i] = document.get(Constants.KEY_TIMESTAMP).toString();
                                                     i++;
                                                 } else{
-                                                    Log.e("oh","hell");
+                                                    Log.e(TAG,"No moment exists");
                                                 }
                                             }
                                             user_imageViewPager.setOffscreenPageLimit(1);
@@ -166,15 +169,15 @@ public class FamilyActivity extends BaseActivity {
                                                 }
                                             });
                                         } else {
-                                            Log.e("what", "the hell inside here?");
+                                            Log.e(TAG, "Task is not processed successfully");
                                         }
                                     });
                         }
                     } else {
-                        Log.e("what", "the fuck");
+                        Log.e(TAG, "Task is not processed successfully");
                     }
 
                 });
-        momentDialog.show();
+        mHandler.postDelayed(() -> momentDialog.show(), 1000);
     }
 }
