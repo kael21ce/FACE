@@ -11,11 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +23,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -39,8 +35,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.R;
@@ -54,10 +48,7 @@ import org.techtown.face.network.NotificationService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -191,13 +182,6 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions(permissions);
         //
 
-        //순간 추가
-        binding.addFloating.setOnClickListener(view -> {
-            Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            pickImage.launch(momentIntent);
-        });
-
         getToken();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frameFragment).commit();
 
@@ -241,53 +225,6 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
-    private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == RESULT_OK){
-                    if (result.getData()!= null){
-                        Log.e(TAG,result.getData().toString());
-                        Uri imageUri = result.getData().getData();
-                        String path = preferenceManager.getString(Constants.KEY_USER_ID)+"/"+imageUri.getLastPathSegment();
-
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                        StorageReference imageRef = storageReference.child(path);
-                        uploadTask = imageRef.putFile(imageUri);
-                        uploadTask.addOnCompleteListener(task -> {
-                            if(task.isSuccessful()){
-                                showToast("We did it!");
-                            } else {
-                                showToast("Failed");
-                            }
-                        });
-
-                        HashMap<String,Object> images = new HashMap<>();
-
-                        String name = preferenceManager.getString(Constants.KEY_NAME);
-                        String image = path;
-                        long now = System.currentTimeMillis();
-                        Date date = new Date(now);
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        String dates = sdf.format(date);
-
-                        images.put(Constants.KEY_NAME,name);
-                        images.put(Constants.KEY_IMAGE,image);
-                        images.put(Constants.KEY_TIMESTAMP,dates);
-
-                        db.collection(Constants.KEY_COLLECTION_USERS)
-                                .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                                .collection(Constants.KEY_COLLECTION_IMAGES)
-                                .add(images)
-                                .addOnCompleteListener(task -> {
-                                    if(task.isSuccessful()){
-                                        showToast("horray");
-                                    } else {
-                                        showToast("fuck");
-                                    }
-                                });
-                    }
-                }
-            });
 
     private void getToken() {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
