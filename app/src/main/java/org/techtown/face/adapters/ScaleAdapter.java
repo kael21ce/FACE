@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,8 +79,9 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
         TextView nameTxt;
         TextView incomingNum;
         TextView outgoingNum;
+        TextView youTxt;
         ImageView scaleHead;
-        FloatingActionButton interactButton;
+        Button interactButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -87,6 +89,7 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             nameTxt = itemView.findViewById(R.id.scaleName);
             incomingNum = itemView.findViewById(R.id.incomingNum);
             outgoingNum = itemView.findViewById(R.id.outgoingNum);
+            youTxt = itemView.findViewById(R.id.youTxt);
             scaleHead = itemView.findViewById(R.id.scale_head);
             interactButton = itemView.findViewById(R.id.interactButton);
 
@@ -103,6 +106,7 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             final float[] angle = {0};
 
             nameTxt.setText(item.getScaleName());
+            youTxt.setText(item.getScaleName());
             String mobileForScale = item.getScaleMoible();
             scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
             scaleInfo.getSentNum(itemView.getContext(), mobileForScale);
@@ -112,10 +116,14 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
                         + preferenceManager.getInt("in" + mobileForScale);
                 numO[0] = scaleInfo.getOutgoingNum(itemView.getContext(), mobileForScale)
                         + preferenceManager.getInt("out" + mobileForScale);
+                Integer numIn = numI[0];
+                String numInString = numIn.toString();
+                Integer numOut = numO[0];
+                String numOutString = numOut.toString();
                 Log.w(STAG, "Inbox in adapter-" + preferenceManager.getInt("in" + mobileForScale));
                 Log.w(STAG, "Sent in adapter-" + preferenceManager.getInt("out" + mobileForScale));
-                incomingNum.setText("수신: " + numI[0]);
-                outgoingNum.setText("발신: " + numO[0]);
+                incomingNum.setText(numInString);
+                outgoingNum.setText(numOutString);
                 //각도
                 angle[0] = preferenceManager.getFloat("angle" + mobileForScale);
                 Log.w(STAG, "Angle in adapter-" + angle[0]);

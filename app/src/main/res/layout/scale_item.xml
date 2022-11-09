@@ -4,7 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="30dp"
+    android:layout_marginEnd="20dp"
+    android:background="@drawable/round"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/scaleName"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="#3F51B5"
+        android:gravity="right"
+        android:paddingEnd="10dp"
+        android:text="이름"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/scaleContainer"
@@ -20,57 +37,38 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/tilt_head" />
 
-        <LinearLayout
-            android:id="@+id/textContainer"
-            android:layout_width="300dp"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/incomingNum"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/scaleName"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="#2196F3"
-                android:gravity="right"
-                android:paddingEnd="10dp"
-                android:text="이름"
-                android:textColor="#FFFFFF"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/sideByside"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/sidebyside" />
 
-            <TextView
-                android:id="@+id/incomingNum"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:text="수신: "
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/outgoingNum"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginStart="10dp"
-                android:text="발신: "
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/interactButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="60dp"
-                android:clickable="true"
-                app:srcCompat="@drawable/chat"
-                tools:ignore="SpeakableTextPresentCheck" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/outgoingNum"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -86,7 +84,7 @@
             android:id="@+id/meTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="100dp"
             android:text="나"
             android:textColor="#000000"
             android:textSize="18sp"
@@ -96,11 +94,24 @@
             android:id="@+id/youTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
+            android:layout_marginStart="120dp"
             android:text="상대방"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/interactButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="30dp"
+        android:layout_weight="1"
+        android:text="연락하기"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
