@@ -149,9 +149,9 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
                                         user.token = Objects.requireNonNull(document.get(Constants.KEY_FCM_TOKEN)).toString();
                                         user.id = document.getId();
                                         user.mobile = Objects.requireNonNull(document.get(Constants.KEY_MOBILE)).toString();
-                                        user.ideal_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_IDEAL_CONTACT)).toString());
+                                        user.ideal_contact = (int) document.get(Constants.KEY_IDEAL_CONTACT);
                                         Log.w(TAG, "Ideal Contact: " + user.ideal_contact);
-                                        user.min_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_MIN_CONTACT)).toString());
+                                        user.min_contact = (int) document.get(Constants.KEY_MIN_CONTACT);
                                         Log.w(TAG, "Min Contact: " + user.min_contact);
                                         user.ideal_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_IDEAL_CONTACT)).toString());
                                         user.like = Objects.requireNonNull(document.get(Constants.KEY_THEME_LIKE)).toString();

@@ -46,7 +46,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/incomingNum"
+            android:id="@+id/outgoingNum"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -62,7 +62,7 @@
             app:srcCompat="@drawable/sidebyside" />
 
         <TextView
-            android:id="@+id/outgoingNum"
+            android:id="@+id/incomingNum"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
