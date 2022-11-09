@@ -28,6 +28,7 @@ import org.techtown.face.utilites.PreferenceManager;
 import org.techtown.face.utilites.ScaleInfo;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
     ArrayList<Family.FamilyScale> items = new ArrayList<>();
@@ -140,17 +141,22 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if (document.get(Constants.KEY_MOBILE).equals(mobileForScale)) {
-                                        user.name = document.get(Constants.KEY_NAME).toString();
-                                        user.email = document.get(Constants.KEY_EMAIL).toString();
-                                        user.image= document.get(Constants.KEY_IMAGE).toString();
-                                        user.token = document.get(Constants.KEY_FCM_TOKEN).toString();
+                                    if (Objects.equals(document.get(Constants.KEY_MOBILE), mobileForScale)) {
+                                        user.name = Objects.requireNonNull(document.get(Constants.KEY_NAME)).toString();
+                                        Log.w(TAG, "Name: " + user.name);
+                                        user.email = Objects.requireNonNull(document.get(Constants.KEY_EMAIL)).toString();
+                                        user.image= Objects.requireNonNull(document.get(Constants.KEY_IMAGE)).toString();
+                                        user.token = Objects.requireNonNull(document.get(Constants.KEY_FCM_TOKEN)).toString();
                                         user.id = document.getId();
-                                        user.mobile = document.get(Constants.KEY_MOBILE).toString();
-                                        user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
-                                        user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
-                                        user.like = document.get(Constants.KEY_THEME_LIKE).toString();
-                                        user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                                        user.mobile = Objects.requireNonNull(document.get(Constants.KEY_MOBILE)).toString();
+                                        user.ideal_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_IDEAL_CONTACT)).toString());
+                                        Log.w(TAG, "Ideal Contact: " + user.ideal_contact);
+                                        user.min_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_MIN_CONTACT)).toString());
+                                        Log.w(TAG, "Min Contact: " + user.min_contact);
+                                        user.ideal_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_IDEAL_CONTACT)).toString());
+                                        user.like = Objects.requireNonNull(document.get(Constants.KEY_THEME_LIKE)).toString();
+                                        user.dislike = Objects.requireNonNull(document.get(Constants.KEY_THEME_DISLIKE)).toString();
+                                        user.expression = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_EXPRESSION)).toString());
                                         //Intent 전송
                                         Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
                                         contactIntent.putExtra(Constants.KEY_USER, user);
