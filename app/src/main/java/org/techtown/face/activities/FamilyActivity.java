@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,7 +43,7 @@ public class FamilyActivity extends BaseActivity {
     User user;
     Dialog momentDialog;
     Handler mHandler;
-    private String TAG = "FamilyActivity";
+    private final String TAG = "FamilyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,12 +115,17 @@ public class FamilyActivity extends BaseActivity {
         momentDialog.setContentView(R.layout.user_moment);
         ImageButton user_closeMoment = momentDialog.findViewById(R.id.user_closeMoment);
         user_closeMoment.setOnClickListener(v -> momentDialog.dismiss());
-        TextView user_nameTxt = momentDialog.findViewById(R.id.user_momentName);
-        ViewPager2 user_imageViewPager = momentDialog.findViewById(R.id.user_imageViewPager);
-        TextView user_momentDate = momentDialog.findViewById(R.id.user_momentDate);
-        CircleIndicator3 user_imgIndicator = momentDialog.findViewById(R.id.user_imgIndicator);
+        //TextView user_nameTxt = momentDialog.findViewById(R.id.user_momentName);
+        //ViewPager2 user_imageViewPager = momentDialog.findViewById(R.id.user_imageViewPager);
+        RecyclerView user_momentRecycler = momentDialog.findViewById(R.id.user_momentRecycler);
+        //TextView user_momentDate = momentDialog.findViewById(R.id.user_momentDate);
+        //CircleIndicator3 user_imgIndicator = momentDialog.findViewById(R.id.user_imgIndicator);
 
-        user_nameTxt.setText(user.name);
+        //user_nameTxt.setText(user.name);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        user_momentRecycler.setLayoutManager(layoutManager);
+        MomentAdapter momentAdapter = new MomentAdapter();
 
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
@@ -144,11 +151,13 @@ public class FamilyActivity extends BaseActivity {
                                                     Log.e(TAG,"No document exists");
                                                 }
                                             }
+                                            String name="";
                                             String[] image = new String[j];
                                             String[] date = new String[j];
                                             int i=0;
                                             for(QueryDocumentSnapshot document : task1.getResult()) {
                                                 if(document.exists()){
+                                                    name = document.get(Constants.KEY_NAME).toString();
                                                     image[i] = document.get(Constants.KEY_IMAGE).toString();
                                                     date[i] = document.get(Constants.KEY_TIMESTAMP).toString();
                                                     i++;
@@ -156,18 +165,23 @@ public class FamilyActivity extends BaseActivity {
                                                     Log.e(TAG,"No moment exists");
                                                 }
                                             }
-                                            user_imageViewPager.setOffscreenPageLimit(1);
-                                            user_imageViewPager
-                                                    .setAdapter(new ImageSliderAdapter(momentDialog.getContext(), image));
-                                            user_imgIndicator.setViewPager(user_imageViewPager);
+                                            momentAdapter.addItem(new Moment(name, image, date));
+                                            user_momentRecycler.setAdapter(momentAdapter);
 
-                                            user_imageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                                                @Override
-                                                public void onPageSelected(int position) {
-                                                    super.onPageSelected(position);
-                                                    user_momentDate.setText("| " + date[position] + " |");
-                                                }
-                                            });
+                                            //momentAdapter.addItem(new Moment(name, image, date));
+                                            //momentRecyclerView.setAdapter(momentAdapter);
+                                            //user_imageViewPager.setOffscreenPageLimit(1);
+                                            //user_imageViewPager
+                                                    //.setAdapter(new ImageSliderAdapter(momentDialog.getContext(), image));
+                                            //user_imgIndicator.setViewPager(user_imageViewPager);
+
+                                            //user_imageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                                                //@Override
+                                                //public void onPageSelected(int position) {
+                                                    //super.onPageSelected(position);
+                                                    //user_momentDate.setText("| " + date[position] + " |");
+                                                //}
+                                            //});
                                         } else {
                                             Log.e(TAG, "Task is not processed successfully");
                                         }
@@ -178,6 +192,6 @@ public class FamilyActivity extends BaseActivity {
                     }
 
                 });
-        mHandler.postDelayed(() -> momentDialog.show(), 1000);
+        momentDialog.show();
     }
 }
