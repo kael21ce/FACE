@@ -15,6 +15,7 @@ import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class FamilyViewActivity extends AppCompatActivity {
 
@@ -129,13 +130,13 @@ public class FamilyViewActivity extends AppCompatActivity {
         } else if (binding.idealContact.getText().toString().trim().isEmpty()) {
             showToast("이상적인 연락 횟수를 입력해주세요");
             return false;
-        } else if (binding.idealContact.getText().toString().matches(pattern)) {
+        } else if (!Pattern.matches(pattern, binding.idealContact.getText().toString())) {
             showToast("제대로 된 이상적인 연락 횟수를 입력해주세요");
             return false;
         } else if (binding.minContact.getText().toString().trim().isEmpty()) {
             showToast("최소 연락 횟수를 입력해주세요");
             return false;
-        } else if (binding.minContact.getText().toString().matches(pattern)) {
+        } else if (!Pattern.matches(pattern, binding.minContact.getText().toString())) {
             showToast("정상적인 최소 연락 횟수를 입력해주세요");
             return false;
         } else if (binding.themeLike.getText().toString().trim().isEmpty()) {
