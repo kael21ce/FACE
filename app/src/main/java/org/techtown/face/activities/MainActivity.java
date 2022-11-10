@@ -4,10 +4,12 @@ package org.techtown.face.activities;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -34,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.UploadTask;
 
@@ -49,6 +52,8 @@ import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
     GardenActivity gardenFragment;
-    UploadTask uploadTask;
     private FirebaseFirestore db;
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
@@ -210,8 +214,24 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                     }
                     return false;
-                }
-        );
+                });
+
+        db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot snapshot : task.getResult()){
+                            if(Objects.equals(snapshot.getString(Constants.KEY_NOTIFICATION), Constants.KEY_MEET)){
+                                String docId = snapshot.getId();
+                                String userId = snapshot.getString(Constants.KEY_USER);
+                                String name = snapshot.getString(Constants.KEY_NAME);
+                                dialogClick(docId, userId, name);
+                            }
+                        }
+                    }
+                });
     }
 
     private void createNotificationChannel() {
@@ -268,5 +288,64 @@ public class MainActivity extends AppCompatActivity {
         if (targets.length > 0) {
             ActivityCompat.requestPermissions(MainActivity.this, targets, 101);
         }
+    }
+
+    public void dialogClick(String docId, String userId, String name) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("대면 만남").setMessage(name+"님의 대면 만남을 수락하시겠습니까?");
+
+        builder.setPositiveButton("예", (dialog, which) -> {
+            long now = System.currentTimeMillis();
+            HashMap<String, Object> window = new HashMap<>();
+            window.put(Constants.KEY_WINDOW, now);
+            Log.e("This ", "is->"+userId);
+            db.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                    .collection(Constants.KEY_COLLECTION_USERS)
+                    .whereEqualTo(Constants.KEY_USER, userId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot snapshot : task.getResult()){
+                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(snapshot.getId())
+                                        .update(window);
+                            }
+                        }
+                    });
+            db.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(userId)
+                    .collection(Constants.KEY_COLLECTION_USERS)
+                    .whereEqualTo(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot snapshot : task.getResult()){
+                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(userId)
+                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(snapshot.getId())
+                                        .update(window);
+                            }
+                        }
+                    });
+
+            db.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                    .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                    .document(docId)
+                    .delete();
+        });
+        builder.setNegativeButton("아니요", (dialog, which) -> db.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .collection(Constants.KEY_COLLECTION_NOTIFICATION)
+                .document(docId)
+                .delete());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

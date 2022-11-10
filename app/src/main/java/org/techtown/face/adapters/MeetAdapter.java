@@ -64,6 +64,7 @@ public class MeetAdapter extends RecyclerView.Adapter<MeetAdapter.ViewHolder> {
             HashMap<String, Object> meet = new HashMap<>();
             meet.put(Constants.KEY_WINDOW, now);
             meet.put(Constants.KEY_EXPRESSION, 5);
+            meet.put(Constants.KEY_USER, getItemId());
 
 
 

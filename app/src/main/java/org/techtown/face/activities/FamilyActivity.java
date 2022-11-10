@@ -81,27 +81,19 @@ public class FamilyActivity extends BaseActivity {
     }
 
     private void sendContact(){
-        HashMap<String, Object> meetRequest = new HashMap<>();
-        meetRequest.put(Constants.KEY_TYPE,Constants.KEY_MEET_REQUEST);
-        meetRequest.put(Constants.KEY_NOTIFICATION, preferenceManager.getString(Constants.KEY_USER_ID));
-
         HashMap<String, Object> notification = new HashMap<>();
         notification.put(Constants.KEY_NOTIFICATION, Constants.KEY_MEET);
         notification.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+        notification.put(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(user.id)
-                .collection(Constants.KEY_COLLECTION_CLOUD)
-                .add(meetRequest)
-                .addOnCompleteListener(task -> {if(task.isSuccessful()){Toast.makeText(this, "요청이 성공하였습니다.",Toast.LENGTH_SHORT).show();}});
-
-        db.collection(Constants.KEY_COLLECTION_USERS)
-                .document(user.id)
                 .collection(Constants.KEY_COLLECTION_NOTIFICATION)
                 .add(notification)
-                .addOnCompleteListener(task -> Log.e("su","ccess"));
+                .addOnCompleteListener(task -> Toast.makeText(this, "요청이 성공하였습니다.",Toast.LENGTH_SHORT).show());
+
     }
 
     private void showMomentDialog(Context context, User user) {
