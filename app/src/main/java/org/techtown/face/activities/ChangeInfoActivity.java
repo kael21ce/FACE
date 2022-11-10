@@ -46,7 +46,6 @@ public class ChangeInfoActivity extends AppCompatActivity {
         reference.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(this).load(uri).into(binding.imageView4));
         binding.imageView3.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
         binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
-        binding.birthDay.setText(preferenceManager.getString(Constants.KEY_BIRTHDAY));
         binding.like.setText(preferenceManager.getString(Constants.KEY_THEME_LIKE));
         binding.dislike.setText(preferenceManager.getString(Constants.KEY_THEME_DISLIKE));
         binding.buttonChange.setOnClickListener(view -> changeInfo());
@@ -66,7 +65,6 @@ public class ChangeInfoActivity extends AppCompatActivity {
     private void changeInfo(){
         if(encodedImage!=null){preferenceManager.putString(Constants.KEY_IMAGE, encodedImage);}
         preferenceManager.putString(Constants.KEY_MOBILE,binding.phoneNumber.getText().toString());
-        preferenceManager.putString(Constants.KEY_BIRTHDAY,binding.birthDay.getText().toString());
         preferenceManager.putString(Constants.KEY_THEME_LIKE,binding.like.getText().toString());
         preferenceManager.putString(Constants.KEY_THEME_DISLIKE,binding.dislike.getText().toString());
 
@@ -77,7 +75,6 @@ public class ChangeInfoActivity extends AppCompatActivity {
                 .update(
                         Constants.KEY_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE),
                         Constants.KEY_MOBILE, preferenceManager.getString(Constants.KEY_MOBILE),
-                        Constants.KEY_BIRTHDAY, preferenceManager.getString(Constants.KEY_BIRTHDAY),
                         Constants.KEY_THEME_LIKE, preferenceManager.getString(Constants.KEY_THEME_LIKE),
                         Constants.KEY_THEME_DISLIKE, preferenceManager.getString(Constants.KEY_THEME_DISLIKE)
                 ).addOnSuccessListener(unused -> showToast("Update Success"))

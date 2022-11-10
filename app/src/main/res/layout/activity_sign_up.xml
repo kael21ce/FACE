@@ -52,72 +52,10 @@
         <EditText
             android:id="@+id/inputName"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/background_input"
-            android:inputType="textPersonName"
             android:hint="필수: 이름"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp"/>
-
-        <EditText
-            android:id="@+id/inputEmail"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:inputType="textEmailAddress"
-            android:hint="필수: 이메일 (abcde1234@naver.com)"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp"/>
-
-
-        <EditText
-            android:id="@+id/inputPassword"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:inputType="textPassword"
-            android:hint="필수: 비밀번호"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp"/>
-
-
-        <EditText
-            android:id="@+id/inputConfirmPassword"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_input"
-            android:inputType="textPassword"
-            android:hint="필수: 비밀번호 확인"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp"/>
-
-        <EditText
-            android:id="@+id/inputBirth"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/background_input"
-            android:hint="필수: 생년월일 (YYYYMMDD)"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="textPersonName"
@@ -127,9 +65,56 @@
             android:textSize="13sp" />
 
         <EditText
+            android:id="@+id/inputEmail"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_input"
+            android:hint="필수: 이메일 (abcde1234@naver.com)"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+
+        <EditText
+            android:id="@+id/inputPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_input"
+            android:hint="필수: 비밀번호"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+
+        <EditText
+            android:id="@+id/inputConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_input"
+            android:hint="필수: 비밀번호 확인"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+        <EditText
             android:id="@+id/inputPhoneNumber"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
             android:hint="필수: 휴대폰 번호 (01012345678)"

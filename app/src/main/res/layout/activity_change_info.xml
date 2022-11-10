@@ -75,17 +75,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="생년월일"/>
-
-        <EditText
-            android:id="@+id/birthDay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="111111"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="선호"/>
 
         <EditText

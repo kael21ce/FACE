@@ -43,7 +43,6 @@ public class AccountActivity extends BaseActivity {
         binding.deleteAccount.setOnClickListener(view -> deleteUser());
         binding.changeInfo.setOnClickListener(view -> changeInformation());
         binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
-        binding.birthDay.setText(preferenceManager.getString(Constants.KEY_BIRTHDAY));
         binding.imageView.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
         binding.like.setText(preferenceManager.getString(Constants.KEY_THEME_LIKE));
         binding.dislike.setText(preferenceManager.getString(Constants.KEY_THEME_DISLIKE));

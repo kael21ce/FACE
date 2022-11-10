@@ -74,7 +74,6 @@ public class SignUpActivity extends AppCompatActivity {
         user.put(Constants.KEY_EMAIL,binding.inputEmail.getText().toString());
         user.put(Constants.KEY_PASSWORD,binding.inputPassword.getText().toString());
         user.put(Constants.KEY_IMAGE,encodedImage);
-        user.put(Constants.KEY_BIRTHDAY,binding.inputBirth.getText().toString());
         user.put(Constants.KEY_MOBILE,binding.inputPhoneNumber.getText().toString());
 
         database.collection(Constants.KEY_COLLECTION_USERS)
@@ -85,7 +84,6 @@ public class SignUpActivity extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_USER_ID,documentReference.getId());
                     preferenceManager.putString(Constants.KEY_NAME,binding.inputName.getText().toString());
                     preferenceManager.putString(Constants.KEY_IMAGE,encodedImage);
-                    preferenceManager.putString(Constants.KEY_BIRTHDAY,binding.inputBirth.getText().toString());
                     preferenceManager.putString(Constants.KEY_MOBILE,binding.inputPhoneNumber.getText().toString());
                     Intent intent = new Intent(getApplicationContext(),CameraActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -162,9 +160,6 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }else if (!binding.inputPassword.getText().toString().equals(binding.inputConfirmPassword.getText().toString())){
             showToast("비밀번호와 비밀번호 확인은 같아야 합니다");
-            return false;
-        }else if (binding.inputBirth.getText().toString().trim().isEmpty()){
-            showToast("생년월일을 입력해주세요");
             return false;
         }else if (binding.inputPhoneNumber.getText().toString().trim().isEmpty()){
             showToast("휴대폰 번호를 입력해주세요");

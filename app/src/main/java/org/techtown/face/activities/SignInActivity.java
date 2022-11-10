@@ -155,7 +155,6 @@ public class SignInActivity extends AppCompatActivity {
                         preferenceManager.putString(Constants.KEY_NAME,documentSnapshot.getString(Constants.KEY_NAME));
                         preferenceManager.putString(Constants.KEY_IMAGE,documentSnapshot.getString(Constants.KEY_IMAGE));
                         preferenceManager.putString(Constants.KEY_MOBILE,documentSnapshot.getString(Constants.KEY_MOBILE));
-                        preferenceManager.putString(Constants.KEY_BIRTHDAY,documentSnapshot.getString(Constants.KEY_BIRTHDAY));
                         preferenceManager.putString(Constants.KEY_PATH,documentSnapshot.getString(Constants.KEY_PATH));
                         database.collection(Constants.KEY_COLLECTION_USERS)
                                 .document(documentSnapshot.getId())
