@@ -103,7 +103,7 @@ public class FamilyAddActivity extends AppCompatActivity {
     }
 
     private Boolean isValidSignUpDetails() {
-        String pattern = "^[0-99]*$";
+        String pattern = "^[0-9]*$";
         if (binding.nameTxt.getText().toString().trim().isEmpty()) {
             showToast("이름을 입력해주세요");
             return false;
@@ -113,11 +113,20 @@ public class FamilyAddActivity extends AppCompatActivity {
         } else if (!Pattern.matches(pattern, binding.idealContact.getText().toString())) {
             showToast("제대로 된 이상적인 연락 횟수를 입력해주세요");
             return false;
+        } else if (Integer.parseInt(binding.idealContact.getText().toString())>99) {
+            showToast("제대로 된 이상적인 연락 횟수를 입력해주세요");
+            return false;
         } else if (binding.minContact.getText().toString().trim().isEmpty()) {
             showToast("최소 연락 횟수를 입력해주세요");
             return false;
-        } else if (!Pattern.matches(pattern, binding.minContact.getText().toString())) {
+        } else if (!Pattern.matches(pattern, binding.minContact.getText().toString())&&Integer.parseInt(binding.minContact.getText().toString())>99) {
             showToast("정상적인 최소 연락 횟수를 입력해주세요");
+            return false;
+        } else if (Integer.parseInt(binding.minContact.getText().toString())>99) {
+            showToast("정상적인 최소 연락 횟수를 입력해주세요");
+            return false;
+        } else if (Integer.parseInt(binding.idealContact.getText().toString())>Integer.parseInt(binding.minContact.getText().toString())) {
+            showToast("정상적으로 해주세요");
             return false;
         } else if (binding.themeLike.getText().toString().trim().isEmpty()) {
             showToast("선호 여부를 입력해주세요");
