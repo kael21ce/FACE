@@ -1,11 +1,15 @@
 package org.techtown.face.network;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -13,6 +17,8 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.techtown.face.R;
+import org.techtown.face.activities.ChatActivity;
+import org.techtown.face.activities.MainActivity;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
@@ -24,6 +30,7 @@ public class NotificationService extends Service {
 
     String CHANNEL_ID = "test";
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(intent==null){
@@ -39,6 +46,7 @@ public class NotificationService extends Service {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void notificationRead(){
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -49,10 +57,17 @@ public class NotificationService extends Service {
                    for(DocumentChange change : value.getDocumentChanges()){
                            if(Objects.equals(change.getDocument().getString(Constants.KEY_NOTIFICATION), Constants.KEY_MEET)){
                                String name = change.getDocument().getString(Constants.KEY_NAME);
+                               @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                       NotificationService.this,
+                                       0, // 보통 default값 0을 삽입
+                                       new Intent(getApplicationContext(), MainActivity.class),
+                                       PendingIntent.FLAG_IMMUTABLE
+                               );
                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                                        .setSmallIcon(R.drawable.user_icon)
                                        .setContentTitle("FACE")
                                        .setContentText(name+"님의 대면 만남 신청이 왔습니다.")
+                                       .setContentIntent(mPendingIntent)
                                        .setDefaults(Notification.DEFAULT_VIBRATE)
                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                        .setAutoCancel(true)
@@ -62,11 +77,18 @@ public class NotificationService extends Service {
                            }else if(Objects.equals(change.getDocument().getString(Constants.KEY_NOTIFICATION),Constants.KEY_COLLECTION_CHAT)){
                                String name = change.getDocument().getString(Constants.KEY_NAME);
                                String message = change.getDocument().getString(Constants.KEY_MESSAGE);
+                               @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                       NotificationService.this,
+                                       0, // 보통 default값 0을 삽입
+                                       new Intent(getApplicationContext(), MainActivity.class),
+                                       PendingIntent.FLAG_IMMUTABLE
+                               );
                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                                        .setSmallIcon(R.drawable.user_icon)
                                        .setContentTitle("FACE")
                                        .setContentText(name+"  "+message)
                                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                                       .setContentIntent(mPendingIntent)
                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                        .setAutoCancel(true)
                                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
@@ -74,10 +96,17 @@ public class NotificationService extends Service {
                                notificationManager.notify(101, mBuilder.build());
                            }else if(Objects.equals(change.getDocument().getString(Constants.KEY_NOTIFICATION),Constants.KEY_FAMILY_REQUEST)){
                                String name = change.getDocument().getString(Constants.KEY_NAME);
+                               @SuppressLint("UnspecifiedImmutableFlag") PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                       NotificationService.this,
+                                       0, // 보통 default값 0을 삽입
+                                       new Intent(getApplicationContext(), MainActivity.class),
+                                       PendingIntent.FLAG_IMMUTABLE
+                               );
                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                                        .setSmallIcon(R.drawable.user_icon)
                                        .setContentTitle("FACE")
                                        .setContentText(name+"님의 가족 요청이 들어왔어요!")
+                                       .setContentIntent(mPendingIntent)
                                        .setDefaults(Notification.DEFAULT_VIBRATE)
                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                        .setAutoCancel(true)

@@ -15,8 +15,8 @@
 
         <FrameLayout
             android:id="@+id/layoutImage2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp">
 
@@ -72,27 +72,6 @@
             android:layout_height="wrap_content"
             android:text="111111"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="선호"/>
-
-        <EditText
-            android:id="@+id/like"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="111111"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="불호"/>
-
-        <EditText
-            android:id="@+id/dislike"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="111111"/>
 
         <Button
             android:id="@+id/buttonChange"

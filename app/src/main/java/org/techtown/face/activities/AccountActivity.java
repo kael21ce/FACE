@@ -58,18 +58,19 @@ public class AccountActivity extends BaseActivity {
         showToast("Signing out...........");
         database = FirebaseFirestore.getInstance();
 
-        DocumentReference documentReference =
-                database.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID));
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
 
-        documentReference.update(updates).addOnSuccessListener(unused -> {
-                    preferenceManager.clear();
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                .update(updates)
+                .addOnSuccessListener(unused -> {
 
-                    startActivity(new Intent(getApplicationContext(), SignInActivity.class));
-                    finish();
                 })
                 .addOnFailureListener(e -> {Log.e("This", "IS problem"); showToast("Unable to sign out");});
+        preferenceManager.clear();
+        startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+        finish();
     }
 
     private void deleteUser(){
