@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Adapter;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,11 +25,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.checkerframework.checker.units.qual.A;
 import org.techtown.face.R;
 import org.techtown.face.activities.MomentCheckActivity;
 import org.techtown.face.adapters.MomentAdapter;
-import org.techtown.face.utilites.Constants;
+import org.techtown.face.adapters.myMomentAdapter;
 import org.techtown.face.models.Moment;
+import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.text.SimpleDateFormat;
@@ -45,30 +48,28 @@ public class MomentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_moment, container, false);
-        //나의 순간 추가
-        Button addMoment = v.findViewById(R.id.addMoment);
-        addMoment.setOnClickListener(v1 -> {
-            Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            pickImage.launch(momentIntent);
-        });
-        //
-        //나의 순간 삭제
-        Button deleteMoment = v.findViewById(R.id.deleteMoment);
-        deleteMoment.setOnClickListener(view -> {
-            Intent deleteIntent = new Intent(v.getContext(), MomentCheckActivity.class);
-            startActivity(deleteIntent);
-        });
-        //
-
-        //리사이클러뷰에 순간 아이템 배열
+        preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
         RecyclerView momentRecyclerView = v.findViewById(R.id.momentRecyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
         momentRecyclerView.setLayoutManager(layoutManager);
-        preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
         MomentAdapter momentAdapter = new MomentAdapter();
+        momentAdapter.setOnItemClickListener(new MomentAdapter.OnItemClickListener() {
+            @Override
+            public void onAddClick(View v, int position) {
+                Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                pickImage.launch(momentIntent);
+            }
 
+            @Override
+            public void onDeleteClick(View v, int position) {
+                Intent deleteIntent = new Intent(v.getContext(), MomentCheckActivity.class);
+                startActivity(deleteIntent);
+            }
+        });
+
+        //리사이클러뷰에 순간 아이템 배열
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
                 .collection(Constants.KEY_COLLECTION_IMAGES)
@@ -97,7 +98,8 @@ public class MomentFragment extends Fragment {
                                 Log.e("oh","hell");
                             }
                         }
-                        momentAdapter.addItem(new Moment(name, image, date));
+                        momentAdapter.addItem(new Moment(name,
+                                preferenceManager.getString(Constants.KEY_USER_ID), image, date));
                         momentRecyclerView.setAdapter(momentAdapter);
                     }
                 });
@@ -141,7 +143,7 @@ public class MomentFragment extends Fragment {
                                                     Log.e("oh","hell");
                                                 }
                                             }
-                                            momentAdapter.addItem(new Moment(name, image, date));
+                                            momentAdapter.addItem(new Moment(name, userId, image, date));
                                             momentRecyclerView.setAdapter(momentAdapter);
                                         } else {
                                             Log.e("what", "the hell inside here?");

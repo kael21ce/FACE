@@ -157,7 +157,7 @@ public class FamilyActivity extends BaseActivity {
                                                     Log.e(TAG,"No moment exists");
                                                 }
                                             }
-                                            momentAdapter.addItem(new Moment(name, image, date));
+                                            momentAdapter.addItem(new Moment(name, userId, image, date));
                                             user_momentRecycler.setAdapter(momentAdapter);
 
                                             //momentAdapter.addItem(new Moment(name, image, date));

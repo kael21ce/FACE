@@ -9,6 +9,14 @@ public class Moment {
         this.name = name;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String[] getImages() {
         return images;
     }
@@ -25,13 +33,15 @@ public class Moment {
         this.dates = dates;
     }
 
-    public Moment(String name, String[] images, String[] dates) {
+    public Moment(String name, String id, String[] images, String[] dates) {
         this.name = name;
+        this.id = id;
         this.images = images;
         this.dates = dates;
     }
 
     String name;
+    String id;
     String[] images;
     String[] dates;
 }
