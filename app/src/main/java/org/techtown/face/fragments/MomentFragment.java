@@ -73,6 +73,7 @@ public class MomentFragment extends Fragment {
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
                 .collection(Constants.KEY_COLLECTION_IMAGES)
+                .orderBy(Constants.KEY_TIMESTAMP,Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()&&task.getResult().size()>0){
