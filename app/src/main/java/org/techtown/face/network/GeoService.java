@@ -1,6 +1,7 @@
 package org.techtown.face.network;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -37,6 +38,8 @@ import java.util.HashMap;
 public class GeoService extends Service {
 
 
+    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+    FirebaseFirestore db;
 
     //위도 경도 게산식이 있는 코드
     private final LocationCallback mLocationCallback = new LocationCallback() {
@@ -56,7 +59,7 @@ public class GeoService extends Service {
                 Log.e("LOCATION_UPDATE", latitude + ", " + longitude);
 
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db = FirebaseFirestore.getInstance();
                 //위도와 경도 데이터 유저 문서에 업데이트 하기
                 db.collection(Constants.KEY_COLLECTION_USERS).document(myId).update(location);
 
@@ -69,7 +72,7 @@ public class GeoService extends Service {
                            if(task.isSuccessful()){
                                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
                                    String userId = documentSnapshot.getString(Constants.KEY_USER);
-                                   //상대방의 위도와 경도 데이터 가져오기기
+                                   //상대방의 위도와 경도 데이터 가져오기
                                    db.collection(Constants.KEY_COLLECTION_USERS)
                                            .document(userId)
                                            .get()
@@ -78,16 +81,10 @@ public class GeoService extends Service {
                                                    DocumentSnapshot documentSnapshot1 = task1.getResult();
                                                    Double latitude1 = documentSnapshot1.getDouble(Constants.KEY_LATITUDE);
                                                    Double longitude1 = documentSnapshot1.getDouble(Constants.KEY_LONGITUDE);
-                                                   Log.e("FACEGeo", "위치를 출력합니다-"
-                                                           + documentSnapshot1.getString(Constants.KEY_NAME) +": " + "Latitude: " + latitude1
-                                                           + " & " + "Longitude: " + longitude1);
                                                    if(latitude1 != null && longitude1 !=null){
                                                        double lat1 = latitude1;
                                                        double lon1 = longitude1;
                                                        double dist = distance(latitude,longitude,lat1,lon1,"meter");
-                                                       Log.e("This","Is->"+dist);
-                                                       Log.e("FACEGeo", "거리를 출력합니다-" + documentSnapshot1.getString(Constants.KEY_NAME) + ": "
-                                                               + distance(latitude,longitude,lat1,lon1,"meter"));
 
                                                        //계산한 거리로 window 업데이트 하기
                                                        if(dist<50){
@@ -98,8 +95,7 @@ public class GeoService extends Service {
                                                                    .collection(Constants.KEY_COLLECTION_USERS)
                                                                    .document(documentSnapshot.getId())
                                                                    .update(now);
-                                                           Log.e("FACEGeo", "업데이트된 윈도우-"
-                                                                   + documentSnapshot1.getString(Constants.KEY_NAME) +": " + System.currentTimeMillis());
+                                                           dialogClick(userId, documentSnapshot1.getString(Constants.KEY_NAME));
                                                        }
                                                    }else{
                                                        Log.e("Hey", "상대방이 GPS를 사용하지 않고 있습니다.");
@@ -142,6 +138,56 @@ public class GeoService extends Service {
     // This function converts radians to decimal degrees
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+    public void dialogClick(String userId, String name) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("대면 만남").setMessage(name+"님의 대면 만남을 수락하시겠습니까?");
+
+        builder.setPositiveButton("예", (dialog, which) -> {
+            long now = System.currentTimeMillis();
+            HashMap<String, Object> window = new HashMap<>();
+            window.put(Constants.KEY_WINDOW, now);
+            Log.e("This ", "is->"+userId);
+            db.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                    .collection(Constants.KEY_COLLECTION_USERS)
+                    .whereEqualTo(Constants.KEY_USER, userId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot snapshot : task.getResult()){
+                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(snapshot.getId())
+                                        .update(window);
+                            }
+                        }
+                    });
+            db.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(userId)
+                    .collection(Constants.KEY_COLLECTION_USERS)
+                    .whereEqualTo(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID))
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot snapshot : task.getResult()){
+                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(userId)
+                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(snapshot.getId())
+                                        .update(window);
+                            }
+                        }
+                    });
+
+        });
+        builder.setNegativeButton("아니요", (dialog, which) -> {});
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Nullable
