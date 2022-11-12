@@ -4,12 +4,12 @@ package org.techtown.face.activities;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -21,8 +21,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,10 +37,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.R;
 import org.techtown.face.databinding.ActivityMainBinding;
@@ -47,12 +49,14 @@ import org.techtown.face.fragments.MomentFragment;
 import org.techtown.face.fragments.ScaleFragment;
 import org.techtown.face.network.BluetoothService;
 import org.techtown.face.network.ContactService;
+import org.techtown.face.network.GeoService;
 import org.techtown.face.network.NotificationService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,13 +79,13 @@ public class MainActivity extends AppCompatActivity {
     MomentFragment momentFragment;
     GardenActivity gardenFragment;
     private FirebaseFirestore db;
-    private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
     String TAG = "MainActivity";
     String CHANNEL_ID = "test";
     String DESCRIPTION = "For the test push notification";
     DrawerLayout drawerLayout;
     View drawerView;
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     ActionBar abar;
 
@@ -134,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        org.techtown.face.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -142,16 +146,41 @@ public class MainActivity extends AppCompatActivity {
         ImageButton close_button = findViewById(R.id.close_button);
         close_button.setOnClickListener(v -> drawerLayout.closeDrawers());
         //설정창 기능
-        LinearLayout setLocation = findViewById(R.id.setLocation);
-        setLocation.setOnClickListener(v -> {
-            Intent intent = new Intent(this, GeoSettingActivity.class);
-            startActivity(intent);
+
+        //GPS
+        TextView isGPSon = findViewById(R.id.isGPSon);
+        Button gpsOn = findViewById(R.id.gpsOn);
+        Button gpsOff = findViewById(R.id.gpsOff);
+        if(isServiceRunning(this)){
+            isGPSon.setText("GPS가 켜져있습니다");
+        }
+
+        gpsOn.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+            } else {
+                startLocationService();
+                isGPSon.setText("GPS가 켜져있습니다");
+            }
         });
+
+        gpsOff.setOnClickListener(v -> {
+            isGPSon.setText("GPS가 꺼져있습니다");
+            stopLocationService();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> updates = new HashMap<>();
+            updates.put(Constants.KEY_LATITUDE, FieldValue.delete());
+            updates.put(Constants.KEY_LONGITUDE, FieldValue.delete());
+            db.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID)).update(updates);
+        });
+
+        //계정 설정
         LinearLayout setAccount = findViewById(R.id.setAccount);
         setAccount.setOnClickListener(v -> {
             Intent intent = new Intent(this, AccountActivity.class);
             startActivity(intent);
         });
+
         LinearLayout setFamily = findViewById(R.id.setFamily);
         setFamily.setOnClickListener(v -> {
             Intent intent = new Intent(this, FamilySettingActivity.class);
@@ -348,4 +377,61 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    public static boolean isServiceRunning(Context context) {
+        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo rsi : am.getRunningServices(Integer.MAX_VALUE)) {
+            if (GeoService.class.getName().equals(rsi.service.getClassName()))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationService();
+            } else {
+                Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean isLocationServiceRunning() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null) {
+            for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if (GeoService.class.getName().equals(service.service.getClassName())) {
+                    if (service.foreground) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private void startLocationService() {
+        if (!isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplicationContext(), GeoService.class);
+            intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void stopLocationService() {
+        if (isLocationServiceRunning()) {
+            Intent intent = new Intent(getApplicationContext(), GeoService.class);
+            intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
+            startService(intent);
+            Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

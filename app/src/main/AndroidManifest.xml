@@ -60,10 +60,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".activities.GeoSettingActivity"
-            android:exported="false" />
-
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="true" />

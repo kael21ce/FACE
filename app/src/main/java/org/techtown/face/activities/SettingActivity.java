@@ -18,11 +18,6 @@ public class SettingActivity extends AppCompatActivity {
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //GPS 설정
-        binding.setLocation.setOnClickListener(v -> {
-            Intent intent = new Intent(SettingActivity.this, GeoSettingActivity.class);
-            startActivity(intent);
-        });
         
         //계정 설정
         binding.setAccount.setOnClickListener(view -> {
