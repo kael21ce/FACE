@@ -75,12 +75,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".activities.AddActivity"
-            android:exported="true"
-            android:title="가족 추가하기"
-            android:windowSoftInputMode="adjustResize" />
-
         <receiver
             android:name=".utilites.ContactReceiver"
             android:enabled="true"

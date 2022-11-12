@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(gardenIntent);
                 break;
             case R.id.add_family:
-                Intent addIntent = new Intent(this, AddActivity.class);
+                Intent addIntent = new Intent(this, SearchActivity.class);
                 startActivity(addIntent);
                 break;
             case R.id.setting:
