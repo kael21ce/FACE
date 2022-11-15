@@ -23,9 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -171,29 +172,32 @@ public class MainActivity extends AppCompatActivity {
 
         //GPS
         TextView isGPSon = findViewById(R.id.isGPSon);
-        Button gpsOn = findViewById(R.id.gpsOn);
-        Button gpsOff = findViewById(R.id.gpsOff);
+        Switch GPSswitch = findViewById(R.id.GPSswitch);
         if(isServiceRunning(this)){
             isGPSon.setText("GPS가 켜져있습니다");
+            GPSswitch.setChecked(true);
         }
 
-        gpsOn.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
-            } else {
-                startLocationService();
-                isGPSon.setText("GPS가 켜져있습니다");
+        GPSswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+                    } else {
+                        startLocationService();
+                        isGPSon.setText("GPS가 켜져있습니다");
+                    }
+                } else {
+                    isGPSon.setText("GPS가 꺼져있습니다");
+                    stopLocationService();
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String,Object> updates = new HashMap<>();
+                    updates.put(Constants.KEY_LATITUDE, FieldValue.delete());
+                    updates.put(Constants.KEY_LONGITUDE, FieldValue.delete());
+                    db.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID)).update(updates);
+                }
             }
-        });
-
-        gpsOff.setOnClickListener(v -> {
-            isGPSon.setText("GPS가 꺼져있습니다");
-            stopLocationService();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Map<String,Object> updates = new HashMap<>();
-            updates.put(Constants.KEY_LATITUDE, FieldValue.delete());
-            updates.put(Constants.KEY_LONGITUDE, FieldValue.delete());
-            db.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID)).update(updates);
         });
 
         //계정 설정

@@ -36,7 +36,8 @@
             android:layout_marginStart="150dp"
             android:layout_marginBottom="3dp"
             android:backgroundTint="#FFFFFF"
-            app:srcCompat="@drawable/close" />
+            app:srcCompat="@drawable/close"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
 
@@ -112,38 +113,37 @@
             app:srcCompat="@drawable/crosshair" />
 
         <LinearLayout
+            android:id="@+id/switchContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/isGPSon"
+            <Switch
+                android:id="@+id/GPSswitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="GPS가 꺼져있습니다" />
+                android:layout_marginTop="5dp"
+                android:paddingStart="12dp"
+                android:text="GPS"
+                android:textColorHighlight="#4CAF50"
+                android:textColorLink="#4CAF50"
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/gpsOn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                <TextView
+                    android:id="@+id/isGPSon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:text="GPS켜기" />
+                    android:paddingStart="10dp"
+                    android:text="GPS가 꺼져있습니다" />
 
-                <Button
-                    android:id="@+id/gpsOff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:text="GPS끄기" />
             </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>
