@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 자꾸 오류떠서 로그에서 추가하라고 한 퍼미션 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/> <!--SmsReceiver를 위한 권한-->
+    <uses-permission android:name="android.permission.READ_SMS"/>
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -30,11 +32,20 @@
         android:theme="@style/Theme.FACE"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <receiver
+            android:name=".utilites.SmsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".network.NotificationService"
             android:enabled="true"
             android:exported="true">
+
         </service>
 
         <activity
