@@ -62,7 +62,6 @@ public class myMomentAdapter extends RecyclerView.Adapter<myMomentAdapter.ViewHo
             imageViewPager = itemView.findViewById(R.id.my_imageViewPager);
             my_momentDate = itemView.findViewById(R.id.my_momentDate);
             imgIndicator = itemView.findViewById(R.id.my_imgIndicator);
-            my_plusMoment = itemView.findViewById(R.id.my_plusMoment);
             my_deleteMoment = itemView.findViewById(R.id.my_deleteMoment);
         }
 

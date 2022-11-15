@@ -13,9 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +29,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -36,11 +40,15 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.techtown.face.R;
 import org.techtown.face.databinding.ActivityMainBinding;
@@ -54,7 +62,9 @@ import org.techtown.face.network.NotificationService;
 import org.techtown.face.utilites.Constants;
 import org.techtown.face.utilites.PreferenceManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -78,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
     ScaleFragment scaleFragment;
     MomentFragment momentFragment;
     GardenActivity gardenFragment;
+    FloatingActionButton momentAddFloating;
+    UploadTask uploadTask;
     private FirebaseFirestore db;
     private PreferenceManager preferenceManager;
     String TAG = "MainActivity";
@@ -141,6 +153,16 @@ public class MainActivity extends AppCompatActivity {
         org.techtown.face.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        momentAddFloating = findViewById(R.id.momentAddFloating);
+        momentAddFloating.setVisibility(View.INVISIBLE);
+        momentAddFloating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                pickImage.launch(momentIntent);
+            }
+        });
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerView = findViewById(R.id.drawer_setting);
         ImageButton close_button = findViewById(R.id.close_button);
@@ -229,16 +251,19 @@ public class MainActivity extends AppCompatActivity {
                                     frameFragment).commit();
                             anim.setDuration(3000);
                             //anim.start();
+                            momentAddFloating.setVisibility(View.INVISIBLE);
 
                             return true;
                         case R.id.scaleTab:
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     scaleFragment).commit();
+                            momentAddFloating.setVisibility(View.INVISIBLE);
 
                             return true;
                         case R.id.momentTab:
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     momentFragment).commit();
+                            momentAddFloating.setVisibility(View.VISIBLE);
 
                             return true;
                     }
@@ -433,5 +458,52 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK){
+                    if (result.getData()!= null){
+                        Log.e(TAG,result.getData().toString());
+                        Uri imageUri = result.getData().getData();
+                        String path = preferenceManager.getString(Constants.KEY_USER_ID)+"/"+imageUri.getLastPathSegment();
+
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        StorageReference imageRef = storageReference.child(path);
+                        uploadTask = imageRef.putFile(imageUri);
+                        uploadTask.addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+                                showToast("We did it!");
+                            } else {
+                                showToast("Failed");
+                            }
+                        });
+
+                        HashMap<String,Object> images = new HashMap<>();
+
+                        String name = preferenceManager.getString(Constants.KEY_NAME);
+                        String image = path;
+                        long now = System.currentTimeMillis();
+                        Date date = new Date(now);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        String dates = sdf.format(date);
+
+                        images.put(Constants.KEY_NAME,name);
+                        images.put(Constants.KEY_IMAGE,image);
+                        images.put(Constants.KEY_TIMESTAMP,dates);
+
+                        db.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                .collection(Constants.KEY_COLLECTION_IMAGES)
+                                .add(images)
+                                .addOnCompleteListener(task -> {
+                                    if(task.isSuccessful()){
+                                        showToast("horray");
+                                    } else {
+                                        showToast("fuck");
+                                    }
+                                });
+                    }
+                }
+            });
 
 }

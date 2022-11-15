@@ -56,13 +56,6 @@ public class MomentFragment extends Fragment {
         MomentAdapter momentAdapter = new MomentAdapter();
         momentAdapter.setOnItemClickListener(new MomentAdapter.OnItemClickListener() {
             @Override
-            public void onAddClick(View v, int position) {
-                Intent momentIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                momentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                pickImage.launch(momentIntent);
-            }
-
-            @Override
             public void onDeleteClick(View v, int position) {
                 Intent deleteIntent = new Intent(v.getContext(), MomentCheckActivity.class);
                 startActivity(deleteIntent);

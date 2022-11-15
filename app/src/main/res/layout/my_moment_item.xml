@@ -10,23 +10,15 @@
         android:id="@+id/deleteContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="@drawable/border_layout">
-
-        <ImageButton
-            android:id="@+id/my_plusMoment"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="280dp"
-            android:backgroundTint="#FFFFFF"
-            app:srcCompat="@drawable/plus"
-            tools:ignore="SpeakableTextPresentCheck" />
+        android:background="@drawable/border_layout"
+        android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/my_deleteMoment"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="30dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="10dp"
             android:backgroundTint="#FFFFFF"
             app:srcCompat="@drawable/minus"
             tools:ignore="SpeakableTextPresentCheck" />

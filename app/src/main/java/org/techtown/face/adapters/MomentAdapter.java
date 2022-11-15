@@ -28,7 +28,6 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     String TAG = "MomentAdapter";
 
     public interface OnItemClickListener{
-        void onAddClick(View v, int position); //순간 추가
         void onDeleteClick(View v, int position);//순간 삭제
     }
     private static MomentAdapter.OnItemClickListener itemClickListener;
@@ -71,7 +70,6 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             ViewPager2 my_imageViewPager = itemView.findViewById(R.id.my_imageViewPager);
             TextView my_momentDate = itemView.findViewById(R.id.my_momentDate);
             CircleIndicator3 imgIndicator = itemView.findViewById(R.id.my_imgIndicator);
-            ImageButton my_plusMoment = itemView.findViewById(R.id.my_plusMoment);
             ImageButton my_deleteMoment = itemView.findViewById(R.id.my_deleteMoment);
 
             String[] dates = item.getDates();
@@ -88,14 +86,6 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 }
             });
 
-            my_plusMoment.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position!=RecyclerView.NO_POSITION) {
-                    if (itemClickListener!=null) {
-                        itemClickListener.onAddClick(v, position);
-                    }
-                }
-            });
             my_deleteMoment.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position!=RecyclerView.NO_POSITION) {
@@ -168,8 +158,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Log.w(TAG, "getItemViewType 호출됨.");
-        //preferenceManager = new PreferenceManager(context);
-        if (items.get(position).getId().equals("AUhLTStRQ1junylpEUJ0")) {
+        if (position==0) {
             return TYPE_MY_MOMENT;
         } else {
             return TYPE_FAMILY_MOMENT;
