@@ -67,6 +67,11 @@ public class Constants {
     public static final String ACTION_CALCULATE_EXPRESSION = "calculateExpression";
     public static final String KEY_COUNT = "count";
 
+    public static final String KEY_COLLECTION_SMS = "sms";
+    public static final String KEY_SENDER = "sender";
+    public static final String KEY_CONTENTS = "contents";
+    public static final String KEY_RECEIVED_TIME = "received_time";
+
     public static HashMap<String, String> remoteMsgHeaders = null;
     public static HashMap<String,String> getRemoteMsgHeaders(){
         if (remoteMsgHeaders == null){

@@ -11,10 +11,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SmsReceiver extends BroadcastReceiver {
     private static final String TAG = "SmsReceiver";
@@ -24,6 +30,9 @@ public class SmsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         long now = System.currentTimeMillis();
+        db = FirebaseFirestore.getInstance();
+        preferenceManager = new PreferenceManager(context);
+        String userId = preferenceManager.getString(Constants.KEY_USER_ID);
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
             Log.w(TAG, "onReceive() is called");
 
@@ -41,9 +50,6 @@ public class SmsReceiver extends BroadcastReceiver {
                 Log.w(TAG, "SMS received timestamp : " + receivedTime);
 
                 //Sms 발신 시 발신자 쪽에서 표정 업데이트
-                db = FirebaseFirestore.getInstance();
-                preferenceManager = new PreferenceManager(context);
-                String userId = preferenceManager.getString(Constants.KEY_USER_ID);
                 db.collection(Constants.KEY_COLLECTION_USERS)
                         .document(userId)
                         .collection(Constants.KEY_COLLECTION_USERS)
@@ -91,6 +97,14 @@ public class SmsReceiver extends BroadcastReceiver {
                                 }
                             }
                         });
+                //For ScaleInfo: 데이터베이스에 정보 올리기
+                Map<String, Object> sms = new HashMap<>();
+                sms.put(Constants.KEY_SENDER, sender);
+                sms.put(Constants.KEY_RECEIVER_ID, userId);
+                sms.put(Constants.KEY_RECEIVED_TIME, receivedTime);
+                db.collection(Constants.KEY_COLLECTION_SMS)
+                        .add(sms)
+                        .addOnSuccessListener(documentReference -> Log.w(TAG, "Document is successfully written!"));
             }
         }
     }
