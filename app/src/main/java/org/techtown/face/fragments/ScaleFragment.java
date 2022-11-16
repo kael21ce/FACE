@@ -63,7 +63,7 @@ public class ScaleFragment extends Fragment {
                                         if (userId.equals(thisId)) {
                                             String name = documentSnapshot.get(Constants.KEY_NAME).toString();
                                             String mobile = documentSnapshot.get(Constants.KEY_MOBILE).toString();
-                                            adapter.addItem(new FamilyScale(name, mobile));
+                                            adapter.addItem(new FamilyScale(name, mobile, userId));
                                             Log.w(TAG, "Successfully loaded");
                                         }
                                     }

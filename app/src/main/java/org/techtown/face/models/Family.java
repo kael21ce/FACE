@@ -21,10 +21,12 @@ public class Family {
     public static class FamilyScale {
         String name;
         String mobile;
+        String id;
 
-        public FamilyScale(String name, String mobile) {
+        public FamilyScale(String name, String mobile, String id) {
             this.name = name;
             this.mobile = mobile;
+            this.id = id;
         }
 
         public String getScaleName() {
@@ -41,6 +43,14 @@ public class Family {
 
         public void setScaleMobile(String mobile) {
             this.mobile = mobile;
+        }
+
+        public String getScaleId() {
+            return id;
+        }
+
+        public void setScaleId(String id) {
+            this.id = id;
         }
         
     }

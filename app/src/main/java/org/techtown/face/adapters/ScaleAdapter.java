@@ -15,20 +15,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import org.techtown.face.R;
 import org.techtown.face.activities.FamilyActivity;
+import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.models.Family;
-import org.techtown.face.R;
 import org.techtown.face.utilites.PreferenceManager;
 import org.techtown.face.utilites.ScaleInfo;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
     ArrayList<Family.FamilyScale> items = new ArrayList<>();
@@ -100,6 +101,7 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
         public void setItem(Family.FamilyScale item) {
             ScaleInfo scaleInfo = new ScaleInfo();
             preferenceManager = new PreferenceManager(itemView.getContext());
+            String myId = preferenceManager.getString(Constants.KEY_USER_ID);
             Handler mHandler = new Handler();
             final int[] numI = {0};
             final int[] numO = {0};
@@ -109,6 +111,7 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             nameTxt.setText(item.getScaleName());
             youTxt.setText(item.getScaleName());
             String mobileForScale = item.getScaleMoible();
+            String userId = item.getScaleId();
             scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
             scaleInfo.getSentNum(itemView.getContext(), mobileForScale);
             scaleInfo.getAngle(itemView.getContext(), mobileForScale);
@@ -137,38 +140,33 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
                 User user = new User();
                 //db에서 데이터 가져오기
                 db.collection(Constants.KEY_COLLECTION_USERS)
+                        .document(myId)
+                        .collection(Constants.KEY_COLLECTION_USERS)
                         .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if (Objects.equals(document.get(Constants.KEY_MOBILE), mobileForScale)) {
-                                        user.name = Objects.requireNonNull(document.get(Constants.KEY_NAME)).toString();
-                                        Log.w(TAG, "Name: " + user.name);
-                                        user.email = Objects.requireNonNull(document.get(Constants.KEY_EMAIL)).toString();
-                                        user.image= Objects.requireNonNull(document.get(Constants.KEY_IMAGE)).toString();
-                                        user.token = Objects.requireNonNull(document.get(Constants.KEY_FCM_TOKEN)).toString();
-                                        user.id = document.getId();
-                                        user.mobile = Objects.requireNonNull(document.get(Constants.KEY_MOBILE)).toString();
-                                        user.ideal_contact = (int) document.get(Constants.KEY_IDEAL_CONTACT);
-                                        Log.w(TAG, "Ideal Contact: " + user.ideal_contact);
-                                        user.min_contact = (int) document.get(Constants.KEY_MIN_CONTACT);
-                                        Log.w(TAG, "Min Contact: " + user.min_contact);
-                                        user.ideal_contact = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_IDEAL_CONTACT)).toString());
-                                        user.like = Objects.requireNonNull(document.get(Constants.KEY_THEME_LIKE)).toString();
-                                        user.dislike = Objects.requireNonNull(document.get(Constants.KEY_THEME_DISLIKE)).toString();
-                                        user.expression = Integer.parseInt(Objects.requireNonNull(document.get(Constants.KEY_EXPRESSION)).toString());
-                                        //Intent 전송
-                                        Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
-                                        contactIntent.putExtra(Constants.KEY_USER, user);
-                                        v.getContext().startActivity(contactIntent);
-                                        Log.w(TAG, "Successfully loaded from ScaleAdapter");
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if (document.get(Constants.KEY_USER).toString().equals(userId)) {
+                                            user.name = document.getString(Constants.KEY_NAME);
+                                            user.mobile = mobileForScale;
+                                            user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
+                                            user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
+                                            user.like = document.get(Constants.KEY_THEME_LIKE).toString();
+                                            user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
+                                            user.id = document.getString(Constants.KEY_USER);
+                                            user.expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
+                                            //Intent 전송
+                                            Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
+                                            contactIntent.putExtra(Constants.KEY_USER, user);
+                                            v.getContext().startActivity(contactIntent);
+                                            Log.w(TAG, "Successfully loaded from ScaleAdapter");
+                                        }
                                     }
                                 }
-                            } else {
-                                Log.w(TAG, "Error getting documents.", task.getException());
                             }
                         });
-
             });
 
 
