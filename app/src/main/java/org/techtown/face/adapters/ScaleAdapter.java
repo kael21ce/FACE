@@ -116,12 +116,16 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             String userId = item.getScaleId();
             scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
             scaleInfo.getSentNum(itemView.getContext(), mobileForScale);
+            scaleInfo.getReceivedNum(itemView.getContext(), mobileForScale);
+            scaleInfo.getSendNum(itemView.getContext(), mobileForScale, myMobile);
             scaleInfo.getAngle(itemView.getContext(), mobileForScale, myMobile);
             mHandler.postDelayed(() -> {
                 numI[0] = scaleInfo.getIncomingNum(itemView.getContext(), mobileForScale)
-                        + preferenceManager.getInt("in" + mobileForScale);
+                        + preferenceManager.getInt("in" + mobileForScale)
+                        + preferenceManager.getInt("received" + mobileForScale);
                 numO[0] = scaleInfo.getOutgoingNum(itemView.getContext(), mobileForScale)
-                        + preferenceManager.getInt("out" + mobileForScale);
+                        + preferenceManager.getInt("out" + mobileForScale)
+                        + preferenceManager.getInt("send" + mobileForScale);
                 Integer numIn = numI[0];
                 String numInString = numIn.toString();
                 Integer numOut = numO[0];
