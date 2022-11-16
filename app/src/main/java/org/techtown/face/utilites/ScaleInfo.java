@@ -205,12 +205,12 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //입력한 연락처에 보낸 sms 가져오기
-    public void getSendNum(Context context, String mobile) {
+    public void getSendNum(Context context, String mobile, String myMobile) {
         preferenceManager = new PreferenceManager(context);
-        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+        //String myId = preferenceManager.getString(Constants.KEY_USER_ID);
         preferenceManager.putInt("send" + mobile, 0);
         db.collection(Constants.KEY_COLLECTION_SMS)
-                .whereEqualTo(Constants.KEY_SENDER_ID, myId)
+                .whereEqualTo(Constants.KEY_SENDER, myMobile)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -227,7 +227,7 @@ public class ScaleInfo extends ContentProvider {
     }
 
     //각도 산출하기
-    public void getAngle(Context context, String mobile) {
+    public void getAngle(Context context, String mobile,String myMobile) {
         final float[] angle = new float[1];
         final float[] y = new float[1];
         //통화
@@ -239,7 +239,7 @@ public class ScaleInfo extends ContentProvider {
         getInboxNum(context, mobile);
         getSentNum(context, mobile);
         getReceivedNum(context, mobile);
-        getSendNum(context, mobile);
+        getSendNum(context, mobile, myMobile);
         handler.postDelayed(() -> {
             numChat[0] = preferenceManager.getInt("in" + mobile)
                     -preferenceManager.getInt("out" + mobile);

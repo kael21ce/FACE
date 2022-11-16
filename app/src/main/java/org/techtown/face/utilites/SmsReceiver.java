@@ -95,29 +95,19 @@ public class SmsReceiver extends BroadcastReceiver {
                                                     }
                                                 }
                                             });
-                                    //For ScaleInfo: 데이터베이스에 정보 올리기
-                                    Map<String, Object> sms = new HashMap<>();
-                                    sms.put(Constants.KEY_SENDER, sender);
-                                    sms.put(Constants.KEY_RECEIVER_ID, userId);
-                                    sms.put(Constants.KEY_RECEIVED_TIME, receivedTime);
-                                    sms.put(Constants.KEY_SENDER_ID, document.getId());
-                                    db.collection(Constants.KEY_COLLECTION_USERS).get().addOnCompleteListener(task12 -> {
-                                        if (task12.isSuccessful()) {
-                                            for (QueryDocumentSnapshot documentSnapshot : task12.getResult()) {
-                                                if (documentSnapshot.getId().equals(userId)) {
-                                                    String userMobile = documentSnapshot.get(Constants.KEY_MOBILE).toString();
-                                                    sms.put(Constants.KEY_RECEIVED_MOBILE, userMobile);
-                                                    db.collection(Constants.KEY_COLLECTION_SMS)
-                                                            .add(sms)
-                                                            .addOnSuccessListener(documentReference
-                                                                    -> Log.w(TAG, "Document is successfully written!"));
-                                                }
-                                            }
-                                        }
-                                    });
                                 }
                             }
                         });
+                //For ScaleInfo: 데이터베이스에 정보 올리기
+                Map<String, Object> sms = new HashMap<>();
+                sms.put(Constants.KEY_SENDER, sender);
+                sms.put(Constants.KEY_RECEIVER_ID, userId);
+                sms.put(Constants.KEY_RECEIVED_TIME, receivedTime);
+                //sms.put(Constants.KEY_SENDER_ID, document.getId());
+                sms.put(Constants.KEY_RECEIVED_MOBILE, preferenceManager.getString(Constants.KEY_MOBILE));
+                db.collection(Constants.KEY_COLLECTION_SMS)
+                        .add(sms)
+                        .addOnCompleteListener(task13 -> Log.w(TAG, "Document is successfully written!"));
             }
         }
     }
