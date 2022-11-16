@@ -38,7 +38,7 @@ import java.util.HashMap;
 public class GeoService extends Service {
 
 
-    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+    PreferenceManager preferenceManager ;
     FirebaseFirestore db;
 
     //위도 경도 게산식이 있는 코드
@@ -46,6 +46,7 @@ public class GeoService extends Service {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
+            preferenceManager = new PreferenceManager(getApplicationContext());
             SharedPreferences preferences = getApplicationContext().getSharedPreferences(Constants.KEY_PREFERENCE_NAME, Context.MODE_MULTI_PROCESS);
             String myId = preferences.getString(Constants.KEY_USER_ID, null);
 
