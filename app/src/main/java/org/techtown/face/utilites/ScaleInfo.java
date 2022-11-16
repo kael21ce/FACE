@@ -12,8 +12,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 //의사소통의 양 측정을 위한 메소드를 포함하고 있는 클래스
 public class ScaleInfo extends ContentProvider {
@@ -182,23 +185,68 @@ public class ScaleInfo extends ContentProvider {
         handler.postDelayed(() -> Log.w("FACEdatabase", "Sent-" + mobile + ": " + preferenceManager.getInt("out" + mobile)), 1000);
     }
 
+    //입력한 연락처로부터 받은 sms 가져오기
+    public void getReceivedNum(Context context, String mobile) {
+        preferenceManager = new PreferenceManager(context);
+        preferenceManager.putInt("received" + mobile, 0);
+        db.collection(Constants.KEY_COLLECTION_SMS)
+                .whereEqualTo(Constants.KEY_SENDER, mobile)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        int num = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            num += 1;
+                        }
+                        preferenceManager.putInt("received" + mobile, num);
+                    }
+                });
+        handler.postDelayed(() -> Log.w("FACEdatabase", "Received-" + mobile + ": " + preferenceManager.getInt("received" + mobile)), 1000);
+    }
+
+    //입력한 연락처에 보낸 sms 가져오기
+    public void getSendNum(Context context, String mobile) {
+        preferenceManager = new PreferenceManager(context);
+        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+        preferenceManager.putInt("send" + mobile, 0);
+        db.collection(Constants.KEY_COLLECTION_SMS)
+                .whereEqualTo(Constants.KEY_SENDER_ID, myId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        int num = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if (document.get(Constants.KEY_RECEIVED_MOBILE).toString().equals(mobile)) {
+                                num += 1;
+                            }
+                        }
+                        preferenceManager.putInt("send" + mobile, num);
+                    }
+                });
+        handler.postDelayed(() -> Log.w("FACEdatabase", "Send-" + mobile + ": " + preferenceManager.getInt("send" + mobile)), 1000);
+    }
+
     //각도 산출하기
     public void getAngle(Context context, String mobile) {
         final float[] angle = new float[1];
         final float[] y = new float[1];
         //통화
         int numCall = getIncomingNum(context, mobile)-getOutgoingNum(context, mobile);
-        //채팅
+        //채팅 & SMS
         final int[] numChat = {0};
+        final int[] numSMS = {0};
         preferenceManager = new PreferenceManager(context);
         getInboxNum(context, mobile);
         getSentNum(context, mobile);
+        getReceivedNum(context, mobile);
+        getSendNum(context, mobile);
         handler.postDelayed(() -> {
             numChat[0] = preferenceManager.getInt("in" + mobile)
                     -preferenceManager.getInt("out" + mobile);
+            numSMS[0] = preferenceManager.getInt("received" + mobile) - preferenceManager.getInt("send" + mobile);
             Log.w("FACEdatabase", "call: " + numCall + " & " + "chat: " + numChat[0]);
             //연락 수 차이
-            y[0] = 1.0f * numCall + 1.0f * numChat[0];
+            y[0] = 1.0f * numCall + 1.0f * numChat[0] + 1.0f * numSMS[0];
             //각도 계산
             if (Float.compare(y[0], 10)==1 || Float.compare(y[0], -10)==1) {
                 angle[0] = 4* y[0];

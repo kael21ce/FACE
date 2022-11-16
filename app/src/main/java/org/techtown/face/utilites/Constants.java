@@ -71,6 +71,7 @@ public class Constants {
     public static final String KEY_SENDER = "sender";
     public static final String KEY_CONTENTS = "contents";
     public static final String KEY_RECEIVED_TIME = "received_time";
+    public static final String KEY_RECEIVED_MOBILE = "received_mobile";
 
     public static HashMap<String, String> remoteMsgHeaders = null;
     public static HashMap<String,String> getRemoteMsgHeaders(){
