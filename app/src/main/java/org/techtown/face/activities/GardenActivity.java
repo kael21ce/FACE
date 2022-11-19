@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -67,6 +68,7 @@ public class GardenActivity extends AppCompatActivity {
     String userIdToRegister;
     ConnectedThread connectedThread;
     Dialog registerDialog;
+    private SwipeRefreshLayout gardenSwipeRefresh;
 
     //페어링된 기기 관련
     ArrayList<String> devicePairedArrayList;
@@ -229,9 +231,33 @@ public class GardenActivity extends AppCompatActivity {
                     Toast.makeText(GardenActivity.this, "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
                 } else {
                     registerDevice(GardenActivity.this, address);
+                    refreshActivity(); //기기 등록 후 새로고침
                 }
             }, 1000);
         });
+
+        //스와이프 새로고침
+        gardenSwipeRefresh = findViewById(R.id.gardenSwipeLayout);
+        gardenSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshActivity();
+                        gardenSwipeRefresh.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+    }
+
+    private void refreshActivity() {
+        finish();
+        overridePendingTransition(0,0);
+        Intent refreshIntent = getIntent();
+        startActivity(refreshIntent);
+        overridePendingTransition(0,0);
     }
 
     //ACTION_FOUND 인텐트를 위한 브로드캐스트 리시버
