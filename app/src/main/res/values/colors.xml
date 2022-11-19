@@ -20,4 +20,12 @@
 
     <color name="FACE_color">#3F51B5</color>
     <color name="FACE_status">#344498</color>
+
+    <color name="wall_color">#FCD5D5</color>
+    <color name="roof_color">#EC8888</color>
+    <color name="window_color">#AF6C6C</color>
+    <color name="fence_color">#FBFCE6</color>
+    <color name="fence_joint_color">#FF018786</color>
+    <color name="sky_color">#E2F4FF</color>
+    <color name="button_color">#66C9A377</color>
 </resources>

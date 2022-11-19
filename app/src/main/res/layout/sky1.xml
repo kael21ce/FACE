@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/sky_color">
+
+    <ImageView
+        android:id="@+id/ellipse_11"
+        android:layout_width="113.5dp"
+        android:layout_height="39.44dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="-75dp"
+        android:layout_marginTop="76.58dp"
+        android:src="@drawable/ellipse_11" />
+
+    <ImageView
+        android:id="@+id/ellipse_10"
+        android:layout_width="89.85dp"
+        android:layout_height="46.34dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="4.21dp"
+        android:layout_marginTop="70.66dp"
+        android:background="@drawable/ellipse_10" />
+
+        <ImageView
+            android:id="@+id/ellipse_9"
+            android:layout_width="89.85dp"
+            android:layout_height="46.34dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="62.15dp"
+            android:layout_marginTop="69.68dp"
+            android:background="@drawable/ellipse_9" />
+
+        <ImageView
+            android:id="@+id/ellipse_7"
+            android:layout_width="57.93dp"
+            android:layout_height="46.34dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4.21dp"
+            android:layout_marginTop="47dp"
+            android:background="@drawable/ellipse_7" />
+
+        <ImageView
+            android:id="@+id/ellipse_8"
+            android:layout_width="72.12dp"
+            android:layout_height="46.34dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="-33.62dp"
+            android:layout_marginTop="55.87dp"
+            android:src="@drawable/ellipse_8" />
+
+        <ImageView
+            android:id="@+id/ellipse_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="55.87dp"
+            android:background="@drawable/ellipse_6" />
+
+    <ImageView
+        android:id="@+id/ellipse_12"
+        android:layout_width="86.5dp"
+        android:layout_height="35.49dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="260dp"
+        android:layout_marginTop="103.62dp"
+        android:background="@drawable/ellipse_12" />f
+    <View
+        android:id="@+id/ellipse_13"
+        android:layout_width="68.48dp"
+        android:layout_height="41.7dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="320.37dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="98.3dp"
+        android:background="@drawable/ellipse_13"
+        />
+    <View
+        android:id="@+id/ellipse_14"
+        android:layout_width="44.15dp"
+        android:layout_height="41.7dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="320.37dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="77dp"
+        android:background="@drawable/ellipse_14"
+        />
+    <View
+        android:id="@+id/ellipse_15"
+        android:layout_width="54.96dp"
+        android:layout_height="41.7dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="291.54dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="84.99dp"
+        android:background="@drawable/ellipse_15"
+        />
+    <View
+        android:id="@+id/ellipse_16"
+        android:layout_width="63.07dp"
+        android:layout_height="41.7dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="337.49dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="84.99dp"
+        android:background="@drawable/ellipse_16"
+        />
+
+</RelativeLayout>
