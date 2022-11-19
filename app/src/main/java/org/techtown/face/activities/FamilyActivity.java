@@ -107,13 +107,7 @@ public class FamilyActivity extends BaseActivity {
         momentDialog.setContentView(R.layout.user_moment);
         ImageButton user_closeMoment = momentDialog.findViewById(R.id.user_closeMoment);
         user_closeMoment.setOnClickListener(v -> momentDialog.dismiss());
-        //TextView user_nameTxt = momentDialog.findViewById(R.id.user_momentName);
-        //ViewPager2 user_imageViewPager = momentDialog.findViewById(R.id.user_imageViewPager);
         RecyclerView user_momentRecycler = momentDialog.findViewById(R.id.user_momentRecycler);
-        //TextView user_momentDate = momentDialog.findViewById(R.id.user_momentDate);
-        //CircleIndicator3 user_imgIndicator = momentDialog.findViewById(R.id.user_imgIndicator);
-
-        //user_nameTxt.setText(user.name);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         user_momentRecycler.setLayoutManager(layoutManager);
@@ -157,23 +151,8 @@ public class FamilyActivity extends BaseActivity {
                                                     Log.e(TAG,"No moment exists");
                                                 }
                                             }
-                                            momentAdapter.addItem(new Moment(name, userId, image, date));
+                                            momentAdapter.addItem(new Moment(name, "y", image, date));
                                             user_momentRecycler.setAdapter(momentAdapter);
-
-                                            //momentAdapter.addItem(new Moment(name, image, date));
-                                            //momentRecyclerView.setAdapter(momentAdapter);
-                                            //user_imageViewPager.setOffscreenPageLimit(1);
-                                            //user_imageViewPager
-                                                    //.setAdapter(new ImageSliderAdapter(momentDialog.getContext(), image));
-                                            //user_imgIndicator.setViewPager(user_imageViewPager);
-
-                                            //user_imageViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-                                                //@Override
-                                                //public void onPageSelected(int position) {
-                                                    //super.onPageSelected(position);
-                                                    //user_momentDate.setText("| " + date[position] + " |");
-                                                //}
-                                            //});
                                         } else {
                                             Log.e(TAG, "Task is not processed successfully");
                                         }

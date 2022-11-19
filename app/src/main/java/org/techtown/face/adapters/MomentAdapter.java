@@ -24,7 +24,6 @@ import me.relex.circleindicator.CircleIndicator3;
 public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder> {
     ArrayList<Moment> items = new ArrayList<>();
     Context context;
-    PreferenceManager preferenceManager;
     String TAG = "MomentAdapter";
 
     public interface OnItemClickListener{
@@ -158,7 +157,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Log.w(TAG, "getItemViewType 호출됨.");
-        if (position==0) {
+        if (position==0 && items.get(position).getTag().equals("m")) {
             return TYPE_MY_MOMENT;
         } else {
             return TYPE_FAMILY_MOMENT;

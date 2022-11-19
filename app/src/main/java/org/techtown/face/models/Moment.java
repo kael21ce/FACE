@@ -9,12 +9,12 @@ public class Moment {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getTag() {
+        return tag;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String[] getImages() {
@@ -33,15 +33,15 @@ public class Moment {
         this.dates = dates;
     }
 
-    public Moment(String name, String id, String[] images, String[] dates) {
+    public Moment(String name, String tag, String[] images, String[] dates) {
         this.name = name;
-        this.id = id;
+        this.tag = tag;
         this.images = images;
         this.dates = dates;
     }
 
     String name;
-    String id;
+    String tag;
     String[] images;
     String[] dates;
 }
