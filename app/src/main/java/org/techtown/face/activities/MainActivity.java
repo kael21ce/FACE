@@ -477,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
                         uploadTask = imageRef.putFile(imageUri);
                         uploadTask.addOnCompleteListener(task -> {
                             if(task.isSuccessful()){
-                                showToast("We did it!");
+                                showToast("업로드에 성공하였습니다.");
                             } else {
                                 showToast("Failed");
                             }
@@ -502,7 +502,6 @@ public class MainActivity extends AppCompatActivity {
                                 .add(images)
                                 .addOnCompleteListener(task -> {
                                     if(task.isSuccessful()){
-                                        showToast("horray");
                                     } else {
                                         showToast("fuck");
                                     }
