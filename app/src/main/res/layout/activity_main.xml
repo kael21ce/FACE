@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:visibility="invisible"
-            app:backgroundTint="#3F51B5"
+            app:backgroundTint="@color/window_color"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.93"

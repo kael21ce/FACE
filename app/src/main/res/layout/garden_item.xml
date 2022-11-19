@@ -13,7 +13,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:text="OOO의 가족 정원"
-        android:textColor="#3F51B5"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold" />
 
