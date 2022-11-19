@@ -120,7 +120,17 @@ public class FamilyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 return new RoofViewHolder(view);
             case 2:
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.window, viewGroup, false);
-                return new WindowViewHolder(view);
+                WindowViewHolder viewHolder = new WindowViewHolder(view);
+                view.setOnClickListener(v -> {
+                    User user = new User();
+                    int position = viewHolder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        user = items.get(position).getFamily().getUserContact();
+                        Log.w("FACEdatabase", user.name);
+                    }
+                    itemClickListener.onItemClicked(position, user);
+                });
+                return viewHolder;
             default:
                 Log.w("ViewData", "view data error");
                 return null;

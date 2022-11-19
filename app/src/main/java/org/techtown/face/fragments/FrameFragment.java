@@ -91,7 +91,7 @@ public class FrameFragment extends Fragment {
                             @Override
                             public int getSpanSize(int position) {
                                 if(position<skyNum+1) return 2;
-                                if((familyNum%2==1) && (position==skyNum+familyNum-1)) return 2;
+                                if((familyNum%2==1) && (position==skyNum+familyNum)) return 2;
                                 return 1;
                             }
                         });
@@ -102,6 +102,7 @@ public class FrameFragment extends Fragment {
                             cnt++;
                             User user = new User();
                             user.name = document.getString(Constants.KEY_NAME);
+                            Log.w(TAG, user.name);
                             user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                             user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
@@ -116,7 +117,10 @@ public class FrameFragment extends Fragment {
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
 
-                                    ViewData face = new ViewData(2, new Family(user));
+                                    Family family = new Family(user);
+                                    ViewData face = new ViewData(2, family);
+                                    face.setType(2);
+                                    face.setFamily(family);
                                     adapter.addItem(face);
                                     //가족 추가 완료
                                     if(finalCnt == familyNum){

@@ -16,7 +16,15 @@ public class ViewData {
         return type;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public Family getFamily() {
         return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
     }
 }
