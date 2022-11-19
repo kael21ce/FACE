@@ -1,6 +1,8 @@
 package org.techtown.face.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,11 +33,14 @@ public class ScaleFragment extends Fragment {
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "FACEdatabase";
+    private SwipeRefreshLayout scaleSwipeRefresh;
+    Handler mHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_scale, container, false);
         preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
+        mHandler = new Handler();
 
         //리사이클러뷰 객체
         RecyclerView recyclerView = v.findViewById(R.id.scaleRecyclerView);
@@ -75,6 +83,35 @@ public class ScaleFragment extends Fragment {
                     }
                 });
 
+        scaleSwipeRefresh = v.findViewById(R.id.scaleSwipeRefresh);
+        scaleSwipeRefresh.setOnRefreshListener(() -> {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    refreshFragment();
+                    scaleSwipeRefresh.setRefreshing(false);
+                }
+            },1000);
+        });
+
         return v;
+    }
+
+    private void refreshActivity() {
+        Fragment fg;
+        fg = getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
+        getActivity().finish();
+        getActivity().overridePendingTransition(0,0);
+        Intent refreshIntent = getActivity().getIntent();
+        startActivity(refreshIntent);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.attach(fg).commit();
+    }
+
+    private void refreshFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, ScaleFragment.class, null)
+                .commit();
     }
 }
