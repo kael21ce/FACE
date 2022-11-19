@@ -1,36 +1,31 @@
 package org.techtown.face.fragments;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
 import org.techtown.face.activities.FamilyActivity;
 import org.techtown.face.adapters.FamilyAdapter;
+import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
 import org.techtown.face.models.ViewData;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.models.Family;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.ArrayList;
@@ -40,14 +35,23 @@ public class FrameFragment extends Fragment {
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "FACEdatabase";
+    String FTAG = "FrameFragment";
+    private SwipeRefreshLayout frameSwipeRefresh;
+    Handler mHandler;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ArrayList<Family> userArrayList = new ArrayList<Family>();
         View v = inflater.inflate(R.layout.fragment_frame, container, false);
+        mHandler = new Handler();
+        Log.w(FTAG, "onCreateView 호출됨.");
+
+        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+        GridLayoutManager layoutManager = new GridLayoutManager(v.getContext(), 2);
         FamilyAdapter adapter = new FamilyAdapter();
 
+        //터치 이벤트 추가
         adapter.setOnItemClickListener((position, user) -> {
             Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
             contactIntent.putExtra(Constants.KEY_USER,user);
@@ -55,10 +59,6 @@ public class FrameFragment extends Fragment {
         });
 
         preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
-
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(v.getContext(), 2);
-
 
         //db에서 데이터 가져오기
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
@@ -165,6 +165,15 @@ public class FrameFragment extends Fragment {
         });
 
  */
+        //스와이프하여 새로고침
+        frameSwipeRefresh = v.findViewById(R.id.frameSwipeRefresh);
+        frameSwipeRefresh.setOnRefreshListener(() -> {
+            Log.w(FTAG, "onFresh 호출됨.");
+            mHandler.postDelayed(() -> {
+                refreshActivity();
+                frameSwipeRefresh.setRefreshing(false);
+            }, 1000);
+        });
         return v;
     }
 
@@ -204,5 +213,16 @@ public class FrameFragment extends Fragment {
                 break;
         }
         return color;
+    }
+
+    private void refreshActivity() {
+        Fragment fg;
+        fg = getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
+        getActivity().finish();
+        getActivity().overridePendingTransition(0,0);
+        Intent refreshIntent = getActivity().getIntent();
+        startActivity(refreshIntent);
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.attach(fg).commit();
     }
 }
