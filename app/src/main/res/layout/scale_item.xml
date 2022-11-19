@@ -15,11 +15,11 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:background="#3F51B5"
+        android:background="@color/FACE_status"
         android:gravity="right"
         android:paddingEnd="10dp"
         android:text="이름"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="25sp"
         android:textStyle="bold" />
 
@@ -111,6 +111,7 @@
         android:layout_marginBottom="30dp"
         android:layout_weight="1"
         android:text="연락하기"
+        android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold" />
 
