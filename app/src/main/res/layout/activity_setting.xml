@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_setting"
-    android:layout_width="250dp"
+    android:layout_width="300dp"
     android:layout_height="match_parent"
     android:layout_gravity="right"
     android:background="#FFFFFF"
@@ -29,43 +29,23 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/close_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginBottom="3dp"
-            android:backgroundTint="#FFFFFF"
-            app:srcCompat="@drawable/close"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/setRuler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/border_layout"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/rulerImg"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ruler" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/rulerTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="의사소통"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+            <ImageButton
+                android:id="@+id/close_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="3dp"
+                android:backgroundTint="#FFFFFF"
+                app:srcCompat="@drawable/close"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -84,16 +64,34 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/bell" />
 
-        <TextView
-            android:id="@+id/alarmTxt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="알림"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+        <LinearLayout
+            android:id="@+id/txtContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/notificationSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingStart="12dp"
+                android:text="알림"
+                android:textColorHighlight="#4CAF50"
+                android:textColorLink="#4CAF50"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/alarmText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="연락할 타이밍, 메시지, 대면만남 등의 알림을 받습니다."
+                android:textSize="10sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -141,7 +139,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:paddingStart="10dp"
-                    android:text="GPS가 꺼져있습니다" />
+                    android:text="GPS가 꺼져있습니다"
+                    android:textSize="10sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -164,16 +163,34 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/user_icon" />
 
-        <TextView
-            android:id="@+id/accountTxt"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/accountContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="계정"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/accountTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="계정"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/accountText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="나의 정보를 수정합니다."
+                android:textSize="10sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -187,19 +204,39 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/familyImg"
             android:layout_width="62dp"
             android:layout_height="63dp"
             app:srcCompat="@drawable/group" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="가족"
-            android:textColor="#000000"
-            android:textSize="24sp" />
+        <LinearLayout
+            android:id="@+id/familyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/familyTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="가족"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/familyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="가족들에 관한 정보를 수정합니다."
+                android:textSize="10sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
