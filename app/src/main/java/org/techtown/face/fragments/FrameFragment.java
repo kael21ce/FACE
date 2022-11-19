@@ -1,36 +1,31 @@
 package org.techtown.face.fragments;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.techtown.face.R;
 import org.techtown.face.activities.FamilyActivity;
 import org.techtown.face.adapters.FamilyAdapter;
+import org.techtown.face.models.Family;
 import org.techtown.face.models.User;
 import org.techtown.face.models.ViewData;
 import org.techtown.face.utilites.Constants;
-import org.techtown.face.models.Family;
 import org.techtown.face.utilites.PreferenceManager;
 
 import java.util.ArrayList;
@@ -40,12 +35,15 @@ public class FrameFragment extends Fragment {
     PreferenceManager preferenceManager;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "FACEdatabase";
+    private SwipeRefreshLayout frameSwipeRefresh;
+    Handler mHandler;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_frame, container, false);
         FamilyAdapter adapter = new FamilyAdapter();
+        mHandler = new Handler();
 
         adapter.setOnItemClickListener((position, user) -> {
             Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
@@ -134,6 +132,19 @@ public class FrameFragment extends Fragment {
                         }
                         Log.w(TAG, "Successfully loaded");}
                 });
+        frameSwipeRefresh = v.findViewById(R.id.frameSwipeRefresh);
+        frameSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshFragment();
+                        frameSwipeRefresh.setRefreshing(false);
+                    }
+                },1000);
+            }
+        });
         return v;
     }
 
@@ -175,5 +186,12 @@ public class FrameFragment extends Fragment {
                 break;
         }
         return color;
+    }
+
+    private void refreshFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, FrameFragment.class, null)
+                .commit();
     }
 }
