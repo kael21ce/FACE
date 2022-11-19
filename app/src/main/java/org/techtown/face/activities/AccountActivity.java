@@ -44,7 +44,7 @@ public class AccountActivity extends BaseActivity {
         binding.changeInfo.setOnClickListener(view -> changeInformation());
         binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
         binding.imageView.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
-        
+
     }
 
     private void changeInformation(){
@@ -53,7 +53,7 @@ public class AccountActivity extends BaseActivity {
     }
 
     private void signOut() {
-        showToast("Signing out...........");
+        showToast("로그아웃 중입니다.");
         database = FirebaseFirestore.getInstance();
 
         HashMap<String, Object> updates = new HashMap<>();
