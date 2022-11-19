@@ -66,8 +66,7 @@ public class FrameFragment extends Fragment {
                             user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
                             user.id = document.getString(Constants.KEY_USER);
                             user.expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
-                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                            firestore.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
+                            db.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
                                     DocumentSnapshot snapshot = task1.getResult();
                                     user.image= snapshot.get(Constants.KEY_IMAGE).toString();

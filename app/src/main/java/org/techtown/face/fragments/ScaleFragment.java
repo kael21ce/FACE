@@ -64,7 +64,6 @@ public class ScaleFragment extends Fragment {
                                             String name = documentSnapshot.get(Constants.KEY_NAME).toString();
                                             String mobile = documentSnapshot.get(Constants.KEY_MOBILE).toString();
                                             adapter.addItem(new FamilyScale(name, mobile, userId));
-                                            Log.w(TAG, "Successfully loaded");
                                         }
                                     }
                                     recyclerView.setAdapter(adapter);

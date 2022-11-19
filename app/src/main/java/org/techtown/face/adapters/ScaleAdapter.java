@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -156,18 +157,26 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if (document.get(Constants.KEY_USER).toString().equals(userId)) {
                                             user.name = document.getString(Constants.KEY_NAME);
-                                            user.mobile = mobileForScale;
                                             user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                                             user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
                                             user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
                                             user.id = document.getString(Constants.KEY_USER);
                                             user.expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
-                                            //Intent 전송
-                                            Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
-                                            contactIntent.putExtra(Constants.KEY_USER, user);
-                                            v.getContext().startActivity(contactIntent);
-                                            Log.w(TAG, "Successfully loaded from ScaleAdapter");
+                                            db.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
+                                                if(task1.isSuccessful()){
+                                                    DocumentSnapshot snapshot = task1.getResult();
+                                                    user.image= snapshot.get(Constants.KEY_IMAGE).toString();
+                                                    user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
+                                                    user.path = snapshot.get(Constants.KEY_PATH).toString();
+                                                }
+                                                Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
+                                                contactIntent.putExtra(Constants.KEY_USER, user);
+                                                v.getContext().startActivity(contactIntent);
+                                            });
+
+                                                    //Intent 전송
+
                                         }
                                     }
                                 }
