@@ -2,14 +2,17 @@ package org.techtown.face.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -26,12 +29,15 @@ public class MomentFragment extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     PreferenceManager preferenceManager;
+    SwipeRefreshLayout momentSwipeRefresh;
+    Handler mHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_moment, container, false);
         preferenceManager = new PreferenceManager(getActivity().getApplicationContext());
         RecyclerView momentRecyclerView = v.findViewById(R.id.momentRecyclerView);
+        mHandler = new Handler();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
         momentRecyclerView.setLayoutManager(layoutManager);
@@ -127,6 +133,28 @@ public class MomentFragment extends Fragment {
                     }
 
         });
+
+        momentSwipeRefresh = v.findViewById(R.id.momentSwipeRefresh);
+        momentSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshFragment();
+                        momentSwipeRefresh.setRefreshing(false);
+                    }
+                },1000);
+            }
+        });
+
         return v;
+    }
+
+    private void refreshFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, MomentFragment.class, null)
+                .commit();
     }
 }
