@@ -96,7 +96,6 @@ public class GeoService extends Service {
                                                                    .collection(Constants.KEY_COLLECTION_USERS)
                                                                    .document(documentSnapshot.getId())
                                                                    .update(now);
-                                                           dialogClick(userId, documentSnapshot1.getString(Constants.KEY_NAME));
                                                        }
                                                    }else{
                                                        Log.e("Hey", "상대방이 GPS를 사용하지 않고 있습니다.");
@@ -141,55 +140,7 @@ public class GeoService extends Service {
         return (rad * 180 / Math.PI);
     }
 
-    public void dialogClick(String userId, String name) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("대면 만남").setMessage(name+"님의 대면 만남을 수락하시겠습니까?");
-
-        builder.setPositiveButton("예", (dialog, which) -> {
-            long now = System.currentTimeMillis();
-            HashMap<String, Object> window = new HashMap<>();
-            window.put(Constants.KEY_WINDOW, now);
-            Log.e("This ", "is->"+userId);
-            db.collection(Constants.KEY_COLLECTION_USERS)
-                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                    .collection(Constants.KEY_COLLECTION_USERS)
-                    .whereEqualTo(Constants.KEY_USER, userId)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot snapshot : task.getResult()){
-                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(snapshot.getId())
-                                        .update(window);
-                            }
-                        }
-                    });
-            db.collection(Constants.KEY_COLLECTION_USERS)
-                    .document(userId)
-                    .collection(Constants.KEY_COLLECTION_USERS)
-                    .whereEqualTo(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID))
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot snapshot : task.getResult()){
-                                db.collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(userId)
-                                        .collection(Constants.KEY_COLLECTION_USERS)
-                                        .document(snapshot.getId())
-                                        .update(window);
-                            }
-                        }
-                    });
-
-        });
-        builder.setNegativeButton("아니요", (dialog, which) -> {});
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
 
     @Nullable
     @Override
