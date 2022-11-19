@@ -42,6 +42,11 @@ public class FamilyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
         }
     }
+    public class BottomViewHolder extends RecyclerView.ViewHolder{
+        BottomViewHolder(View itemView){
+            super(itemView);
+        }
+    }
     public class WindowViewHolder extends RecyclerView.ViewHolder{
         ImageView view;
         WindowViewHolder(View itemView){
@@ -131,6 +136,9 @@ public class FamilyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     itemClickListener.onItemClicked(position, user);
                 });
                 return viewHolder;
+            case 3:
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.bottom, viewGroup, false);
+                return new RoofViewHolder(view);
             default:
                 Log.w("ViewData", "view data error");
                 return null;

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -47,7 +48,7 @@ public class FrameFragment extends Fragment {
 
         adapter.setOnItemClickListener((position, user) -> {
             Intent contactIntent = new Intent(v.getContext(), FamilyActivity.class);
-            contactIntent.putExtra(Constants.KEY_USER,user);
+            contactIntent.putExtra(Constants.KEY_USER, user);
             startActivity(contactIntent);
         });
 
@@ -59,7 +60,7 @@ public class FrameFragment extends Fragment {
 
         //db에서 데이터 가져오기
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
-        ArrayList<ViewData> viewDataArrayList= new ArrayList<ViewData>();
+        ArrayList<ViewData> viewDataArrayList = new ArrayList<ViewData>();
         //다른 사람 정보 추가
         db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(myId)
@@ -68,14 +69,14 @@ public class FrameFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot result = task.getResult();
-                        int cnt=0;
+                        int cnt = 0;
                         int familyNum = result.size();
                         Log.w("familyNum", String.valueOf(familyNum));
 
                         //sky 추가
                         int skyNum = skyNum(familyNum);
                         //Log.w("skyNum", String.valueOf(skyNum));
-                        for(int i=0; i<skyNum; i++){
+                        for (int i = 0; i < skyNum; i++) {
                             adapter.addItem(new ViewData(0));
                         }
 
@@ -83,12 +84,14 @@ public class FrameFragment extends Fragment {
                         adapter.addItem(new ViewData(1));
 
                         //layout 설정
-                        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+                        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
                             @Override
                             public int getSpanSize(int position) {
-                                if(position<skyNum+1) return 2;
-                                if((familyNum%2==1) && (position==skyNum+familyNum)) return 2;
+                                if (position < skyNum + 1) return 2;
+                                if ((familyNum % 2 == 1) && (position == skyNum + familyNum))
+                                    return 2;
+                                if (position > skyNum + familyNum) return 2;
                                 return 1;
                             }
                         });
@@ -108,9 +111,9 @@ public class FrameFragment extends Fragment {
                             user.expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
                             int finalCnt = cnt;
                             db.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
-                                if(task1.isSuccessful()){
+                                if (task1.isSuccessful()) {
                                     DocumentSnapshot snapshot = task1.getResult();
-                                    user.image= snapshot.get(Constants.KEY_IMAGE).toString();
+                                    user.image = snapshot.get(Constants.KEY_IMAGE).toString();
                                     user.mobile = snapshot.get(Constants.KEY_MOBILE).toString();
                                     user.path = snapshot.get(Constants.KEY_PATH).toString();
 
@@ -120,17 +123,18 @@ public class FrameFragment extends Fragment {
                                     face.setFamily(family);
                                     adapter.addItem(face);
                                     //가족 추가 완료
-                                    if(finalCnt == familyNum){
+                                    if (finalCnt == familyNum) {
                                         Log.w("SET ADAPTER", "adapter setting");
                                         //잔디 추가
-
+                                        adapter.addItem(new ViewData(3));
                                         //adapter 설정
                                         recyclerView.setAdapter(adapter);
                                     }
                                 }
                             });
                         }
-                        Log.w(TAG, "Successfully loaded");}
+                        Log.w(TAG, "Successfully loaded");
+                    }
                 });
         frameSwipeRefresh = v.findViewById(R.id.frameSwipeRefresh);
         frameSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -142,15 +146,15 @@ public class FrameFragment extends Fragment {
                         refreshFragment();
                         frameSwipeRefresh.setRefreshing(false);
                     }
-                },1000);
+                }, 1000);
             }
         });
         return v;
     }
 
-    int skyNum(int familyNum){
+    int skyNum(int familyNum) {
         int sky;
-        switch (familyNum){
+        switch (familyNum) {
             case 0:
             case 1:
             case 2:
@@ -163,9 +167,9 @@ public class FrameFragment extends Fragment {
         return sky;
     }
 
-    String change_filter(int expression){
+    String change_filter(int expression) {
         String color;
-        switch(expression){
+        switch (expression) {
             case 1:
                 color = "#111111";
                 break;
@@ -188,10 +192,12 @@ public class FrameFragment extends Fragment {
         return color;
     }
 
+
     private void refreshFragment() {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, FrameFragment.class, null)
                 .commit();
-    }
+
+        }
 }
