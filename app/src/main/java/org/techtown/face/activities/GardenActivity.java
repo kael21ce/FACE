@@ -62,6 +62,7 @@ public class GardenActivity extends AppCompatActivity {
     BluetoothAdapter btAdapter;
     BluetoothSocket btSocket;
     BluetoothDevice device;
+    BluetoothService btService;
     private final static int REQUEST_ENABLED_BT = 101;
     String garden = "GARDEN";
     String TAG = "FACEBluetooth";
@@ -69,6 +70,7 @@ public class GardenActivity extends AppCompatActivity {
     ConnectedThread connectedThread;
     Dialog registerDialog;
     private SwipeRefreshLayout gardenSwipeRefresh;
+    boolean isBtService = false;
 
     //페어링된 기기 관련
     ArrayList<String> devicePairedArrayList;
@@ -91,12 +93,18 @@ public class GardenActivity extends AppCompatActivity {
     ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            //서비스와 연결되었을 때 호출되는 메서드
             Log.w(TAG, iBinder + "호출됨.");
+            BluetoothService.BtBinder bb = (BluetoothService.BtBinder) iBinder;
+            btService = bb.getService();
+            isBtService = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            //서비스와 연결이 끊기거나 종료되었을 때 호출되는 메서드
             Log.w(TAG, componentName + "끊어짐.");
+            isBtService = false;
         }
     };
 
@@ -230,8 +238,21 @@ public class GardenActivity extends AppCompatActivity {
                 if (userId[0].equals(myId)) {
                     Toast.makeText(GardenActivity.this, "기기가 이미 등록되어 있습니다.", Toast.LENGTH_SHORT);
                 } else {
-                    registerDevice(GardenActivity.this, address);
-                    refreshActivity(); //기기 등록 후 새로고침
+                    connectedThread = registerDevice(GardenActivity.this, address);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //입력
+                            getExpressionFromDevice(device);
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.w(TAG, "inString: " + preferenceManager.getString(device.getAddress() + myId));
+                                    connectedThread.write(preferenceManager.getString(device.getAddress() + myId));
+                                }
+                            },1000);
+                        }
+                    },9000);
                 }
             }, 1000);
         });
@@ -258,6 +279,12 @@ public class GardenActivity extends AppCompatActivity {
         Intent refreshIntent = getIntent();
         startActivity(refreshIntent);
         overridePendingTransition(0,0);
+    }
+
+    private void calculateExpression() {
+        Intent refreshIntent = new Intent(GardenActivity.this, BluetoothService.class);
+        unbindService(connection);
+        mHandler.postDelayed(() -> bindService(refreshIntent, connection, BIND_AUTO_CREATE),500);
     }
 
     //ACTION_FOUND 인텐트를 위한 브로드캐스트 리시버
@@ -403,11 +430,12 @@ public class GardenActivity extends AppCompatActivity {
                 Log.w(TAG, "등록 id: " + userIdToRegister);
                 Toast.makeText(getApplicationContext(), "등록되었습니다!", Toast.LENGTH_SHORT).show();
                 registerDialog.dismiss();
+                refreshActivity();
             }
         });
     }
     @SuppressLint("MissingPermission")
-    private void registerDevice(Context context, String deviceAddress) {
+    private ConnectedThread registerDevice(Context context, String deviceAddress) {
         if (btAdapter.isDiscovering()) {
             btAdapter.cancelDiscovery();
         }
@@ -437,5 +465,44 @@ public class GardenActivity extends AppCompatActivity {
             registerDialog.setContentView(R.layout.dialog_btregister);
             showRegisterDialog(device);
         }
+        return connectedThread;
+    }
+
+    private void getExpressionFromDevice(BluetoothDevice device) {
+        final String[] string = new String[1];
+        preferenceManager = new PreferenceManager(getApplicationContext());
+        String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getApplicationContext(), "블루투스 권한 확인 필요", Toast.LENGTH_SHORT).show();
+        }
+        db.collection(Constants.KEY_COLLECTION_GARDEN).whereEqualTo(Constants.KEY_USER, myId)
+                .whereEqualTo(Constants.KEY_ADDRESS, device.getAddress())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String registeredId = document.getString(Constants.KEY_REGISTERED);
+                            final String[] expresison = new String[1];
+                            final String[] userName = new String[1];
+                            //표정 가져오기
+                            db.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(myId)
+                                    .collection(Constants.KEY_COLLECTION_USERS)
+                                    .whereEqualTo(Constants.KEY_USER, registeredId)
+                                    .get().addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                                expresison[0] = documentSnapshot.get(Constants.KEY_EXPRESSION).toString();
+                                                userName[0] = documentSnapshot.get(Constants.KEY_NAME).toString();
+                                                string[0] = expresison[0] + "," + userName[0];
+                                                String key = device.getAddress() + myId;
+                                                preferenceManager.putString(key, string[0]);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 }

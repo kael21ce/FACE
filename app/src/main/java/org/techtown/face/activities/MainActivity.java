@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         bindService(bIntent, connection, Context.BIND_AUTO_CREATE);
         //BluetoothService
         Intent btIntent = new Intent(MainActivity.this, BluetoothService.class);
-        bindService(btIntent, connection, Context.BIND_AUTO_CREATE);
+        bindService(btIntent, btConnection, Context.BIND_AUTO_CREATE);
     }
 
     FrameFragment frameFragment;
@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     View drawerView;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    BluetoothService btService;
+    boolean isBtService = false;
 
     ActionBar abar;
 
@@ -144,6 +146,25 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName componentName) {
 
         }
+    };
+
+    //BluetoothService를 위한 connection
+    ServiceConnection btConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                //서비스와 연결되었을 때 호출되는 메서드
+                Log.w(TAG, iBinder + "호출됨.");
+                BluetoothService.BtBinder bb = (BluetoothService.BtBinder) iBinder;
+                btService = bb.getService();
+                isBtService = true;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                //서비스와 연결이 끊기거나 종료되었을 때 호출되는 메서드
+                Log.w(TAG, componentName + "끊어짐.");
+                isBtService = false;
+            }
     };
 
 

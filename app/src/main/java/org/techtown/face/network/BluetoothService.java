@@ -33,13 +33,19 @@ public class BluetoothService extends Service {
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     ConnectedThread connectedThread;
     BluetoothSocket btSocket;
+    BluetoothDevice device;
     final static String TAG = "FACEBluetooth";
     Handler mHandler = new Handler();
 
-    private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+    IBinder btBinder = new BtBinder();
 
-    public BluetoothService() {
+    public class BtBinder extends Binder {
+        public BluetoothService getService() {
+            return BluetoothService.this;
+        }
     }
+
+    private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -74,23 +80,17 @@ public class BluetoothService extends Service {
                                         }
                                     });
                             mHandler.postDelayed(() -> {
-                                writeToDevice(document.getString(Constants.KEY_ADDRESS), inString[0]);
-                                Log.w(TAG,  document.getString(Constants.KEY_NAME) + "에 전해진 표정: " + expresison[0]);
-                            },1000);
+                                device = btAdapter.getRemoteDevice(document.getString(Constants.KEY_ADDRESS));
+                                Log.w(TAG, "isConnected: " + isConnected(device));
+                                if (!isConnected(device)) {
+                                    writeToDevice(document.getString(Constants.KEY_ADDRESS), inString[0]);
+                                    Log.w(TAG, document.getString(Constants.KEY_NAME) + "에 전해진 표정: " + expresison[0]);
+                                }
+                            }, 1000);
                         }
                     }
                 });
-        return new BtBinder();
-    }
-
-    class BtBinder extends Binder {
-        public void showBound() {
-            Log.w(TAG, TAG + " 성공적으로 바인딩 됨.");
-        }
-
-        public void loseBinding() {
-            Log.w(TAG, TAG + " 바인딩 해제 됨.");
-        }
+        return btBinder;
     }
 
     //createBluetoothSocket 메서드
@@ -122,7 +122,7 @@ public class BluetoothService extends Service {
     }
 
     @SuppressLint("MissingPermission")
-    private void writeToDevice(String deviceAddress, String input) {
+    public void writeToDevice(String deviceAddress, String input) {
         if (btAdapter.isDiscovering()) {
             btAdapter.cancelDiscovery();
         }
