@@ -227,8 +227,8 @@ public class AccountActivity extends BaseActivity {
                         firestore.collection(Constants.KEY_COLLECTION_USERS)
                                 .document(preferenceManager.getString(Constants.KEY_USER_ID))
                                 .delete().addOnSuccessListener(unused -> {
-                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    user.delete().addOnCompleteListener(task1 -> {if(task1.isSuccessful()){showToast("Delete Successful");}});
+
+
 
                                     preferenceManager.clear();
                                     Intent intent = new Intent(AccountActivity.this, SignInActivity.class);
@@ -237,6 +237,8 @@ public class AccountActivity extends BaseActivity {
                                 });
 
                         //인증에서 유저 삭제
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.delete().addOnCompleteListener(task1 -> {if(task1.isSuccessful()){showToast("Delete Successful");}});
 
                     } else {
                         Log.e("THis", "IS FUCK");
