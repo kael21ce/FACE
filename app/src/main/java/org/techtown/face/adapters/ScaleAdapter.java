@@ -1,6 +1,7 @@
 package org.techtown.face.adapters;
 
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
@@ -8,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,21 +79,21 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
         String STAG = "ScaleAdapter";
         PreferenceManager preferenceManager;
 
-        TextView nameTxt;
+        TextView title;
         TextView incomingNum;
         TextView outgoingNum;
         TextView youTxt;
-        ImageView scaleHead;
+        ImageView scaleHeart;
         ImageView interactButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTxt = itemView.findViewById(R.id.scaleName);
+            title = itemView.findViewById(R.id.title);
             incomingNum = itemView.findViewById(R.id.incomingNum);
             outgoingNum = itemView.findViewById(R.id.outgoingNum);
             youTxt = itemView.findViewById(R.id.youTxt);
-            scaleHead = itemView.findViewById(R.id.heart);
+            scaleHeart = itemView.findViewById(R.id.heart);
             interactButton = itemView.findViewById(R.id.background);
 
         }
@@ -109,10 +109,11 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             final int[] numI = {0};
             final int[] numO = {0};
             float y = 0;
-            final float[] angle = {0};
+            final float[] magnitude = {0};
+            float oldX = scaleHeart.getX();
+            Log.w(STAG, "Old x: " + oldX);
 
-
-            nameTxt.setText(item.getScaleName());
+            title.setText("나 & " + item.getScaleName());
             youTxt.setText(item.getScaleName());
             String mobileForScale = item.getScaleMobile();
             String userId = item.getScaleId();
@@ -129,17 +130,23 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
                         + preferenceManager.getInt("out" + mobileForScale)
                         + preferenceManager.getInt("send" + mobileForScale);
                 Integer numIn = numI[0];
-                String numInString = numIn.toString();
+                String numInString = numIn + "회";
                 Integer numOut = numO[0];
-                String numOutString = numOut.toString();
+                String numOutString = numOut + "회";
                 Log.w(STAG, "Inbox in adapter-" + preferenceManager.getInt("in" + mobileForScale));
                 Log.w(STAG, "Sent in adapter-" + preferenceManager.getInt("out" + mobileForScale));
                 incomingNum.setText(numInString);
                 outgoingNum.setText(numOutString);
-                //각도
-                angle[0] = preferenceManager.getFloat("angle" + mobileForScale);
-                Log.w(STAG, "Angle in adapter-" + angle[0]);
-                scaleHead.setRotation(angle[0]);
+                //ScaleHeart 게이지 이동
+                magnitude[0] = preferenceManager.getFloat("angle" + mobileForScale);
+                Log.w(STAG, "Magnitude in adapter: " + magnitude[0]);
+                //float newX = oldX + magnitude[0];
+                //scaleHeart.setX(newX);
+                ObjectAnimator animation = ObjectAnimator.ofFloat(scaleHeart, "translationX", magnitude[0] * -8.f);
+                //ObjectAnimator animation = ObjectAnimator.ofFloat(scaleHeart, "translationX", -360.f);
+                animation.setDuration(500);
+                animation.start();
+                //Log.w(STAG, "Now position is...: " + newX);
             }, 2000);
 
 
