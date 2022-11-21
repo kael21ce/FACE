@@ -37,7 +37,7 @@ public class Family {
             this.name = name;
         }
 
-        public String getScaleMoible() {
+        public String getScaleMobile() {
             return mobile;
         }
 

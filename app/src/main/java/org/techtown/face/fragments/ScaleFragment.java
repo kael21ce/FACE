@@ -31,7 +31,7 @@ import org.techtown.face.utilites.PreferenceManager;
 public class ScaleFragment extends Fragment {
 
     PreferenceManager preferenceManager;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db;
     String TAG = "FACEdatabase";
     private SwipeRefreshLayout scaleSwipeRefresh;
     Handler mHandler;
@@ -54,6 +54,7 @@ public class ScaleFragment extends Fragment {
         ScaleAdapter adapter = new ScaleAdapter();
 
         String myId = preferenceManager.getString(Constants.KEY_USER_ID);
+        db = FirebaseFirestore.getInstance();
 
         //db에서 데이터 가져오기
         db.collection(Constants.KEY_COLLECTION_USERS)

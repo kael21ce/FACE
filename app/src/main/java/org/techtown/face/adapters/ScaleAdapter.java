@@ -84,7 +84,7 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
         TextView outgoingNum;
         TextView youTxt;
         ImageView scaleHead;
-        Button interactButton;
+        ImageView interactButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -93,8 +93,8 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             incomingNum = itemView.findViewById(R.id.incomingNum);
             outgoingNum = itemView.findViewById(R.id.outgoingNum);
             youTxt = itemView.findViewById(R.id.youTxt);
-            scaleHead = itemView.findViewById(R.id.scale_head);
-            interactButton = itemView.findViewById(R.id.interactButton);
+            scaleHead = itemView.findViewById(R.id.heart);
+            interactButton = itemView.findViewById(R.id.background);
 
         }
 
@@ -111,9 +111,10 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
             float y = 0;
             final float[] angle = {0};
 
+
             nameTxt.setText(item.getScaleName());
             youTxt.setText(item.getScaleName());
-            String mobileForScale = item.getScaleMoible();
+            String mobileForScale = item.getScaleMobile();
             String userId = item.getScaleId();
             scaleInfo.getInboxNum(itemView.getContext(), mobileForScale);
             scaleInfo.getSentNum(itemView.getContext(), mobileForScale);

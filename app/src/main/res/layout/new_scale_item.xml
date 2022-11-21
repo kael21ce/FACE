@@ -61,7 +61,7 @@
         app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
-        android:id="@+id/text3"
+        android:id="@+id/scaleName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -75,7 +75,7 @@
         app:layout_constraintStart_toStartOf="@+id/background" />
 
     <TextView
-        android:id="@+id/text4"
+        android:id="@+id/youTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
@@ -89,7 +89,7 @@
         app:layout_constraintEnd_toEndOf="@+id/background" />
 
     <TextView
-        android:id="@+id/sendNum"
+        android:id="@+id/incomingNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="95dp"
@@ -103,7 +103,7 @@
         app:layout_constraintStart_toStartOf="@+id/background" />
 
     <TextView
-        android:id="@+id/receiveNum"
+        android:id="@+id/outgoingNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="91dp"
