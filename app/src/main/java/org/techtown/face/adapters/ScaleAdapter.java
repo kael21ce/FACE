@@ -39,7 +39,7 @@ public class ScaleAdapter extends RecyclerView.Adapter<ScaleAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.scale_item, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.new_scale_item, viewGroup, false);
 
         return new ViewHolder(itemView);
     }

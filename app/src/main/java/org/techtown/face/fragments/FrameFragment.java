@@ -69,27 +69,28 @@ public class FrameFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot result = task.getResult();
+
                         int cnt = 0;
                         int familyNum = result.size();
-                        Log.w("familyNum", String.valueOf(familyNum));
+                        Log.w("Firebase Family Number", String.valueOf(familyNum));
 
-                        //sky 추가
+                        /***sky 추가***/
                         int skyNum = skyNum(familyNum);
                         //Log.w("skyNum", String.valueOf(skyNum));
                         for (int i = 0; i < skyNum; i++) {
                             adapter.addItem(new ViewData(0));
                         }
 
-                        //roof 추가
+                        /***roof 추가***/
                         adapter.addItem(new ViewData(1));
 
-                        //layout 설정
+                        /***layout 설정***/
                         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
                             @Override
                             public int getSpanSize(int position) {
-                                if (position < skyNum + 1) return 2;
-                                if ((familyNum % 2 == 1) && (position == skyNum + familyNum))
+                                if (position < skyNum + 1) return 2;//roof
+                                if (((familyNum % 2) == 1) && (position == skyNum + familyNum))
                                     return 2;
                                 if (position > skyNum + familyNum) return 2;
                                 return 1;
@@ -109,7 +110,7 @@ public class FrameFragment extends Fragment {
                             user.dislike = document.get(Constants.KEY_THEME_DISLIKE).toString();
                             user.id = document.getString(Constants.KEY_USER);
                             user.expression = Integer.parseInt(document.get(Constants.KEY_EXPRESSION).toString());
-                            int finalCnt = cnt;
+                            int finalCnt1 = cnt;
                             db.collection(Constants.KEY_COLLECTION_USERS).document(user.id).get().addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
                                     DocumentSnapshot snapshot = task1.getResult();
@@ -122,14 +123,15 @@ public class FrameFragment extends Fragment {
                                     face.setType(2);
                                     face.setFamily(family);
                                     adapter.addItem(face);
+                                    Log.w("face 추가", String.valueOf(finalCnt1));
                                     //가족 추가 완료
-                                    if (finalCnt == familyNum) {
-                                        Log.w("SET ADAPTER", "adapter setting");
+                                    if (finalCnt1 == familyNum) {
+                                        Log.w("SET ADAPTER", String.valueOf(familyNum));
                                         //잔디 추가
                                         adapter.addItem(new ViewData(3));
-                                        //adapter 설정
-                                        recyclerView.setAdapter(adapter);
                                     }
+                                    //adapter 설정
+                                    recyclerView.setAdapter(adapter);
                                 }
                             });
                         }
