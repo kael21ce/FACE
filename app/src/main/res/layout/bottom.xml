@@ -6,5 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src = "@drawable/bottom"
-        android:background = "@color/wall_color"/>
+        android:background = "@color/wall_color"
+        android:scaleType="fitXY"/>
 </LinearLayout>

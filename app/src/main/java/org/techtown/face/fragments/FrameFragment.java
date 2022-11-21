@@ -102,7 +102,7 @@ public class FrameFragment extends Fragment {
                             cnt++;
                             User user = new User();
                             user.name = document.getString(Constants.KEY_NAME);
-                            Log.w(TAG, user.name);
+                            //Log.w(TAG, user.name);
                             user.min_contact = Integer.parseInt(document.get(Constants.KEY_MIN_CONTACT).toString());
                             user.ideal_contact = Integer.parseInt(document.get(Constants.KEY_IDEAL_CONTACT).toString());
                             user.like = document.get(Constants.KEY_THEME_LIKE).toString();
