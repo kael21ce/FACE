@@ -60,8 +60,9 @@ public class SmsReceiver extends BroadcastReceiver {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     //상대방 데이터베이스에 내 expression 업데이트
+                                    String familyId = document.getString(Constants.KEY_USER);
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.getId())
+                                            .document(familyId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .whereEqualTo(Constants.KEY_USER, userId)
                                             .get()
@@ -69,17 +70,17 @@ public class SmsReceiver extends BroadcastReceiver {
                                                 if (task1.isSuccessful()) {
                                                     for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                         db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                .document(document.getId())
+                                                                .document(familyId)
                                                                 .collection(Constants.KEY_COLLECTION_USERS)
                                                                 .document(documentSnapshot.getId())
                                                                 .update(Constants.KEY_EXPRESSION, 5);
-                                                        Log.w(TAG, document.getId() + "내 expression 업데이트 됨");
+                                                        Log.w(TAG, familyId + ": 내 expression 업데이트 됨");
                                                     }
                                                 }
                                             });
                                     //상대방 데이터베이스에 내 window 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(document.getId())
+                                            .document(familyId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
                                             .whereEqualTo(Constants.KEY_USER, userId)
                                             .get()
@@ -87,11 +88,11 @@ public class SmsReceiver extends BroadcastReceiver {
                                                 if (task1.isSuccessful()) {
                                                     for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                         db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                .document(document.getId())
+                                                                .document(familyId)
                                                                 .collection(Constants.KEY_COLLECTION_USERS)
                                                                 .document(documentSnapshot.getId())
                                                                 .update(Constants.KEY_WINDOW, now);
-                                                        Log.w(TAG, document.getId() + "내 window 업데이트 됨");
+                                                        Log.w(TAG, familyId + ": 내 window 업데이트 됨");
                                                     }
                                                 }
                                             });
