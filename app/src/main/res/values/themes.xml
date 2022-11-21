@@ -12,5 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/FACE_status</item>
         <!-- Customize your theme here. -->
+
+        <item name="android:fontFamily">@font/jua</item>
     </style>
 </resources>
