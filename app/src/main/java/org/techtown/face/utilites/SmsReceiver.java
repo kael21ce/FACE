@@ -104,11 +104,18 @@ public class SmsReceiver extends BroadcastReceiver {
                 sms.put(Constants.KEY_SENDER, sender);
                 sms.put(Constants.KEY_RECEIVER_ID, userId);
                 sms.put(Constants.KEY_RECEIVED_TIME, receivedTime);
-                //sms.put(Constants.KEY_SENDER_ID, document.getId());
                 sms.put(Constants.KEY_RECEIVED_MOBILE, preferenceManager.getString(Constants.KEY_MOBILE));
                 db.collection(Constants.KEY_COLLECTION_SMS)
                         .add(sms)
-                        .addOnCompleteListener(task13 -> Log.w(TAG, "Document is successfully written!"));
+                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                Log.w(TAG, "Sender: " + sender);
+                                Log.w(TAG, "Receiver_id: " + userId);
+                                Log.w(TAG, "Received time: " + receivedTime);
+                                Log.w(TAG, "Received mobile: " + preferenceManager.getString(Constants.KEY_MOBILE));
+                            }
+                        });
             }
         }
     }
