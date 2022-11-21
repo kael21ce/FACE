@@ -110,9 +110,10 @@ public class ChatActivity extends BaseActivity {
                 .document(receiverUser.id)
                 .collection(Constants.KEY_COLLECTION_USERS)
                 .whereEqualTo(Constants.KEY_USER, preferenceManager.getString(Constants.KEY_USER_ID))
-                .addSnapshotListener((value, error) -> {
-                    for(DocumentChange change : value.getDocumentChanges()){
-                        String docId = change.getDocument().getId();
+                .get()
+                .addOnCompleteListener(task -> {
+                    for(QueryDocumentSnapshot snapshot : task.getResult()){
+                        String docId = snapshot.getId();
                         database.collection(Constants.KEY_COLLECTION_USERS)
                                 .document(receiverUser.id)
                                 .collection(Constants.KEY_COLLECTION_USERS)
