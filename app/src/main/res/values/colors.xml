@@ -32,5 +32,6 @@
     <color name="letter1_color">#A33A332A</color>
     <color name="background">#00000000</color>
     <color name="background_heart">#55DDD4B3</color>
+    <color name="background_leg">#DDD4B3</color>
 
 </resources>
