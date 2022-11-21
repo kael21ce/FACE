@@ -8,7 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/white">
 
         <Button
             android:id="@+id/addFamilyButton"
@@ -18,6 +20,7 @@
             android:layout_marginTop="84dp"
             android:layout_marginEnd="16dp"
             android:text="가족 추가"
+            android:textColor="@color/letter_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +38,8 @@
             android:id="@+id/searchName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="168dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="192dp"
             android:layout_weight="1"
             android:text="TextView"
             android:textSize="20sp"
@@ -52,10 +55,10 @@
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.447"
+            app:layout_constraintHorizontal_bias="0.388"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.709" />
+            app:layout_constraintVertical_bias="0.507" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
