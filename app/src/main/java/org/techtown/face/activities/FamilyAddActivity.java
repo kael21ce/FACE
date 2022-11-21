@@ -22,7 +22,8 @@ public class FamilyAddActivity extends AppCompatActivity {
 
     ActivityFamilyAddBinding binding;
     PreferenceManager preferenceManager;
-    private final Intent intent = getIntent();
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class FamilyAddActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
 
-
+        intent = getIntent();
         String mobile = intent.getStringExtra(Constants.KEY_MOBILE);
         String path = intent.getStringExtra(Constants.KEY_PATH);
 
