@@ -100,7 +100,7 @@ public class FrameFragment extends Fragment {
                         recyclerView.setLayoutManager(layoutManager);
 
                         for (QueryDocumentSnapshot document : result) {
-                            cnt++;
+                            Log.w("cnt 증가", String.valueOf(++cnt));
                             User user = new User();
                             user.name = document.getString(Constants.KEY_NAME);
                             //Log.w(TAG, user.name);
@@ -123,9 +123,10 @@ public class FrameFragment extends Fragment {
                                     face.setType(2);
                                     face.setFamily(family);
                                     adapter.addItem(face);
-                                    Log.w("face 추가", String.valueOf(finalCnt1));
+                                    Log.w("ADD ITEM", String.valueOf(adapter.getItemCount()-skyNum-1));
+
                                     //가족 추가 완료
-                                    if (finalCnt1 == familyNum) {
+                                    if (adapter.getItemCount()-skyNum-1 == familyNum) {
                                         Log.w("SET ADAPTER", String.valueOf(familyNum));
                                         //잔디 추가
                                         adapter.addItem(new ViewData(3));
