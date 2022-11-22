@@ -30,8 +30,9 @@
     <color name="button_color">#66C9A377</color>
     <color name="letter_color">#3A2D0C</color>
     <color name="letter1_color">#A33A332A</color>
-    <color name="background">#00000000</color>
+    <color name="background">#55957248</color>
     <color name="background_heart">#55DDD4B3</color>
     <color name="background_leg">#DDD4B3</color>
+    <color name="notice_color">#66C9A377</color>
 
 </resources>

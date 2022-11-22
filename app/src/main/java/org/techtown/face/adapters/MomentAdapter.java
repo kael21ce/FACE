@@ -41,7 +41,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         Log.w(TAG, "onCreateViewHolder 호출됨.");
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(getViewSrc(viewType), viewGroup, false);
-        context = viewGroup.getContext();
+        //context = viewGroup.getContext();
         return new ViewHolder(itemView, viewType);
     }
 
