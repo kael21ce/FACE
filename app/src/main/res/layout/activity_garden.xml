@@ -56,12 +56,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border_layout"
             android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:text="연결할 가족 정원 찾기"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textColor="@color/letter_color"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/searchLocation"
@@ -74,6 +73,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:text="주변 기기 찾기"
+            android:textColor="@color/letter1_color"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -81,9 +81,10 @@
             android:id="@+id/locationExist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="주변 기기가 없습니다"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView

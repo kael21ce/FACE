@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
@@ -9,63 +10,77 @@
 
     <LinearLayout
         android:layout_width="324dp"
-        android:layout_height="339dp"
-        android:background="@drawable/rectangle"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_round"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/gardenName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:text="OOO의 가족 정원"
+            android:background="@drawable/border_garden_title"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp"
+            android:text="| OOO의 가족 정원 |"
             android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="24sp" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btcontainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/txtContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/deviceText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="170dp"
-                    android:text="GARDEN0"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/gardenStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="주변에 있지 않습니다."
-                    android:textSize="20sp" />
-            </LinearLayout>
 
             <ImageView
                 android:id="@+id/flowerImg"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/flower" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/deviceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:layout_marginBottom="10dp"
+                android:text="GARDEN0"
+                android:textColor="@color/letter_color"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/gardenStatus"
+                app:layout_constraintEnd_toEndOf="@+id/flowerImg"
+                app:layout_constraintStart_toStartOf="@+id/flowerImg"
+                app:layout_constraintTop_toTopOf="@+id/flowerImg" />
+
+            <TextView
+                android:id="@+id/gardenStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="160dp"
+                android:text="주변에 있지 않습니다."
+                android:textColor="@color/letter_color"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/flowerImg"
+                app:layout_constraintEnd_toEndOf="@+id/flowerImg"
+                app:layout_constraintHorizontal_bias="0.473"
+                app:layout_constraintStart_toStartOf="@+id/flowerImg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.482" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/setGarden"
@@ -73,13 +88,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="#F6BB23"
             android:paddingStart="50dp"
             android:paddingEnd="50dp"
             android:text="변경하기"
+            android:textColor="@color/letter_color"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:visibility="gone" />
 
     </LinearLayout>
 

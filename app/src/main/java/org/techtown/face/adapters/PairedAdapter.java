@@ -71,7 +71,7 @@ public class PairedAdapter extends RecyclerView.Adapter<PairedAdapter.ViewHolder
                                     for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                         if (documentSnapshot.getId()
                                                 .equals(document.getString("registered"))) {
-                                            gardenName.setText(documentSnapshot.getString(Constants.KEY_NAME) + "의 가족정원");
+                                            gardenName.setText("| " + documentSnapshot.getString(Constants.KEY_NAME) + "의 가족정원 |");
                                         }
                                     }
                                 }
