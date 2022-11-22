@@ -9,7 +9,7 @@
             <stroke
                 android:width="3dp"
                 android:color="#42AC8A63"/>
-            <solid android:color="@color/background"/>
+            <solid android:color="@color/icon_background"/>
         </shape>
     </item>
 </layer-list>

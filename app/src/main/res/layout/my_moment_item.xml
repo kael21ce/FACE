@@ -1,85 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_gravity="center_horizontal"
-    android:background="@color/background">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/icon_background"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/myBoardContainer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/notice_color"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content">
+        android:background="@color/notice_color"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/my_board"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:src="@drawable/board"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/my_imageViewPager"
+            android:layout_width="270dp"
+            android:layout_height="270dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="67dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintBottom_toBottomOf="@+id/my_board"
+            app:layout_constraintEnd_toEndOf="@+id/my_board"
+            app:layout_constraintStart_toStartOf="@+id/my_board"
+            app:layout_constraintTop_toTopOf="@+id/my_board" />
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/my_imgIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            app:ci_drawable="@drawable/bg_indicator_active"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/my_imageViewPager">
+
+        </me.relex.circleindicator.CircleIndicator3>
 
         <ImageButton
             android:id="@+id/my_deleteMoment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+
             android:backgroundTint="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/my_imgIndicator"
-            app:layout_constraintEnd_toEndOf="@+id/imageView1"
-            app:layout_constraintTop_toBottomOf="@+id/my_imageViewPager"
+            app:layout_constraintBottom_toBottomOf="@+id/my_board"
+            app:layout_constraintEnd_toEndOf="@+id/my_board"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/my_board"
+            app:layout_constraintTop_toTopOf="@+id/my_board"
+            app:layout_constraintVertical_bias="0.965"
             app:srcCompat="@drawable/deletebtn"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/my_imageViewPager"
-            android:layout_width="250"
-            android:layout_height="270"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="67dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="60dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView1"
-            app:layout_constraintEnd_toEndOf="@+id/imageView1"
-            app:layout_constraintStart_toStartOf="@+id/imageView1"
-            app:layout_constraintTop_toTopOf="@+id/imageView1" />
-
-        <me.relex.circleindicator.CircleIndicator3
-            android:id="@+id/my_imgIndicator"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            app:ci_drawable="@drawable/bg_indicator_active"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView1" />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/my_ftextContainer"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toTopOf="@+id/my_imageViewPager"
-            app:layout_constraintEnd_toEndOf="@+id/imageView1"
-            app:layout_constraintStart_toStartOf="@+id/imageView1">
+            app:layout_constraintEnd_toEndOf="@+id/my_board"
+            app:layout_constraintStart_toStartOf="@+id/my_board"
+            app:layout_constraintTop_toTopOf="@+id/my_board">
 
             <TextView
                 android:id="@+id/my_momentName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="150dp"
-                android:layout_marginBottom="10dp"
-                android:text="유소현"
+                android:text="나의 순간"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/my_momentDate"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,14 +95,13 @@
                 android:id="@+id/my_momentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="110dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="40dp"
                 android:text="|  0000-00-00  |"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/my_momentName"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
