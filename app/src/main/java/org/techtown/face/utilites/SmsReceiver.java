@@ -52,47 +52,70 @@ public class SmsReceiver extends BroadcastReceiver {
 
                 //Sms 발신 시 발신자 쪽에서 표정 업데이트
                 db.collection(Constants.KEY_COLLECTION_USERS)
-                        .document(userId)
-                        .collection(Constants.KEY_COLLECTION_USERS)
                         .whereEqualTo(Constants.KEY_MOBILE, sender)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     //상대방 데이터베이스에 내 expression 업데이트
-                                    String familyId = document.getString(Constants.KEY_USER);
+                                    Log.w(TAG, "here1: " + document.getId());
+                                    String senderId = document.getId();
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(familyId)
+                                            .document(userId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .whereEqualTo(Constants.KEY_USER, userId)
+                                            .whereEqualTo(Constants.KEY_USER, senderId)
                                             .get()
                                             .addOnCompleteListener(task1 -> {
                                                 if (task1.isSuccessful()) {
                                                     for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                         db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                .document(familyId)
+                                                                .document(senderId)
                                                                 .collection(Constants.KEY_COLLECTION_USERS)
-                                                                .document(documentSnapshot.getId())
-                                                                .update(Constants.KEY_EXPRESSION, 5);
-                                                        Log.w(TAG, familyId + ": 내 expression 업데이트 됨");
+                                                                .whereEqualTo(Constants.KEY_USER, userId)
+                                                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task2) {
+                                                                        if (task2.isSuccessful()) {
+                                                                            for (QueryDocumentSnapshot snapshot : task2.getResult()) {
+                                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                                        .document(senderId)
+                                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                                        .document(snapshot.getId()).update(Constants.KEY_EXPRESSION, 5);
+                                                                                Log.w(TAG, senderId + ": 내 expression 업데이트 됨");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
                                                     }
                                                 }
                                             });
                                     //상대방 데이터베이스에 내 window 업데이트
                                     db.collection(Constants.KEY_COLLECTION_USERS)
-                                            .document(familyId)
+                                            .document(userId)
                                             .collection(Constants.KEY_COLLECTION_USERS)
-                                            .whereEqualTo(Constants.KEY_USER, userId)
+                                            .whereEqualTo(Constants.KEY_USER, senderId)
                                             .get()
                                             .addOnCompleteListener(task1 -> {
                                                 if (task1.isSuccessful()) {
                                                     for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                                                         db.collection(Constants.KEY_COLLECTION_USERS)
-                                                                .document(familyId)
+                                                                .document(senderId)
                                                                 .collection(Constants.KEY_COLLECTION_USERS)
-                                                                .document(documentSnapshot.getId())
-                                                                .update(Constants.KEY_WINDOW, now);
-                                                        Log.w(TAG, familyId + ": 내 window 업데이트 됨");
+                                                                .whereEqualTo(Constants.KEY_USER, userId)
+                                                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task2) {
+                                                                        if (task2.isSuccessful()) {
+                                                                            for (QueryDocumentSnapshot snapshot : task2.getResult()) {
+                                                                                db.collection(Constants.KEY_COLLECTION_USERS)
+                                                                                        .document(senderId)
+                                                                                        .collection(Constants.KEY_COLLECTION_USERS)
+                                                                                        .document(snapshot.getId()).update(Constants.KEY_WINDOW, now);
+                                                                                Log.w(TAG, senderId + ": 내 window 업데이트 됨");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
                                                     }
                                                 }
                                             });
