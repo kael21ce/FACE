@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            app:itemBackground="@color/button_color"
+            app:itemBackground="#99DDD4B3"
             app:itemIconTint="@color/black"
             app:itemTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"

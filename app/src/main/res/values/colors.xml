@@ -19,7 +19,7 @@
     <color name="green">#008000</color>
 
     <color name="FACE_color">#DDD4B3</color>
-    <color name="FACE_status">#DDD4B3</color>
+    <color name="FACE_status">#99DDD4B3</color>
 
     <color name="wall_color">#FCD5D5</color>
     <color name="roof_color">#EC8888</color>
