@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_heart"
     android:orientation="vertical"
     tools:context=".activities.FamilyViewActivity">
 
-    <LinearLayout android:orientation="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/image"
@@ -16,94 +19,306 @@
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <EditText
-            android:id="@+id/nameTxt"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:text="Name" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/mobile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/frontNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_left_frame"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="이름"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nameTxt"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="이상적인 연락 기간" />
+            <EditText
+                android:id="@+id/nameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="100dp"
+                android:background="@drawable/border_right_frame"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="Name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/idealContact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="(0에서 99사이의 숫자를 입력해 주세요) 예시 3"
-            android:inputType="textPersonName"
-            android:minHeight="48dp" />
+            <TextView
+                android:id="@+id/mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:text="01000000000"
+                app:layout_constraintBottom_toBottomOf="@+id/idealContact"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameTxt"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="최소 연락 기간" />
+            <TextView
+                android:id="@+id/frontIdealContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_left_frame"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="이상적인 연락 기간"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/idealContact"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mobile"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/minContact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="(0에서 99사이의 숫자를 입력해 주세요) 예시 10"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            tools:ignore="TouchTargetSizeCheck" />
+            <EditText
+                android:id="@+id/idealContact"
+                android:layout_width="200dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/border_right_frame"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="0~99"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameTxt"
+                app:layout_constraintVertical_bias="0.003" />
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="선호하는 주제" />
+            <TextView
+                android:id="@+id/wantText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:text="# ~일에 한번은 연락해줘"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frontIdealContact"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/themeLike"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="대화하고 싶은 주제를 적어주세요"
-            android:inputType="textPersonName"
-            android:minHeight="48dp" />
+            <TextView
+                android:id="@+id/frontMinContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/border_left_frame"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="최소 연락 기간"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/wantText"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="불호하는 주제" />
+            <EditText
+                android:id="@+id/minContact"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/border_right_frame"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="0~99"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/frontMinContact"
+                app:layout_constraintTop_toBottomOf="@+id/idealContact"
+                app:layout_constraintVertical_bias="0.004"
+                tools:ignore="TouchTargetSizeCheck" />
 
-        <EditText
-            android:id="@+id/themeDislike"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="대화하고 싶지 않은 주제를 적어주세요"
-            android:inputType="textPersonName"
-            android:minHeight="48dp" />
+            <TextView
+                android:id="@+id/minText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:text="# 못해도 최소한 ~일에 한번은 연락해줘"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frontMinContact"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/frontThemeLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_left_frame"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="선호하는 주제"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/minText"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/themeLike"
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/border_right_frame"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="대화하고 싶은 주제"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/frontThemeLike"
+                app:layout_constraintTop_toBottomOf="@+id/minContact"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/likeBelow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:text="# 상대방과 대화하고 싶은 주제"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frontThemeLike"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/frontThemeDislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_left_frame"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="불호하는 주제"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/likeBelow"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/themeDislike"
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/border_right_frame"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="대화하고 싶지 않은 주제"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/frontThemeDislike"
+                app:layout_constraintTop_toBottomOf="@+id/themeLike"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/dislikeBelow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                android:text="# 상대방과 대화하고 싶지 않은 주제"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frontThemeDislike" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/add"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="변경하기" />
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#80C9A377"
+            android:text="변경하기"
+            android:textColor="@color/letter_color"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
 
         <Button
             android:id="@+id/deleteFamily"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="삭제하기" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="삭제하기"
+            android:textColor="@color/letter_color"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
     </LinearLayout>
 
 </ScrollView>

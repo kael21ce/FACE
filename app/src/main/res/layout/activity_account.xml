@@ -6,87 +6,116 @@
     android:layout_height="match_parent"
     android:contentDescription="@string/action_sign_in"
     android:layout_gravity="center"
+    android:background="@color/FACE_status"
     tools:context=".activities.AccountActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#E3D3BD"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center"
-            android:text="이미지" />
-
-        <FrameLayout
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center">
-
-            <ImageView
-                android:id="@+id/imageMe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/avatars" />
-        </FrameLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center"
-            android:text="채팅 이미지" />
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="TODO" />
+            android:text="| 현재 나의 계정 정보 |"
+            android:background="@color/white"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="휴대폰 번호  " />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/phoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="전화번호" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:text="가족 프로필 이미지" />
 
+                <FrameLayout
+                    android:layout_width="156dp"
+                    android:layout_height="156dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageMe"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:srcCompat="@tools:sample/avatars" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:text="채팅 프로필 이미지" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="211dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:contentDescription="TODO"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </LinearLayout>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="전화번호"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/changeInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="계정 설정 변경" />
+            android:text="계정 설정 변경하기" />
 
-        <Button
-            android:id="@+id/SignOut"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="로그아웃" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/deleteAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="탈퇴" />
+            <Button
+                android:id="@+id/SignOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:text="로그아웃" />
+
+            <Button
+                android:id="@+id/deleteAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_weight="1"
+                android:text="탈퇴" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
