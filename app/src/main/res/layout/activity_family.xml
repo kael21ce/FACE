@@ -1,64 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/familyName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="가족"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.043"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/familyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가족"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/exit"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="4dp"
-        android:paddingTop="0dp"
-        android:paddingRight="4dp"
-        android:paddingBottom="8dp"
-        android:text="x"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.996"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        <Button
+            android:id="@+id/exit"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x"
+            android:textColor="#000000"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="410dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2">
-
-        <LinearLayout
-            android:id="@+id/buttonContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp">
+        android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -134,58 +111,16 @@
                     android:textColor="#993A2D0C"
                     android:paddingTop="5dp"/>
             </LinearLayout>
-
-
-
-        </LinearLayout>
-
-
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="44dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="143dp" />
-
-
-
-
-
-    <Button
-        android:id="@+id/momentButton"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:text="'OOO'의 순간 보기"
-        android:textColor="#3A2D0C"
-        android:textSize="23sp"
-        android:textStyle="bold"
-        app:backgroundTint="#66C9A377"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.596" />
 
     <LinearLayout
         android:id="@+id/fbsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        android:padding="20dp"
+        android:layout_margin="10dp">
 
         <TextView
             android:id="@+id/hope"
@@ -198,16 +133,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:layout_marginBottom="20dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/favourite"/>
+                android:src="@drawable/favourite"
+                android:layout_marginRight="10dp"/>
             <TextView
                 android:id="@+id/idealContact"
                 android:layout_width="wrap_content"
@@ -218,64 +157,87 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/favourite"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/minContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아무리 적어도 OO일에 1번은 연락을 했으면 좋겠어..."
+                android:textColor="#aa3A2D0C"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/favourite"/>
-        <TextView
-            android:id="@+id/minContact"
-            android:layout_width="wrap_content"
+            android:src="@drawable/line"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="아무리 적어도 OO일에 1번은 연락을 했으면 좋겠어..."
-            android:textColor="#aa3A2D0C"
-            android:textSize="14sp"
-            android:layout_gravity="center_vertical"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/favourite1"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/themeLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="선호 이야기를 함께 하면 즐거울 것 같아!"
+                android:textColor="#aa3A2D0C"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/favourite2"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/themeDislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="불호 이야기는 조금 줄여줬으면 좋겠어..."
+                android:textColor="#aa3A2D0C"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:width="100dp"
-        android:height="3dp"
-        android:src="@drawable/line"/>
+    <Button
+        android:id="@+id/momentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="'OOO'의 순간 보기"
+        android:textColor="#3A2D0C"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        app:backgroundTint="#66C9A377"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/favourite1"/>
-        <TextView
-            android:id="@+id/themeLike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="선호 이야기를 함께 하면 즐거울 것 같아!"
-            android:textColor="#aa3A2D0C"
-            android:textSize="14sp"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/favourite2"/>
-        <TextView
-            android:id="@+id/themeDislike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="불호 이야기는 조금 줄여줬으면 좋겠어..."
-            android:textColor="#aa3A2D0C"
-            android:textSize="14sp"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
