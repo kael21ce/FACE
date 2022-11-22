@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_heart"
     android:clipToPadding="false"
     android:overScrollMode="never"
     android:padding="24dp"
@@ -15,14 +16,15 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical">
+
         <TextView
+            android:id="@+id/signUpTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="회원가입"
-            android:textColor="@color/primary_text"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:text="| 회원가입 |"
+            android:textColor="@color/letter_color"
+            android:textSize="30sp" />
 
         <FrameLayout
             android:id="@+id/layoutImage"
@@ -37,16 +39,17 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:background="@drawable/background_image"
-                android:scaleType="centerCrop"/>
+                android:backgroundTint="@color/background"
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/textAddImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="채팅 프로필"
                 android:textColor="@color/secondary_text"
-                android:textSize="15sp"
-                android:text="채팅 프로필"/>
+                android:textSize="15sp" />
         </FrameLayout>
 
         <EditText
@@ -55,6 +58,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="필수: 이름"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
@@ -70,6 +74,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="필수: 이메일 (abcde1234@naver.com)"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
@@ -86,6 +91,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="필수: 비밀번호"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
@@ -102,6 +108,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="필수: 비밀번호 확인"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
@@ -117,6 +124,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="필수: 휴대폰 번호 (01012345678)"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
@@ -137,9 +145,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="@string/app_start"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
                 app:cornerRadius="8dp" />
 
             <ProgressBar
@@ -157,8 +164,7 @@
             android:layout_marginTop="10dp"
             android:text="돌아가기"
             android:textColor="@color/primary"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:textSize="15sp" />
 
 
     </LinearLayout>
