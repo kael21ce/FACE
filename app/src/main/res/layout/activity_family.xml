@@ -227,12 +227,12 @@
         android:id="@+id/momentButton"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#66C9A377"
         android:text="'OOO'의 순간 보기"
         android:textColor="#3A2D0C"
-        android:textSize="23sp"
-        android:textStyle="bold"
-        app:background="#66C9A377"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:textSize="20sp"
+        app:cornerRadius="10dp" />
 
 </LinearLayout>
