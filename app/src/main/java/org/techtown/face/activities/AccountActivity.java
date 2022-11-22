@@ -42,7 +42,7 @@ public class AccountActivity extends BaseActivity {
         binding.SignOut.setOnClickListener(view -> signOut());
         binding.deleteAccount.setOnClickListener(view -> deleteUser());
         binding.changeInfo.setOnClickListener(view -> changeInformation());
-        binding.phoneNumber.setText(preferenceManager.getString(Constants.KEY_MOBILE));
+        binding.phoneNumber.setText("휴대폰 번호  |  "+preferenceManager.getString(Constants.KEY_MOBILE));
         binding.imageView.setImageBitmap(getUserImage(preferenceManager.getString(Constants.KEY_IMAGE)));
 
     }
