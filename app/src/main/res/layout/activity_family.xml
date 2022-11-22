@@ -45,7 +45,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="410dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_layout"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,77 +54,92 @@
 
         <LinearLayout
             android:id="@+id/buttonContainer"
-            android:layout_width="411dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/callButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:clickable="true"
-                app:srcCompat="@android:drawable/stat_sys_phone_call"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/chatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="60dp"
-                android:clickable="true"
-                app:backgroundTint="#FFC107"
-                app:srcCompat="@drawable/chat"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/contactButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginStart="60dp"
-                android:layout_marginEnd="50dp"
-                android:clickable="true"
-                app:backgroundTint="#9C27B0"
-                app:srcCompat="@drawable/group"
-                tools:ignore="SpeakableTextPresentCheck" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/textContainer_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
 
-            <TextView
-                android:id="@+id/call"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="63dp"
-                android:text="통화"
-                android:textColor="#000000" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/message"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/callButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:backgroundTint="#7DCB80"
+                    app:srcCompat="@drawable/call"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <TextView
+                    android:id="@+id/call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="통화"
+                    android:textColor="#993A2D0C"
+                    android:paddingTop="5dp"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="86dp"
-                android:text="메시지"
-                android:textColor="#000000" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/chatButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    app:backgroundTint="#F0D67B"
+                    app:srcCompat="@drawable/envelope"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
-            <TextView
-                android:id="@+id/contact"
+                <TextView
+                    android:id="@+id/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="메시지"
+                    android:textColor="#993A2D0C"
+                    android:paddingTop="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:layout_marginEnd="50dp"
-                android:text="대면 만남"
-                android:textColor="#000000" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/contactButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:backgroundTint="#C99CE4"
+                    app:srcCompat="@drawable/conversation"
+                    tools:ignore="SpeakableTextPresentCheck" />
+                <TextView
+                    android:id="@+id/contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="대면 만남"
+                    android:textColor="#993A2D0C"
+                    android:paddingTop="5dp"/>
+            </LinearLayout>
+
+
+
         </LinearLayout>
+
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -142,45 +156,9 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="143dp" />
 
-    <TextView
-        android:id="@+id/hope"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
 
-        android:paddingStart="5dp"
-        android:paddingBottom="2dp"
-        android:text="가족의 마음을 전합니다"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <View
-        android:id="@+id/dividerTop"
-        android:layout_width="180dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/FACE_color"
-        android:backgroundTint="@color/FACE_color"
-        android:foregroundTint="@color/FACE_color"
-        app:layout_constraintEnd_toEndOf="@+id/hope"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
-    <View
-        android:id="@+id/dividerBottom"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_marginBottom="11dp"
-        android:background="@color/FACE_color"
-        android:backgroundTint="@color/FACE_color"
-        app:layout_constraintBottom_toTopOf="@+id/momentButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hope"
-        app:layout_constraintVertical_bias="0.972" />
 
     <Button
         android:id="@+id/momentButton"
@@ -188,9 +166,11 @@
         android:layout_height="60dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:text="가족의 순간 보러가기"
-        android:textSize="18sp"
+        android:text="'OOO'의 순간 보기"
+        android:textColor="#3A2D0C"
+        android:textSize="23sp"
         android:textStyle="bold"
+        app:backgroundTint="#66C9A377"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -203,56 +183,99 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/dividerBottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hope"
-        app:layout_constraintVertical_bias="0.282">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/idealContact"
+            android:id="@+id/hope"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="| 'OOO'의 마음을 전합니다 |"
+            android:textColor="#3A2D0C"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/favourite"/>
+            <TextView
+                android:id="@+id/idealContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OO일에 1번 연락하면 좋을 것 같아!"
+                android:textColor="#aa3A2D0C"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:text="OO일에 1번 연락하면 좋을 것 같아!"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
+            android:src="@drawable/favourite"/>
         <TextView
             android:id="@+id/minContact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:text="아무리 적어도 OO일에 1번은 연락을 했으면 좋겠어..."
-            android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textColor="#aa3A2D0C"
+            android:textSize="14sp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
+    <ImageView
+        android:width="100dp"
+        android:height="3dp"
+        android:src="@drawable/line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/favourite1"/>
         <TextView
             android:id="@+id/themeLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:text="선호 이야기를 함께 하면 즐거울 것 같아!"
-            android:textColor="@color/green"
-            android:textSize="20sp" />
+            android:textColor="#aa3A2D0C"
+            android:textSize="14sp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/favourite2"/>
         <TextView
             android:id="@+id/themeDislike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
             android:text="불호 이야기는 조금 줄여줬으면 좋겠어..."
-            android:textColor="@color/error"
-            android:textSize="20sp" />
+            android:textColor="#aa3A2D0C"
+            android:textSize="14sp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
