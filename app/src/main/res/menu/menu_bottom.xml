@@ -14,7 +14,7 @@
         android:id="@+id/scaleTab"
         app:showAsAction="ifRoom"
         android:enabled="true"
-        android:title="연락저울"
+        android:title="연락 온도계"
         android:icon="@drawable/scale"
         />
 
