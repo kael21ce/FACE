@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_heart"
     android:clipToPadding="false"
     android:overScrollMode="never"
     android:padding="24dp"
@@ -13,26 +14,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="돌아오신 것을 환영합니다"
-            android:textColor="@color/primary_text"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textColor="@color/letter_color"
+            android:textSize="24sp" />
 
         <TextView
+            android:id="@+id/keepText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="10dp"
             android:text="계속하려면 로그인 하세요"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/inputEmail"
@@ -40,6 +41,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="45dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="이메일"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
@@ -55,6 +57,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/background_input"
+            android:backgroundTint="@color/background"
             android:hint="비밀번호"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
@@ -68,25 +71,25 @@
             android:id="@+id/layoutSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="50dp"
             android:animateLayoutChanges="true">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonSignIn"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:text="로그인"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                app:cornerRadius="8dp" />
+                android:textColor="@color/letter_color"
+                android:textSize="18sp"
+                app:backgroundTint="#40C9A377"
+                app:cornerRadius="10dp" />
 
             <ProgressBar
                 android:id="@+id/progress_signIn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </FrameLayout>
 
@@ -98,21 +101,24 @@
             <Button
                 android:id="@+id/forgotPassword"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginTop="30dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="비밀번호 찾기" />
+                android:backgroundTint="#40E0D6C9"
+                android:text="비밀번호 찾기"
+                android:textColor="@color/letter_color" />
 
             <Button
                 android:id="@+id/textCreateNewAccount"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginTop="30dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
-                android:text="회원 가입"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
+                android:backgroundTint="#40E0D6C9"
+                android:text="회원 가입"
+                android:textColor="@color/letter_color"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
