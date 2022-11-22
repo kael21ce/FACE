@@ -15,7 +15,7 @@
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="연락 온도계"
-        android:icon="@drawable/scale"
+        android:icon="@drawable/thermometer"
         />
 
     <item
