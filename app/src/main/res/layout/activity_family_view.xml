@@ -47,7 +47,7 @@
             <EditText
                 android:id="@+id/nameTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="100dp"
@@ -95,16 +95,16 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/idealContact"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mobile"
                 app:layout_constraintVertical_bias="0.0" />
 
             <EditText
                 android:id="@+id/idealContact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_width="200dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="120dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/border_right_frame"
                 android:ems="10"
@@ -115,10 +115,9 @@
                 android:text="0~99"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.726"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameTxt"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.003" />
 
             <TextView
                 android:id="@+id/wantText"
@@ -159,7 +158,7 @@
             <EditText
                 android:id="@+id/minContact"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/border_right_frame"
                 android:ems="10"
@@ -173,7 +172,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/frontMinContact"
                 app:layout_constraintTop_toBottomOf="@+id/idealContact"
-                app:layout_constraintVertical_bias="0.018"
+                app:layout_constraintVertical_bias="0.004"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
@@ -214,7 +213,7 @@
             <EditText
                 android:id="@+id/themeLike"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/border_right_frame"
                 android:ems="10"
@@ -268,7 +267,7 @@
             <EditText
                 android:id="@+id/themeDislike"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/border_right_frame"
                 android:ems="10"
@@ -307,7 +306,8 @@
             android:backgroundTint="#80C9A377"
             android:text="변경하기"
             android:textColor="@color/letter_color"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
 
         <Button
             android:id="@+id/deleteFamily"
@@ -317,7 +317,8 @@
             android:layout_marginTop="10dp"
             android:text="삭제하기"
             android:textColor="@color/letter_color"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
     </LinearLayout>
 
 </ScrollView>
