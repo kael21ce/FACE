@@ -93,6 +93,7 @@ public class BluetoothService extends Service {
                                 Log.w(TAG, "isConnected: " + isConnected(device));
                                 if (!isConnected(device)) {
                                     @NonNull ConnectedThread forConnect = writeToDevice(document.getString(Constants.KEY_ADDRESS), inString[0]);
+                                    writeForDevice(forConnect, inString[0]);
                                     Log.w(TAG, document.getString(Constants.KEY_NAME) + "에 전해진 표정: " + expresison[0]);
                                     final String[] userInId = new String[1];
                                     db.collection(Constants.KEY_COLLECTION_USERS)
@@ -113,14 +114,13 @@ public class BluetoothService extends Service {
                                         DocumentReference ref = db.collection(Constants.KEY_COLLECTION_USERS)
                                                 .document(myId)
                                                 .collection(Constants.KEY_COLLECTION_USERS).document(userInId[0]);
-                                        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
-                                                Log.w("BluetoothService", "onEvent 호출됨.");
-                                                String darkness = documentSnapshot.get(Constants.KEY_EXPRESSION).toString();
-                                                String name = documentSnapshot.getString(Constants.KEY_NAME);
-                                                String sentOne = darkness + "," + name;
-                                                forConnect.write(sentOne);
+                                        ref.addSnapshotListener((documentSnapshot, error) -> {
+                                            Log.w("BluetoothService", "onEvent 호출됨.");
+                                            String darkness = documentSnapshot.get(Constants.KEY_EXPRESSION).toString();
+                                            String name = documentSnapshot.getString(Constants.KEY_NAME);
+                                            String sentOne = darkness + "," + name;
+                                            if (!inString[0].equals(sentOne)) {
+                                                writeForDevice(forConnect ,sentOne);
                                             }
                                         });
                                     }, 1000);
@@ -185,8 +185,12 @@ public class BluetoothService extends Service {
         if (flag) {
             connectedThread = new ConnectedThread(btSocket);
             connectedThread.start();
-            connectedThread.write(input);
+            //connectedThread.write(input);
         }
         return connectedThread;
+    }
+
+    public void writeForDevice(ConnectedThread connectedThread, String input) {
+        connectedThread.write(input);
     }
 }
