@@ -14,10 +14,19 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.techtown.face.utilites.ConnectedThread;
 import org.techtown.face.utilites.Constants;
@@ -83,8 +92,38 @@ public class BluetoothService extends Service {
                                 device = btAdapter.getRemoteDevice(document.getString(Constants.KEY_ADDRESS));
                                 Log.w(TAG, "isConnected: " + isConnected(device));
                                 if (!isConnected(device)) {
-                                    writeToDevice(document.getString(Constants.KEY_ADDRESS), inString[0]);
+                                    @NonNull ConnectedThread forConnect = writeToDevice(document.getString(Constants.KEY_ADDRESS), inString[0]);
                                     Log.w(TAG, document.getString(Constants.KEY_NAME) + "에 전해진 표정: " + expresison[0]);
+                                    final String[] userInId = new String[1];
+                                    db.collection(Constants.KEY_COLLECTION_USERS)
+                                            .document(myId)
+                                            .collection(Constants.KEY_COLLECTION_USERS)
+                                            .whereEqualTo(Constants.KEY_USER, registeredId)
+                                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task15) {
+                                                    if (task15.isSuccessful()) {
+                                                        for (DocumentSnapshot snapshot : task15.getResult()) {
+                                                            userInId[0] = snapshot.getId();
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                    mHandler.postDelayed(() -> {
+                                        DocumentReference ref = db.collection(Constants.KEY_COLLECTION_USERS)
+                                                .document(myId)
+                                                .collection(Constants.KEY_COLLECTION_USERS).document(userInId[0]);
+                                        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                                                Log.w("BluetoothService", "onEvent 호출됨.");
+                                                String darkness = documentSnapshot.get(Constants.KEY_EXPRESSION).toString();
+                                                String name = documentSnapshot.getString(Constants.KEY_NAME);
+                                                String sentOne = darkness + "," + name;
+                                                forConnect.write(sentOne);
+                                            }
+                                        });
+                                    }, 1000);
                                 }
                             }, 1000);
                         }
@@ -122,7 +161,7 @@ public class BluetoothService extends Service {
     }
 
     @SuppressLint("MissingPermission")
-    public void writeToDevice(String deviceAddress, String input) {
+    public ConnectedThread writeToDevice(String deviceAddress, String input) {
         if (btAdapter.isDiscovering()) {
             btAdapter.cancelDiscovery();
         }
@@ -148,5 +187,6 @@ public class BluetoothService extends Service {
             connectedThread.start();
             connectedThread.write(input);
         }
+        return connectedThread;
     }
 }
