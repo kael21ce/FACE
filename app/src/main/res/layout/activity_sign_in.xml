@@ -77,11 +77,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonSignIn"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="80dp"
                 android:text="로그인"
                 android:textColor="@color/letter_color"
                 android:textSize="18sp"
-                app:backgroundTint="#40C9A377"
+                app:backgroundTint="#C9A377"
                 app:cornerRadius="10dp" />
 
             <ProgressBar
@@ -101,26 +101,26 @@
             <Button
                 android:id="@+id/forgotPassword"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="#40E0D6C9"
+                android:backgroundTint="#E0D6C9"
                 android:text="비밀번호 찾기"
-                android:textColor="@color/letter_color" />
+                android:textColor="@color/letter_color"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/textCreateNewAccount"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="#40E0D6C9"
+                android:backgroundTint="#E0D6C9"
                 android:text="회원 가입"
                 android:textColor="@color/letter_color"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 

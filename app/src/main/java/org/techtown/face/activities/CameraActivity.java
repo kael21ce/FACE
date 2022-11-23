@@ -37,8 +37,14 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
 
-        binding.imageUpload.setVisibility(View.INVISIBLE);
-        binding.next.setVisibility(View.INVISIBLE);
+        binding.imageUpload.setVisibility(View.GONE);
+        binding.next.setVisibility(View.GONE);
+        binding.cameraSet.setVisibility(View.GONE);
+
+        binding.okCheckButton.setOnClickListener(v -> {
+            binding.cameraSet.setVisibility(View.VISIBLE);
+            binding.okCheckButton.setVisibility(View.INVISIBLE);
+        });
 
         binding.cameraSet.setOnClickListener(v -> setCamera());
         binding.imageUpload.setOnClickListener(v -> upload());
@@ -76,6 +82,7 @@ public class CameraActivity extends AppCompatActivity {
             db.collection(Constants.KEY_COLLECTION_USERS)
                     .document(preferenceManager.getString(Constants.KEY_USER_ID))
                     .update(Constants.KEY_PATH,path).addOnSuccessListener(unused -> {
+                        binding.imageUpload.setVisibility(View.INVISIBLE);
                         binding.next.setVisibility(View.VISIBLE);
                         Log.e("Camera", "Succeed");
                     });
@@ -90,6 +97,7 @@ public class CameraActivity extends AppCompatActivity {
                         Bundle extras = result.getData().getExtras();
                         bitmap = (Bitmap) extras.get("data");
                         binding.cameraImage.setImageBitmap(bitmap);
+                        binding.cameraSet.setVisibility(View.INVISIBLE);
                         binding.imageUpload.setVisibility(View.VISIBLE);
                     }
                 }
