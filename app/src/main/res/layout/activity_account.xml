@@ -10,17 +10,20 @@
     tools:context=".activities.AccountActivity">
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#E3D3BD"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="| 현재 나의 계정 정보 |"
             android:background="@color/white"
+            android:padding="2dp"
+            android:text="| 현재 나의 계정 정보 |"
+            android:textColor="@color/letter_color"
             android:textSize="30sp" />
 
         <LinearLayout
@@ -31,9 +34,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/profileText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -56,23 +61,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/chatProfileText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="30dp"
                     android:text="채팅 프로필 이미지" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="211dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="0dp"
-                    android:contentDescription="TODO"
-                    tools:srcCompat="@tools:sample/avatars" />
+                <FrameLayout
+                    android:layout_width="156dp"
+                    android:layout_height="156dp"
+                    android:layout_gravity="center">
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="TODO"
+                        tools:srcCompat="@tools:sample/avatars" />
+                </FrameLayout>
+
             </LinearLayout>
         </LinearLayout>
 
@@ -90,7 +101,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="계정 설정 변경하기" />
+            android:text="계정 설정 변경하기"
+            android:textColor="@color/letter_color"
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +117,9 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:text="로그아웃" />
+                android:text="로그아웃"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/deleteAccount"
@@ -113,7 +128,9 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
                 android:layout_weight="1"
-                android:text="탈퇴" />
+                android:text="탈퇴"
+                android:textColor="@color/letter_color"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
